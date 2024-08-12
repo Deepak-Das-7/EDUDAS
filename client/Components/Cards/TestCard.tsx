@@ -1,0 +1,190 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { ThemeContext } from '../../Context/ThemeContext';
+import { router } from 'expo-router';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Entypo from '@expo/vector-icons/Entypo';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from 'axios';
+import { AuthContext } from '@/Context/AuthContext';
+
+const TestCard = ({ test }) => {
+    const { theme } = useContext(ThemeContext);
+    const [given, setGiven] = useState(false);
+    const [error, setError] = useState("");
+    const { userDetails } = useContext(AuthContext);
+
+    const handlePress = () => {
+        router.push(`/Dashboard/Tests/SingleTest?id=${test._id}`);
+    };
+
+    useEffect(() => {
+        const checkTestStatus = async () => {
+            try {
+                const response = await axios.get(`http://192.168.31.161:5000/submitted-tests/${userDetails.id}/${test._id}`);
+
+                if (response.data) {
+                    setGiven(true);
+                }
+            } catch (error) {
+                setError('Error fetching test status');
+            }
+        };
+        checkTestStatus();
+    }, []);
+
+
+    return (
+        <View style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}>
+            <Text style={[styles.title, { color: theme.colors.primary }]}>{test.name}</Text>
+            {
+                given &&
+                <View
+                    style={
+                        {
+                            display: "flex", flexDirection: "row", backgroundColor: theme.colors.success, marginHorizontal: 65, padding: 2, borderRadius: 5, marginBottom: 3, justifyContent: "center"
+                        }
+                    }
+                >
+                    <Ionicons name="checkmark-done-circle-sharp" size={20} color={theme.textColors.successText} />
+                    <Text
+                        style={
+                            {
+                                color: theme.textColors.successText, fontWeight: "bold", fontSize: 10, textAlign: "center", verticalAlign: "middle"
+                            }
+                        }>Test attempted already</Text>
+                </View>
+            }
+
+
+            {test.photo ? (
+                <Image source={{ uri: test.photo }} style={styles.image} />
+            ) : (
+                <Text style={[styles.noImageText, { color: theme.textColors.primaryText }]}>No photo available</Text>
+            )}
+
+
+            <View style={{ display: "flex", flexDirection: "row", gap: 5, marginBottom: 5 }}>
+                <AntDesign name="infocirlce" size={15} color={theme.textColors.primaryText} />
+                <Text style={[styles.description, { color: theme.textColors.primaryText }]}>{test.description || 'No description available'}</Text>
+            </View>
+
+
+            <View style={styles.infoRow}>
+                <View style={styles.infoRow2}>
+                    <FontAwesome name="language" size={20} color={theme.textColors.primaryText} />
+                    <Text style={[styles.language, { color: theme.textColors.primaryText }]}>{test.language?.name || 'N/A'} </Text>
+                </View>
+                <View style={styles.infoRow2}>
+                    <FontAwesome name="group" size={18} color={theme.textColors.primaryText} />
+                    <Text style={[styles.text, { color: theme.textColors.primaryText }]}>{test.course.class || 'class N/A'}</Text>
+                </View>
+
+                <View style={styles.infoRow2}>
+                    <FontAwesome name="calendar-check-o" size={18} color={theme.textColors.primaryText} />
+                    <Text style={[styles.text, { color: theme.textColors.primaryText }]}>
+                        {test.startDate
+                            ? new Date(test.startDate).toLocaleDateString()
+                            : test.course?.startDate
+                                ? new Date(test.course.startDate).toLocaleDateString()
+                                : 'N/A'}
+                    </Text>
+                </View>
+            </View>
+
+
+            <View style={styles.priceRow}>
+                <Text style={[styles.price, { color: theme.textColors.primaryText, textDecorationLine: test.course.isFree ? 'line-through' : 'none', }]}>Rs. {test.course.price.toFixed(2) || '0.00'}</Text>
+                {test.course.isFree && (
+                    <Text style={[styles.freeText]}>Free</Text>
+                )}
+                <View style={styles.infoRow2}>
+                    <Entypo name="time-slot" size={18} color={theme.textColors.primaryText} />
+                    <Text style={[styles.text, { color: theme.textColors.primaryText }]}>{test.duration || 'duration N/A'}</Text>
+                </View>
+                <TouchableOpacity
+                    style={[styles.button, { backgroundColor: theme.buttonColors.secondaryButtonBackground }]}
+                    onPress={handlePress}
+                >
+                    <Text style={[styles.buttonText, { color: theme.buttonColors.secondaryButtonText }]}>{given ? "Attempt Again" : "Attempt"}</Text>
+                </TouchableOpacity>
+            </View>
+
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    card: {
+        borderRadius: 12,
+        padding: 12,
+        marginVertical: 5,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+        elevation: 3,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    text: {
+        fontSize: 12,
+    },
+    language: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    description: {
+        fontSize: 10,
+    },
+    button: {
+        padding: 7,
+        borderRadius: 7,
+        alignItems: 'center',
+        elevation: 2,
+    },
+    buttonText: {
+        fontSize: 15,
+        fontWeight: "bold"
+    },
+    image: {
+        width: '100%',
+        height: 150,
+        borderRadius: 10,
+        marginBottom: 5
+    },
+    noImageText: {
+        textAlign: 'center',
+        paddingVertical: 80,
+        fontSize: 16,
+    },
+    infoRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    infoRow2: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    priceRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    price: {
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    freeText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: 'green',
+    },
+});
+
+export default TestCard;
