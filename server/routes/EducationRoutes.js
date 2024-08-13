@@ -16,6 +16,7 @@ const languageController = require('../controllers/languageController')
 const testController = require('../controllers/testController')
 const submittedTestController = require('../controllers/submitted_testController')
 const courseContentController = require('../controllers/courseContentController')
+const videosListController = require('../controllers/videosListController')
 
 // Course routes
 router.post('/courses', courseController.createCourse);
@@ -120,6 +121,13 @@ router.get('/CourseContent', courseContentController.getCourseContents);
 router.get('/CourseContent/:id', courseContentController.getCourseContentById);
 router.put('/CourseContent/:id', courseContentController.updateCourseContent);
 router.delete('/CourseContent/:id', courseContentController.deleteCourseContent);
+
+//videos add
+router.post('/videos', videosListController.createVideoList);
+router.get('/videos', videosListController.getAllVideoLists);
+router.put('/videos/:id', videosListController.updateVideoList);
+router.get('/videos/:id', videosListController.getVideoListById);
+router.delete('/videos/:id', videosListController.deleteVideoList);
 
 
 module.exports = router;

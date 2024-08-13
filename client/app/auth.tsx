@@ -12,9 +12,9 @@ import { router } from 'expo-router';
 type FormData = {
     email: string;
     password: string;
-    firstName?: string;
-    lastName?: string;
-    dateOfBirth?: Date;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
 };
 
 export default function Auth() {
@@ -22,6 +22,44 @@ export default function Auth() {
     const [userType, setUserType] = useState<'teacher' | 'student'>('student');
     const { login } = useContext(AuthContext);
     const { theme } = useContext(ThemeContext); // Access the color context
+
+    const handleLoginError = (error: any) => {
+        if (axios.isAxiosError(error) && error.response) {
+            const status = error.response.status;
+            const data = error.response.data;
+
+            switch (status) {
+                case 400:
+                    if (data.message === 'Email and password are required') {
+                        Alert.alert('Error', 'Please provide both email and password.');
+                    } else if (data.message === 'Invalid credentials') {
+                        Alert.alert('Error', 'The email or password you entered is incorrect.');
+                    } else {
+                        Alert.alert('Error', data.message || 'Bad Request');
+                    }
+                    break;
+
+                case 404:
+                    if (data.message === 'Student not found' || data.message === 'Teacher not found') {
+                        Alert.alert('Error', 'No account found for this email.');
+                    } else {
+                        Alert.alert('Error', data.message || 'Resource not found');
+                    }
+                    break;
+
+                case 500:
+                    Alert.alert('Error', 'An internal server error occurred. Please try again later.');
+                    break;
+
+                default:
+                    Alert.alert('Error', 'An unexpected error occurred.');
+                    break;
+            }
+        } else {
+            // Network or other error without a response
+            Alert.alert('Error', 'Network Error: Unable to connect to the server.');
+        }
+    };
 
     const handleLogin = async (formData: { email: string; password: string }) => {
         try {
@@ -36,12 +74,13 @@ export default function Auth() {
             router.replace('/(main)/Dashboard/Course');
         } catch (error) {
             console.error('Error logging in:', error);
-            Alert.alert('Error', 'An error occurred while logging in.');
+            handleLoginError(error);
         }
     };
 
     const handleSignup = async (formData: FormData) => {
         try {
+            console.log("input", formData);
             let response: AxiosResponse<any, any>;
             if (userType === 'teacher') {
                 response = await axios.post(`https://edudas.onrender.com/teachers`, formData);

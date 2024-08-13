@@ -1,20 +1,15 @@
 const mongoose = require('mongoose');
 
-const videosList = new mongoose.Schema({
+const videoSchema = new mongoose.Schema({
+    videoId: { type: String, required: true },
+    videoName: { type: String, required: true },
+    class: { type: String, required: true },
+    duration: { type: String, required: true }
+});
+
+const videosListSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
-    videos: { type: String },
-    description: String,
-    duration: String,
-    photo: String,
-    language: { type: mongoose.Schema.Types.ObjectId, ref: 'Language' },
-    class: { type: String }, // Class or level of the course
-    isFree: { type: Boolean, default: false },
-    price: { type: Number, default: 0 },
-    startDate: { type: Date }, // Start date of the course
-    subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }],
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
-    tests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Test' }],
-    content: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent' }],
+    videos: { type: [videoSchema], required: true },
 }, {
     timestamps: true
 });
