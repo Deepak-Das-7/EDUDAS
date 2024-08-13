@@ -8,6 +8,7 @@ export default function Index() {
     const router = useRouter();
     const [isReady, setIsReady] = useState(false);
 
+
     useEffect(() => {
         const checkAuth = async () => {
             const storedToken = await AsyncStorage.getItem('token');

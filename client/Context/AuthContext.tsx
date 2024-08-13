@@ -1,13 +1,14 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import mongoose from 'mongoose'; // Import mongoose for ObjectId
 
 
 interface DecodedToken {
-    id: string,
-    firstName: string,
-    email: string,
-    lastName: string,
+    id: mongoose.Types.ObjectId; // Use mongoose.Types.ObjectId
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
 interface AuthContextType {
@@ -33,7 +34,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 try {
                     const decodedToken = jwtDecode<DecodedToken>(token);
                     setUserDetails(decodedToken);
-                    // console.log("Setting user details=", decodedToken);
+                    console.log("Setting user details=", decodedToken);
                 } catch (error) {
                     console.error('Failed to decode token:', error);
                 }

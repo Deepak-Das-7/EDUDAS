@@ -26,11 +26,16 @@ const TestCard = ({ test }) => {
                     setGiven(true);
                 }
             } catch (error) {
-                console.log(error);
+                if (error.response && error.response.status === 404) {
+                    // console.log("Test status not found. User has not submitted this test.");
+                } else {
+                    console.error("An error occurred:", error);
+                }
             }
         };
+
         checkTestStatus();
-    }, []);
+    }, [userDetails, test._id]);
 
 
     return (
