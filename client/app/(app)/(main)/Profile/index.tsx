@@ -3,11 +3,14 @@ import {
     Button,
     DrawerLayoutAndroid,
     StyleSheet,
+    TouchableOpacity,
     View,
+    Text
 } from 'react-native';
 import Drawer from '@/Components/Drawer/Drawer';
 import { AuthContext } from '@/Context/AuthContext';
 import { ThemeContext } from '@/Context/ThemeContext';
+import { router } from 'expo-router';
 
 const Home = () => {
     const drawer = useRef<DrawerLayoutAndroid>(null);
@@ -25,6 +28,12 @@ const Home = () => {
                     title="Open drawer"
                     onPress={() => drawer.current?.openDrawer()}
                 />
+                <TouchableOpacity onPress={() => {
+                    console.log("goingggggg");
+                    router.push("/Profile/Setting")
+                }}>
+                    <Text>Go to settings tab</Text>
+                </TouchableOpacity>
             </View>
         </DrawerLayoutAndroid>
     );

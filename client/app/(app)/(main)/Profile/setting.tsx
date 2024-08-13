@@ -1,14 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const Setting = () => {
+const setting = () => {
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View>
             <Text>setting</Text>
         </View>
     )
 }
 
-export default Setting
+export default setting
 
 const styles = StyleSheet.create({})

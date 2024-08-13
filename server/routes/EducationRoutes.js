@@ -15,6 +15,7 @@ const attendanceController = require('../controllers/attendanceController');
 const languageController = require('../controllers/languageController')
 const testController = require('../controllers/testController')
 const submittedTestController = require('../controllers/submitted_testController')
+const courseContentController = require('../controllers/courseContentController')
 
 // Course routes
 router.post('/courses', courseController.createCourse);
@@ -112,5 +113,13 @@ router.get('/submitted-tests/:user_id/:test_id', submittedTestController.getSubm
 router.get('/submitted-tests/:id', submittedTestController.getSubmittedTestById);
 router.put('/submitted-tests/:id', submittedTestController.updateSubmittedTestById);
 router.delete('/submitted-tests/:id', submittedTestController.deleteSubmittedTestById);
+
+//CourseContent
+router.post('/CourseContent', courseContentController.createCourseContent);
+router.get('/CourseContent', courseContentController.getCourseContents);
+router.get('/CourseContent/:id', courseContentController.getCourseContentById);
+router.put('/CourseContent/:id', courseContentController.updateCourseContent);
+router.delete('/CourseContent/:id', courseContentController.deleteCourseContent);
+
 
 module.exports = router;

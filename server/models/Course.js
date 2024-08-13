@@ -14,6 +14,7 @@ const courseSchema = new mongoose.Schema({
     subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }],
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
     tests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Test' }],
+    content: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent' }],
 }, {
     timestamps: true
 });
