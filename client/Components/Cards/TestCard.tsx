@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { ThemeContext } from '../../Context/ThemeContext';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -29,6 +29,7 @@ const TestCard = ({ test }) => {
                 }
             } catch (error) {
                 setError('Error fetching test status');
+                Alert.alert("Failed", "Fetching test failed")
             }
         };
         checkTestStatus();
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         alignItems: 'center',
         elevation: 2,
+        marginTop: 3,
     },
     buttonText: {
         fontSize: 15,

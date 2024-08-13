@@ -63,6 +63,17 @@ exports.getSubmittedTestById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching submitted test', error });
     }
 };
+//for any user
+exports.getSubmittedTestByUserId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const submittedTests = await SubmittedTest.find({ user_id: id, is_deleted: false });
+
+        res.status(200).json(submittedTests);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching submitted test', error });
+    }
+};
 
 // Get a specific submitted test by ID UserIdAndTestID
 exports.getSubmittedTestByUserIdAndTestID = async (req, res) => {

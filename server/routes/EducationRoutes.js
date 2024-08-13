@@ -114,6 +114,7 @@ router.post('/submit-test', submittedTestController.submitTest);
 router.get('/submitted-tests', submittedTestController.getAllSubmittedTests);
 router.get('/submitted-tests/:user_id/:test_id', submittedTestController.getSubmittedTestByUserIdAndTestID);
 router.get('/submitted-tests/:id', submittedTestController.getSubmittedTestById);
+router.get('/submitted-tests-user/:id', submittedTestController.getSubmittedTestByUserId);
 router.put('/submitted-tests/:id', submittedTestController.updateSubmittedTestById);
 router.delete('/submitted-tests/:id', submittedTestController.deleteSubmittedTestById);
 
