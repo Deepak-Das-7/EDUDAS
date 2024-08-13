@@ -106,6 +106,8 @@ router.get('/tests', testController.getAllTests);
 router.get('/tests/:id', testController.getTestById);
 router.put('/tests/:id', testController.updateTest);
 router.delete('/tests/:id', testController.deleteTest);
+router.get('/course_tests/:id', testController.getTestByCourseId);
+
 //
 router.post('/submitted-tests', submittedTestController.createSubmittedTest);
 router.post('/submit-test', submittedTestController.submitTest);

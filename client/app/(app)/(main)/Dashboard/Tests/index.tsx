@@ -3,11 +3,10 @@ import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'r
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import TestCard from '@/Components/Cards/TestCard';
-import { Test } from '@/Constants/types';
 
 const Home = () => {
-    const [tests, setTests] = useState<Test[]>([]);
-    const [filteredTests, setFilteredTests] = useState<Test[]>([]);
+    const [tests, setTests] = useState([]);
+    const [filteredTests, setFilteredTests] = useState([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);

@@ -40,7 +40,7 @@ const SingleCourse = () => {
         course && (
             <ScrollView style={[styles.main, { backgroundColor: theme.colors.onPrimary }]}>
                 <Intro course={course} />
-                <VideoTestCard />
+                <VideoTestCard course={course} />
             </ScrollView>
         )
     );

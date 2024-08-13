@@ -1,34 +1,34 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native';
 import YouTubeIframe from 'react-native-youtube-iframe';
-import { ThemeContext } from "@/Context/ThemeContext"
+import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
+import { useLocalSearchParams } from 'expo-router';
 
 const Videos = () => {
+    const { id } = useLocalSearchParams();
+    console.log("id", id);
     const { theme } = useContext(ThemeContext);
     const [playing, setPlaying] = useState<string | null>(null);
-    const [videos, setVideos] = useState([]);
-    const [selectedVideoId, setSelectedVideoId] = useState<string | null>(videos[0]);
+    const [videos, setVideos] = useState<any[]>([]);
+    const [selectedVideoId, setSelectedVideoId] = useState<string | null>("vRAp1w3-BHg");
 
     const screenWidth = Dimensions.get('window').width;
     const playerWidth = screenWidth * 0.9;
     const playerHeight = (playerWidth * 9) / 16;
 
-
     useEffect(() => {
-        const fetchCourses = async () => {
+        const fetchVideos = async () => {
             try {
-                const response = await axios.get('https://edudas.onrender.com/videos');
-                console.log('Video List fetched:', response.data);
+                const response = await axios.get(`https://edudas.onrender.com/videos/${id}`);
                 setVideos(response.data.videos);
+                console.log("getting all videos of ", response.data.videos);
             } catch (error) {
                 console.error('Error getting video list:', error);
-                throw error;
             }
         };
-        fetchCourses();
+        fetchVideos();
     }, []);
-
 
     const onStateChange = useCallback((state, videoId) => {
         if (state === 'ended') {
@@ -36,8 +36,6 @@ const Videos = () => {
             alert(`Video with ID: ${videoId} has finished playing!`);
         }
     }, []);
-
-
 
     const renderSelectedVideo = () => {
         const selectedVideo = videos.find((video) => video.videoId === selectedVideoId);
@@ -65,7 +63,7 @@ const Videos = () => {
 
     const renderVideoItem = ({ item }: { item: any }) => (
         <TouchableOpacity
-            style={[styles.videoListItem, { backgroundColor: theme.colors.background }]}
+            style={[styles.videoListItem, { backgroundColor: theme.colors.surface }]}
             onPress={() => setSelectedVideoId(item.videoId)}
         >
             <Image
@@ -114,7 +112,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     videoListItem: {
-        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
@@ -132,11 +129,11 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     videoName: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 13,
     },
     videoDetails: {
         marginTop: 2,
+        fontSize: 10
     },
 });
 

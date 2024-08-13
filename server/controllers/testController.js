@@ -1,5 +1,6 @@
 const Test = require('../models/Test');
 const mongoose = require('mongoose');
+const Course = require('../models/Course');
 
 // Create a new test
 exports.createTest = async (req, res) => {
@@ -62,6 +63,36 @@ exports.getTestById = async (req, res) => {
         }
 
         res.status(200).json(result[0]);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+exports.getTestByCourseId = async (req, res) => {
+    try {
+        const courseId = mongoose.Types.ObjectId(req.params.id);
+
+        // Find the course by ID
+        const course = await Course.findOne({ _id: courseId, is_deleted: false });
+
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found or is deleted' });
+        }
+
+        // Fetch all tests concurrently
+        const testPromises = course.tests.map(testId =>
+            Test.findOne({ _id: testId, is_deleted: false })
+        );
+        const tests = await Promise.all(testPromises);
+
+        // Filter out any null or undefined results
+        const validTests = tests.filter(test => test !== null && test !== undefined);
+
+        if (validTests.length === 0) {
+            return res.status(404).json({ message: 'No associated tests found or all tests are deleted' });
+        }
+
+        res.status(200).json(validTests);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

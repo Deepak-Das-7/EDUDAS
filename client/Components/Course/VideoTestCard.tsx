@@ -3,22 +3,28 @@ import React, { useContext } from 'react'
 import { ThemeContext } from '@/Context/ThemeContext';
 import { router } from 'expo-router';
 
-const VideoTestCard = () => {
+const VideoTestCard = ({ course }) => {
     const { theme } = useContext(ThemeContext);
-    const goTo = (path: string) => () => {
-        router.push(path);
+
+    const goTo = (path: string, ID: any) => () => {
+        const query = new URLSearchParams({ id: ID }).toString();
+        router.push(`/(main)/Dashboard/Course/${path}?${query}`);
     };
     const image = "https://picsum.photos/600";
     return (
         <View>
             <View style={styles.cardRow}>
-                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]} onPress={goTo("/(main)/Dashboard/Course/Tests")}>
+                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
+                    onPress={goTo("Tests", course._id)}
+                >
                     <Image source={{ uri: image }} style={styles.image} />
                     <View style={styles.overlay}>
                         <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Tests</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]} onPress={goTo("/(main)/Dashboard/Course/Videos")}>
+                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
+                    onPress={goTo("Videos", course.videos)}
+                >
                     <Image source={{ uri: image }} style={styles.image} />
                     <View style={styles.overlay}>
                         <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Videos</Text>
@@ -26,13 +32,16 @@ const VideoTestCard = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.cardRow}>
-                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]} onPress={goTo("/(main)/Dashboard/Course/Theories")}>
+                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
+                    onPress={goTo("Theories", course.content)}
+                >
                     <Image source={{ uri: image }} style={styles.image} />
                     <View style={styles.overlay}>
                         <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Theories</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]} onPress={goTo("/(main)/Dashboard/Course/DoubtSection")}>
+                <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
+                    onPress={goTo("DoubtSection", course._id)}>
                     <Image source={{ uri: image }} style={styles.image} />
                     <View style={styles.overlay}>
                         <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>DoubtSection</Text>

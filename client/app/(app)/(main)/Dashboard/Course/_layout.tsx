@@ -1,10 +1,7 @@
 import { Stack } from 'expo-router'
 import * as React from 'react'
-import { useContext } from 'react';
-import { AuthContext } from '@/Context/AuthContext';
 
 const _layout = () => {
-    const { userDetails } = useContext(AuthContext);
 
     return (
         <Stack screenOptions={{
