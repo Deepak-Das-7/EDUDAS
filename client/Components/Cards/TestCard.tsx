@@ -22,7 +22,7 @@ const TestCard = ({ test }) => {
     useEffect(() => {
         const checkTestStatus = async () => {
             try {
-                const response = await axios.get(`http://192.168.31.161:5000/submitted-tests/${userDetails.id}/${test._id}`);
+                const response = await axios.get(`https://edudas.onrender.com/submitted-tests/${userDetails.id}/${test._id}`);
 
                 if (response.data) {
                     setGiven(true);
