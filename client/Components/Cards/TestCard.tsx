@@ -78,27 +78,19 @@ const TestCard = ({ test }) => {
                 </View>
                 <View style={styles.infoRow2}>
                     <FontAwesome name="group" size={18} color={theme.textColors.primaryText} />
-                    <Text style={[styles.text, { color: theme.textColors.primaryText }]}>{test.course.class || 'class N/A'}</Text>
+                    <Text style={[styles.text, { color: theme.textColors.primaryText }]}>{test.class || 'class N/A'}</Text>
                 </View>
 
                 <View style={styles.infoRow2}>
                     <FontAwesome name="calendar-check-o" size={18} color={theme.textColors.primaryText} />
                     <Text style={[styles.text, { color: theme.textColors.primaryText }]}>
-                        {test.startDate
-                            ? new Date(test.startDate).toLocaleDateString()
-                            : test.course?.startDate
-                                ? new Date(test.course.startDate).toLocaleDateString()
-                                : 'N/A'}
+                        {test.startDate ? new Date(test.startDate).toLocaleDateString() : 'N/A'}
                     </Text>
                 </View>
             </View>
 
 
             <View style={styles.priceRow}>
-                <Text style={[styles.price, { color: theme.textColors.primaryText, textDecorationLine: test.course.isFree ? 'line-through' : 'none', }]}>Rs. {test.course.price.toFixed(2) || '0.00'}</Text>
-                {test.course.isFree && (
-                    <Text style={[styles.freeText]}>Free</Text>
-                )}
                 <View style={styles.infoRow2}>
                     <Entypo name="time-slot" size={18} color={theme.textColors.primaryText} />
                     <Text style={[styles.text, { color: theme.textColors.primaryText }]}>{test.duration || 'duration N/A'}</Text>
@@ -175,15 +167,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    price: {
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-    freeText: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        color: 'green',
     },
 });
 

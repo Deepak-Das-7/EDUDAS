@@ -72,32 +72,21 @@ exports.getTestByCourseId = async (req, res) => {
     try {
         const courseId = mongoose.Types.ObjectId(req.params.id);
 
-        // Find the course by ID
-        const course = await Course.findOne({ _id: courseId, is_deleted: false });
+        const course = await Course.findById(courseId)
+            .populate({
+                path: 'tests',
+                match: { is_deleted: false } // Filter out deleted tests
+            });
 
         if (!course) {
-            return res.status(404).json({ message: 'Course not found or is deleted' });
+            return res.status(404).json({ message: 'Course not found' });
         }
 
-        // Fetch all tests concurrently
-        const testPromises = course.tests.map(testId =>
-            Test.findOne({ _id: testId, is_deleted: false })
-        );
-        const tests = await Promise.all(testPromises);
-
-        // Filter out any null or undefined results
-        const validTests = tests.filter(test => test !== null && test !== undefined);
-
-        if (validTests.length === 0) {
-            return res.status(404).json({ message: 'No associated tests found or all tests are deleted' });
-        }
-
-        res.status(200).json(validTests);
+        res.status(200).json(course);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
 // Update a test by ID
 exports.updateTest = async (req, res) => {
     try {

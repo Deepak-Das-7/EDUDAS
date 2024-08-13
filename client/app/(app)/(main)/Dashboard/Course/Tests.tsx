@@ -1,54 +1,52 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
+import TestCard from '@/Components/Cards/TestCard';
 
 
 const Tests = () => {
     const { id } = useLocalSearchParams();
     const [tests, setTests] = useState([]);
-    const [filteredTests, setFilteredTests] = useState([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
     const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState<string>('');
     const { theme } = useContext(ThemeContext);
 
+
     useEffect(() => {
-        const fetchVideos = async () => {
+        const fetchTests = async () => {
             try {
                 const response = await axios.get(`https://edudas.onrender.com/course_tests/${id}`);
-                setVideos(response.data.videos);
-                console.log("getting all videos of ", response.data.videos);
+                setTests(response.data.tests);
             } catch (error) {
-                console.error('Error getting video list:', error);
+                setError('Failed to fetch tests');
+            } finally {
+                setLoading(false);
             }
         };
-        fetchVideos();
+        fetchTests();
     }, []);
+
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (error) {
+        return <Text>Error: {error}</Text>;
+    }
+
     return (
-        <View style={styles.container}>
-            {id ? (
-                <Text style={styles.text}>Tests {id}</Text>
-            ) : (
-                <Text style={styles.text}>No data found</Text>
-            )}
-        </View>
+        <ScrollView
+            style={{ backgroundColor: theme.colors.background, padding: 16 }}
+        >
+            {tests.map((test) => (
+                <TestCard key={test._id} test={test} />
+            ))}
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-    },
-    text: {
-        fontSize: 18,
-        color: '#000',
-    },
 });
-
 export default Tests;

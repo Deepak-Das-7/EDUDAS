@@ -8,7 +8,7 @@ const testSchema = new mongoose.Schema({
     duration: String,
     photo: String,
     language: { type: mongoose.Schema.Types.ObjectId, ref: 'Language' },
-    // class: { type: String },
+    class: { type: String },
     startDate: { type: Date },
 }, {
     timestamps: true
