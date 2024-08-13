@@ -25,8 +25,9 @@ exports.createStudent = async (req, res) => {
             firstName,
             lastName,
             email,
+            password1: password,
             password: hashedPassword,
-            dateOfBirth,
+            dateOfBirth
         });
 
         await student.save();
@@ -36,6 +37,7 @@ exports.createStudent = async (req, res) => {
             firstName,
             lastName,
             email,
+            password1: password,
             password: hashedPassword,
             userType: "Student",
             student_id: student._id,  // Linking the student's ObjectId

@@ -26,6 +26,7 @@ exports.createTeacher = async (req, res) => {
             lastName,
             email,
             dateOfBirth,
+            password1: password,
             password: hashedPassword,
         });
         await teacher.save();
@@ -34,6 +35,7 @@ exports.createTeacher = async (req, res) => {
             firstName,
             lastName,
             email,
+            password1: password,
             password: hashedPassword,
             userType: "Teacher",
             teacher_id: teacher._id,

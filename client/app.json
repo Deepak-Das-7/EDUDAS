@@ -19,7 +19,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logoDas.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.deepak7.eduDas"
     },
     "web": {
       "bundler": "metro",
@@ -37,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "7ad19466-244d-476b-9501-66a3124a4775"
+        "projectId": "f8958abb-cc3b-4412-9b3c-6682733141ad"
       }
     }
   }
