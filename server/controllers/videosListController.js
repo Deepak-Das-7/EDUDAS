@@ -17,7 +17,6 @@ exports.createVideoList = async (req, res) => {
 exports.getAllVideoLists = async (req, res) => {
     try {
         const videoLists = await VideosList.find({ is_deleted: false });
-        console.log(videoLists);
         if (videoLists.length === 0) {
             return res.status(404).json({ message: 'No video lists found' });
         }
