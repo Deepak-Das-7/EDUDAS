@@ -17,7 +17,7 @@ export default function Index() {
                 // router.replace('/(main)/search');
             } else {
                 // router.replace('/(main)/Profile');
-                router.replace('/(main)/Dashboard/Course');
+                router.replace('/(main)/Dashboard/Performance');
             }
         };
 

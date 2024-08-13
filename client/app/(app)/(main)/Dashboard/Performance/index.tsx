@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import { AuthContext } from '@/Context/AuthContext';
-import TestCard from '@/Components/Cards/TestCard';
 
 const Home = () => {
     const [tests, setTests] = useState([]);
@@ -15,7 +14,7 @@ const Home = () => {
     useEffect(() => {
         const fetchTests = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/submitted-tests-user/${userDetails._id}`);
+                const response = await axios.get(`https://edudas.onrender.com/submitted-tests-user/${userDetails.id}`);
                 setTests(response.data);
             } catch (error) {
                 console.error("error fetching performance", error)
@@ -35,8 +34,7 @@ const Home = () => {
             style={{ backgroundColor: theme.colors.background, padding: 16 }}
         >
             {tests.map((test) => (
-                // <TestCard key={test._id} test={test} />
-                <Text>{test.total_marks}</Text>
+                <Text key={test._id} style={{ color: "white" }}>{test.total_marks}</Text>
             ))}
         </ScrollView>
     );

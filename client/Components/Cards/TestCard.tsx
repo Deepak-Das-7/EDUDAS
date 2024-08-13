@@ -12,7 +12,6 @@ import { AuthContext } from '@/Context/AuthContext';
 const TestCard = ({ test }) => {
     const { theme } = useContext(ThemeContext);
     const [given, setGiven] = useState(false);
-    const [error, setError] = useState("");
     const { userDetails } = useContext(AuthContext);
 
     const handlePress = () => {
@@ -23,13 +22,11 @@ const TestCard = ({ test }) => {
         const checkTestStatus = async () => {
             try {
                 const response = await axios.get(`https://edudas.onrender.com/submitted-tests/${userDetails.id}/${test._id}`);
-
                 if (response.data) {
                     setGiven(true);
                 }
             } catch (error) {
-                setError('Error fetching test status');
-                Alert.alert("Failed", "Fetching test failed")
+                console.log(error);
             }
         };
         checkTestStatus();
