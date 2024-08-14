@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, Image, Alert } from 'react-native'
 import React, { useContext } from 'react'
 import { ThemeContext } from '@/Context/ThemeContext';
 import { router } from 'expo-router';
@@ -6,9 +6,13 @@ import { router } from 'expo-router';
 const VideoTestCard = ({ course }) => {
     const { theme } = useContext(ThemeContext);
 
-    const goTo = (path: string, ID: any) => () => {
-        const query = new URLSearchParams({ id: ID }).toString();
-        router.push(`/(main)/Dashboard/Course/${path}?${query}`);
+    const goTo = (path: string, id: any) => () => {
+        if (!path || !id) {
+            Alert.alert(`Sorry`, `No Data in ${path}`)
+            return;
+        }
+        const query = new URLSearchParams({ id: String(id) }).toString();
+        router.push(`/Dashboard/Course/${path}?${query}`);
     };
     const image = "https://picsum.photos/600";
     return (

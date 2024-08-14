@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import YouTubeIframe from 'react-native-youtube-iframe';
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
@@ -7,11 +7,11 @@ import { useLocalSearchParams } from 'expo-router';
 
 const Videos = () => {
     const { id } = useLocalSearchParams();
-    // console.log("id", id);
     const { theme } = useContext(ThemeContext);
     const [playing, setPlaying] = useState<string | null>(null);
     const [videos, setVideos] = useState<any[]>([]);
-    const [selectedVideoId, setSelectedVideoId] = useState<string | null>("vRAp1w3-BHg");
+    const [selectedVideoId, setSelectedVideoId] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const screenWidth = Dimensions.get('window').width;
     const playerWidth = screenWidth * 0.9;
@@ -20,17 +20,18 @@ const Videos = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await axios.get(`http://192.168.31.161:5000/videos/${id}`);
+                const response = await axios.get(`https://edudas.onrender.com/videos/${id}`);
                 setVideos(response.data.videos);
-                // console.log("getting all videos of ", response.data.videos);
             } catch (error) {
                 console.error('Error getting video list:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchVideos();
-    }, []);
+    }, [id]);
 
-    const onStateChange = useCallback((state, videoId) => {
+    const onStateChange = useCallback((state: string, videoId: any) => {
         if (state === 'ended') {
             setPlaying(null);
             alert(`Video with ID: ${videoId} has finished playing!`);
@@ -43,7 +44,7 @@ const Videos = () => {
 
         return (
             <View style={[styles.selectedVideoContainer, { backgroundColor: theme.colors.surface }]}>
-                <Text style={[styles.videoName, { color: theme.textColors.primaryText }]}>{selectedVideo.videoName}</Text>
+                <Text style={[styles.videoName, { color: 'blue' }]}>{selectedVideo.videoName}</Text>
                 <YouTubeIframe
                     height={playerHeight}
                     width={playerWidth}
@@ -63,7 +64,9 @@ const Videos = () => {
 
     const renderVideoItem = ({ item }: { item: any }) => (
         <TouchableOpacity
-            style={[styles.videoListItem, { backgroundColor: theme.colors.surface }]}
+            style={[styles.videoListItem, { backgroundColor: theme.colors.surface },
+            item.videoId === selectedVideoId && { borderColor: theme.colors.primary, borderWidth: 1, backgroundColor: theme.colors.secondary }
+            ]}
             onPress={() => setSelectedVideoId(item.videoId)}
         >
             <Image
@@ -77,6 +80,14 @@ const Videos = () => {
             </View>
         </TouchableOpacity>
     );
+
+    if (loading) {
+        return (
+            <View style={[styles.loadingContainer, { backgroundColor: theme.colors.background }]}>
+                <ActivityIndicator size="large" color={theme.colors.primary} />
+            </View>
+        );
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
@@ -95,6 +106,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingTop: 10,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     selectedVideoContainer: {
         alignItems: 'center',

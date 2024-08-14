@@ -45,15 +45,15 @@ export default function _layout() {
                 }}
             />
             <Tabs.Screen
-                name="AddPost"
+                name="AddCourse"
                 options={{
                     headerShown: false,
-                    title: "AddPost",
+                    title: "AddCourse",
                     tabBarIcon: ({ focused }) =>
                         focused ? (
-                            <Ionicons name="search" size={30} color={theme.colors.primary} />
+                            <Ionicons name="add-circle" size={30} color={theme.colors.primary} />
                         ) : (
-                            <Ionicons name="search" size={26} color={theme.textColors.secondaryText} />
+                            <Ionicons name="add-circle" size={26} color={theme.textColors.secondaryText} />
                         ),
                 }}
             />

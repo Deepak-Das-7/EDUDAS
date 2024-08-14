@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl, Alert, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
 import { useRefresh } from '@/Context/RefreshContext'; // Correctly import useRefresh
 import axios from 'axios';
-import CourseCard from '@/Components/Cards/CourseCard';
 import { Course } from '@/Constants/types';
+import AddCourse from '@/Components/Cards/AddCourse';
 import { AuthContext } from '@/Context/AuthContext';
-import { router } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
 
 const Home = () => {
     const { theme } = useContext(ThemeContext);
@@ -20,17 +18,13 @@ const Home = () => {
     const { userDetails } = useContext(AuthContext);
 
     const fetchCourses = async () => {
-        if (!userDetails || !userDetails.id) return; // Early return if userDetails or userDetails.id is null
-
+        if (!userDetails || !userDetails.id) return;
         try {
-            // console.log(userDetails.id);
-            const response = await axios.get(`https://edudas.onrender.com/coursesOfUser/${userDetails.id}`);
-            // console.log(response.data);
+            const response = await axios.get(`https://edudas.onrender.com/coursesOfNotUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);
-            setError(''); // Clear any previous error
+            setError('');
         } catch (error) {
-            console.error('Error fetching courses:', error);
             setError('Failed to fetch courses');
         } finally {
             setLoading(false);
@@ -44,6 +38,9 @@ const Home = () => {
         }
     }, [userDetails]);
 
+
+
+
     useEffect(() => {
         const results = courses.filter(course =>
             (course.courseName.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -52,6 +49,7 @@ const Home = () => {
         setFilteredCourses(results);
     }, [searchQuery, courses]);
 
+    // Handler for pull-to-refresh action
     const onRefresh = () => {
         setRefreshing(true);
         fetchCourses();
@@ -62,21 +60,7 @@ const Home = () => {
     }
 
     if (error) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity
-                    style={{ alignItems: 'center' }}
-                    onPress={() => {
-                        router.push("/AddCourse/");
-                    }}
-                >
-                    <Ionicons name="add-circle" size={50} color="black" />
-                </TouchableOpacity>
-                <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
-                    {error} {/* Display the actual error message */}
-                </Text>
-            </View>
-        );
+        return <Text>Error: {error}</Text>;
     }
 
     return (
@@ -102,7 +86,7 @@ const Home = () => {
             </View>
             {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (
-                    <CourseCard key={course._id} course={course} />
+                    <AddCourse key={course._id} course={course} />
                 ))
             ) : (
                 <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>

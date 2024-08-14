@@ -16,15 +16,11 @@ const Performance = () => {
     const [error, setError] = useState<string>('');
     const { theme } = useContext(ThemeContext);
 
-    // const id = "66bb456adb5a7b0c7acc7adb"
-
-
     useEffect(() => {
         const fetchTests = async () => {
             try {
                 if (!userDetails || !userDetails.id) return;
-                const response = await axios.get(`http://192.168.31.161:5000/submitted-tests-user/${userDetails.id}`);
-                // console.log("Helloo", response.data);
+                const response = await axios.get(`https://edudas.onrender.com/submitted-tests-user/${userDetails.id}`);
                 setTests(response.data);
             } catch (error) {
                 console.error(error);
@@ -51,7 +47,7 @@ const Performance = () => {
         >
             <TouchableOpacity
                 onPress={() => {
-                    router.push('/(main)/Dashboard/Performance/Chart')
+                    router.push('/Dashboard/Performance/Chart')
                 }}
                 style={{ backgroundColor: theme.colors.background, padding: 16, alignContent: "center" }}
             >

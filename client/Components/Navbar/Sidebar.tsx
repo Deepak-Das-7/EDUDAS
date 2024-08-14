@@ -40,7 +40,7 @@ const Sidebar: React.FC = () => {
             </View>
             <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => router.push('/(main)/AddPost')}
+                onPress={() => router.push('/(main)/AddCourse')}
             >
                 <AntDesign name="home" size={24} color={theme.colors.primary} />
                 <Text style={[styles.menuText, { color: theme.textColors.primaryText }]}>
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.menuItem}
-                onPress={() => router.push('/(main)/AddPost')}
+                onPress={() => router.push('/(main)/AddCourse')}
             >
                 <AntDesign name="profile" size={24} color={theme.colors.primary} />
                 <Text style={[styles.menuText, { color: theme.textColors.primaryText }]}>

@@ -23,7 +23,9 @@ router.post('/courses', courseController.createCourse);
 router.get('/courses', courseController.getCourses);
 router.get('/courses/:id', courseController.getCourseById);
 router.put('/courses/:id', courseController.updateCourseByID);
+router.post('/coursesAddToUser/:user_id/:course_id', courseController.addCourseByUserId);
 router.get('/coursesOfUser/:id', courseController.getCourseByUserId);
+router.get('/coursesOfNotUser/:id', courseController.getOtherCourseByUserId);
 router.put('/coursesOfUser/:id', courseController.updateCourseByUserId);
 router.delete('/courses/:id', courseController.deleteCourse);
 

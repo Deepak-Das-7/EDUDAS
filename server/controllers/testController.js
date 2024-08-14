@@ -28,7 +28,7 @@ exports.getAllTests = async (req, res) => {
                 }
             },
             { $unwind: { path: '$course', preserveNullAndEmptyArrays: true } }
-        ]);
+        ]).sort({ startDate: -1 });
 
         if (!results || results.length === 0) {
             return res.status(404).json({ message: 'No tests found' });
@@ -76,7 +76,7 @@ exports.getTestByCourseId = async (req, res) => {
             .populate({
                 path: 'tests',
                 match: { is_deleted: false } // Filter out deleted tests
-            });
+            }).sort({ createdAt: -1 });
 
         if (!course) {
             return res.status(404).json({ message: 'Course not found' });

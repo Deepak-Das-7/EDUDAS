@@ -10,6 +10,7 @@ import { Question, Result } from '@/Constants/types';
 
 const SingleTest = () => {
     const { id } = useLocalSearchParams();
+    // console.log(id, "In single test");
     const { theme } = useContext(ThemeContext);
     const { userDetails } = useContext(AuthContext);
 
@@ -25,7 +26,7 @@ const SingleTest = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`http://192.168.31.161:5000/tests/${id}`);
+                const response = await axios.get(`https://edudas.onrender.com/tests/${id}`);
                 setQuestions(response.data.questions);
             } catch (error) {
                 setError('Failed to fetch courses');
@@ -90,7 +91,7 @@ const SingleTest = () => {
         const total_marks = calculateScore();
         const marks_string = `${total_marks}/${questions.length}`;
         try {
-            const response = await axios.post('http://192.168.31.161:5000/submit-test', {
+            const response = await axios.post('https://edudas.onrender.com/submit-test', {
                 test_id: id,
                 user_id: userDetails.id,
                 questions: results,
