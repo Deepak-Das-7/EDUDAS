@@ -29,7 +29,7 @@ const Home = () => {
                     onPress={() => drawer.current?.openDrawer()}
                 />
                 <TouchableOpacity onPress={() => {
-                    console.log("goingggggg");
+                    // console.log("goingggggg");
                     router.push("/Profile/Setting")
                 }}>
                     <Text>Go to settings tab</Text>

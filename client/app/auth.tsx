@@ -65,9 +65,9 @@ export default function Auth() {
         try {
             let response: AxiosResponse<any, any>;
             if (userType === 'teacher') {
-                response = await axios.post(`https://edudas.onrender.com/teachers/login`, formData);
+                response = await axios.post(`http://192.168.31.161:5000/teachers/login`, formData);
             } else {
-                response = await axios.post(`https://edudas.onrender.com/students/login`, formData);
+                response = await axios.post(`http://192.168.31.161:5000/students/login`, formData);
             }
             const token = response.data.token;
             login(token);
@@ -83,9 +83,9 @@ export default function Auth() {
             console.log("input", formData);
             let response: AxiosResponse<any, any>;
             if (userType === 'teacher') {
-                response = await axios.post(`https://edudas.onrender.com/teachers`, formData);
+                response = await axios.post(`http://192.168.31.161:5000/teachers`, formData);
             } else {
-                response = await axios.post(`https://edudas.onrender.com/students`, formData);
+                response = await axios.post(`http://192.168.31.161:5000/students`, formData);
             }
             Alert.alert('Success', 'Registration successful!');
             setIsSignup(false);

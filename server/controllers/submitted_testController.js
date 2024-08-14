@@ -75,7 +75,7 @@ exports.getSubmittedTestByUserId = async (req, res) => {
         }
 
         // Fetch submitted tests for the given user ID
-        const submittedTests = await SubmittedTest.find({ user_id: id, is_deleted: false });
+        const submittedTests = await SubmittedTest.find({ user_id: id, is_deleted: false }).populate('test_id').sort({ createdAt: -1 });
 
         if (!submittedTests || submittedTests.length === 0) {
             return res.status(404).json({ message: 'No submitted tests found for this user' });

@@ -16,7 +16,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('https://edudas.onrender.com/courses');
+                const response = await axios.get('http://192.168.31.161:5000/courses');
                 setCourses(response.data);
                 setFilteredCourses(response.data);
             } catch (error) {

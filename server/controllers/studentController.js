@@ -9,7 +9,7 @@ dotenv.config();
 // Create a new student (registration)
 exports.createStudent = async (req, res) => {
     const { firstName, lastName, email, password, dateOfBirth } = req.body;
-    console.log("on getting ", firstName, lastName, email, password, dateOfBirth);
+    // console.log("on getting ", firstName, lastName, email, password, dateOfBirth);
     try {
         // Check if the student already exists
         const existingStudent = await Student.findOne({ email });

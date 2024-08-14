@@ -17,7 +17,7 @@ const SingleCourse = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/courses/${id}`);
+                const response = await axios.get(`http://192.168.31.161:5000/courses/${id}`);
                 setCourse(response.data);
             } catch (error) {
                 setError('Failed to fetch course');

@@ -1,36 +1,41 @@
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
 import TestCard from '@/Components/Cards/TestCard';
 import { AuthContext } from '@/Context/AuthContext';
+import TestList from '@/Components/Cards/TestList';
+import AllChart from '@/Components/Charts/AllChart';
 
 
-const Tests = () => {
+const Performance = () => {
     const { userDetails } = useContext(AuthContext);
-    const { id } = useLocalSearchParams();
     const [tests, setTests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
     const { theme } = useContext(ThemeContext);
 
+    // const id = "66bb456adb5a7b0c7acc7adb"
 
 
     useEffect(() => {
         const fetchTests = async () => {
             try {
-                console.log(userDetails);
-                const response = await axios.get(`https://edudas.onrender.com/course_tests/${id}`);
-                setTests(response.data.tests);
+                if (!userDetails || !userDetails.id) return;
+                const response = await axios.get(`http://192.168.31.161:5000/submitted-tests-user/${userDetails.id}`);
+                // console.log("Helloo", response.data);
+                setTests(response.data);
             } catch (error) {
+                console.error(error);
                 setError('Failed to fetch tests');
             } finally {
                 setLoading(false);
             }
         };
+
         fetchTests();
-    }, []);
+    }, [userDetails]);
 
     if (loading) {
         return <Text>Loading...</Text>;
@@ -41,16 +46,22 @@ const Tests = () => {
     }
 
     return (
-        <ScrollView
+        <View
             style={{ backgroundColor: theme.colors.background, padding: 16 }}
         >
-            {tests.map((test) => (
-                <TestCard key={test._id} test={test} />
-            ))}
-        </ScrollView>
+            <TouchableOpacity
+                onPress={() => {
+                    router.push('/(main)/Dashboard/Performance/Chart')
+                }}
+                style={{ backgroundColor: theme.colors.background, padding: 16, alignContent: "center" }}
+            >
+                <Text>Show chart</Text>
+            </TouchableOpacity>
+            <TestList tests={tests} />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
 });
-export default Tests;
+export default Performance;

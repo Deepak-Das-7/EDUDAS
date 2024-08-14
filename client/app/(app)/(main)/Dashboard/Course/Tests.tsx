@@ -17,7 +17,7 @@ const Tests = () => {
     useEffect(() => {
         const fetchTests = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/course_tests/${id}`);
+                const response = await axios.get(`http://192.168.31.161:5000/course_tests/${id}`);
                 setTests(response.data.tests);
             } catch (error) {
                 setError('Failed to fetch tests');

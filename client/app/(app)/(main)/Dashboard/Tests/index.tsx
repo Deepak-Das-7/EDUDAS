@@ -15,7 +15,7 @@ const Home = () => {
 
     const fetchTests = async () => {
         try {
-            const response = await axios.get('https://edudas.onrender.com/tests');
+            const response = await axios.get('http://192.168.31.161:5000/tests');
             setTests(response.data);
             setFilteredTests(response.data); // Initialize filteredTests
         } catch (error) {

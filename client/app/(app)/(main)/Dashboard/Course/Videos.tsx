@@ -7,7 +7,7 @@ import { useLocalSearchParams } from 'expo-router';
 
 const Videos = () => {
     const { id } = useLocalSearchParams();
-    console.log("id", id);
+    // console.log("id", id);
     const { theme } = useContext(ThemeContext);
     const [playing, setPlaying] = useState<string | null>(null);
     const [videos, setVideos] = useState<any[]>([]);
@@ -20,9 +20,9 @@ const Videos = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/videos/${id}`);
+                const response = await axios.get(`http://192.168.31.161:5000/videos/${id}`);
                 setVideos(response.data.videos);
-                console.log("getting all videos of ", response.data.videos);
+                // console.log("getting all videos of ", response.data.videos);
             } catch (error) {
                 console.error('Error getting video list:', error);
             }
