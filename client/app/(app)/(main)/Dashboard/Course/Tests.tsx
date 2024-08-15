@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
 import { useRefresh } from '@/Context/RefreshContext'; // Import useRefresh
 import TestCard from '@/Components/Cards/TestCard';
+import { BASE_URL } from '@env';
 
 const Tests = () => {
     const { id } = useLocalSearchParams();
@@ -16,7 +17,7 @@ const Tests = () => {
 
     const fetchTests = async () => {
         try {
-            const response = await axios.get(`https://edudas.onrender.com/course_tests/${id}`);
+            const response = await axios.get(`${BASE_URL}/course_tests/${id}`);
             setTests(response.data.tests);
             setError(''); // Clear any previous error
         } catch (error) {

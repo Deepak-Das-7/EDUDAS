@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text } from 'react-native';
 import { ThemeContext } from './Context/ThemeContext';
 import axios from 'axios';
 import CourseCard from './Components/Cards/CourseCard';
+import { BASE_URL } from '@env';
 
 
 const Home = () => {
@@ -14,7 +15,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('https://edudas.onrender.com/courses');
+                const response = await axios.get(`${BASE_URL}/courses`);
                 setCourses(response.data);
             } catch (error) {
                 setError('Failed to fetch courses');

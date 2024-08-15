@@ -4,6 +4,7 @@ import YouTubeIframe from 'react-native-youtube-iframe';
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import { useLocalSearchParams } from 'expo-router';
+import { BASE_URL } from '@env';
 
 const Videos = () => {
     const { id } = useLocalSearchParams();
@@ -20,7 +21,7 @@ const Videos = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/videos/${id}`);
+                const response = await axios.get(`${BASE_URL}/videos/${id}`);
                 setVideos(response.data.videos);
             } catch (error) {
                 console.error('Error getting video list:', error);

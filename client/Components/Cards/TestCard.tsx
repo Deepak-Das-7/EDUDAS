@@ -8,6 +8,7 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
 import { AuthContext } from '@/Context/AuthContext';
+import { BASE_URL } from '@env';
 
 const TestCard = ({ test }) => {
     const { theme } = useContext(ThemeContext);
@@ -21,7 +22,7 @@ const TestCard = ({ test }) => {
     useEffect(() => {
         const checkTestStatus = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/submitted-tests/${userDetails.id}/${test._id}`);
+                const response = await axios.get(`${BASE_URL}/submitted-tests/${userDetails.id}/${test._id}`);
                 if (response.data) {
                     setGiven(true);
                 }

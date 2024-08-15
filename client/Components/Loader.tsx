@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
 
-const Spinner = () => {
+const Loader = () => {
     const { theme } = React.useContext(ThemeContext);
 
     return (
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Spinner;
+export default Loader;

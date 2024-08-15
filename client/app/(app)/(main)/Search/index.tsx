@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Navbar from '../../../../Components/Navbar/Navbar';
 import { ThemeContext } from '../../../../Context/ThemeContext';
 import axios from 'axios';
 import CourseCard from '../../../../Components/Cards/CourseCard';
+import { router } from 'expo-router';
+import { BASE_URL } from '@env';
 
 
 const Home = () => {
@@ -15,7 +17,7 @@ const Home = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('https://edudas.onrender.com/courses');
+                const response = await axios.get(`${BASE_URL}/courses`);
                 setCourses(response.data);
             } catch (error) {
                 setError('Failed to fetch courses');
@@ -38,6 +40,12 @@ const Home = () => {
     return (
         <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
             <Navbar />
+            <TouchableOpacity onPress={() => {
+                console.log("Going to search")
+                router.push('/Search/setting')
+            }}>
+                <Text>Go to search test page</Text>
+            </TouchableOpacity>
             <ScrollView style={styles.container}>
                 {courses.map((course) => (
                     <CourseCard key={course._id} course={course} />

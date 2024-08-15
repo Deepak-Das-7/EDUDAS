@@ -7,6 +7,7 @@ import TestCard from '@/Components/Cards/TestCard';
 import { AuthContext } from '@/Context/AuthContext';
 import TestList from '@/Components/Cards/TestList';
 import AllChart from '@/Components/Charts/AllChart';
+import { BASE_URL } from '@env';
 
 
 const Performance = () => {
@@ -20,7 +21,7 @@ const Performance = () => {
         const fetchTests = async () => {
             try {
                 if (!userDetails || !userDetails.id) return;
-                const response = await axios.get(`https://edudas.onrender.com/submitted-tests-user/${userDetails.id}`);
+                const response = await axios.get(`${BASE_URL}/submitted-tests-user/${userDetails.id}`);
                 setTests(response.data);
             } catch (error) {
                 console.error(error);

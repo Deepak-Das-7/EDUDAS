@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Course } from '@/Constants/types';
 import VideoTestCard from '@/Components/Course/VideoTestCard';
 import Intro from '@/Components/Course/Intro';
+import { BASE_URL } from '@env';
 
 const SingleCourse = () => {
     const { id } = useLocalSearchParams();
@@ -17,7 +18,7 @@ const SingleCourse = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/courses/${id}`);
+                const response = await axios.get(`${BASE_URL}/courses/${id}`);
                 setCourse(response.data);
             } catch (error) {
                 setError('Failed to fetch course');

@@ -6,6 +6,8 @@ import axios from 'axios';
 import { Course } from '@/Constants/types';
 import AddCourse from '@/Components/Cards/AddCourse';
 import { AuthContext } from '@/Context/AuthContext';
+import { BASE_URL } from '@env';
+import Count from '@/Components/Count';
 
 const Home = () => {
     const { theme } = useContext(ThemeContext);
@@ -20,7 +22,7 @@ const Home = () => {
     const fetchCourses = async () => {
         if (!userDetails || !userDetails.id) return;
         try {
-            const response = await axios.get(`https://edudas.onrender.com/coursesOfNotUser/${userDetails.id}`);
+            const response = await axios.get(`${BASE_URL}/coursesOfNotUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);
             setError('');
@@ -60,12 +62,12 @@ const Home = () => {
     }
 
     if (error) {
-        return <Text>Error: {error}</Text>;
+        return <Text>All courses are added to your account!!</Text>;
     }
 
     return (
         <ScrollView
-            style={{ backgroundColor: theme.colors.background, padding: 16 }}
+            style={{ backgroundColor: theme.colors.background, padding: 10 }}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -77,16 +79,19 @@ const Home = () => {
         >
             <View style={styles.searchContainer}>
                 <TextInput
-                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText }]}
+                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
                     placeholder="Search courses"
                     placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
+                {
+                    searchQuery && <Count count={filteredCourses.length} />
+                }
             </View>
             {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (
-                    <AddCourse key={course._id} course={course} />
+                    <AddCourse key={course._id} course={course} onRefresh={onRefresh} />
                 ))
             ) : (
                 <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>
@@ -97,7 +102,10 @@ const Home = () => {
 
 const styles = StyleSheet.create({
     searchContainer: {
-        marginBottom: 10,
+        marginBottom: 7,
+        display: 'flex',
+        flexDirection: "row",
+        gap: 10
     },
     searchBox: {
         padding: 7,

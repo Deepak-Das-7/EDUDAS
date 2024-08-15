@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'r
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import TestCard from '@/Components/Cards/TestCard';
+import { BASE_URL } from '@env';
+import Count from '@/Components/Count';
 
 const Home = () => {
     const [tests, setTests] = useState([]);
@@ -15,7 +17,7 @@ const Home = () => {
 
     const fetchTests = async () => {
         try {
-            const response = await axios.get('https://edudas.onrender.com/tests');
+            const response = await axios.get(`${BASE_URL}/tests`);
             setTests(response.data);
             setFilteredTests(response.data); // Initialize filteredTests
         } catch (error) {
@@ -52,7 +54,7 @@ const Home = () => {
 
     return (
         <ScrollView
-            style={{ backgroundColor: theme.colors.background, padding: 16 }}
+            style={{ backgroundColor: theme.colors.background, padding: 10 }}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -64,12 +66,15 @@ const Home = () => {
         >
             <View style={styles.searchContainer}>
                 <TextInput
-                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText }]}
+                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
                     placeholder="Search tests"
                     placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
+                {searchQuery &&
+                    <Count count={filteredTests.length} />
+                }
             </View>
             {filteredTests.length > 0 ? (
                 filteredTests.map((test) => (
@@ -84,13 +89,16 @@ const Home = () => {
 
 const styles = StyleSheet.create({
     searchContainer: {
-        marginBottom: 16,
+        marginBottom: 7,
+        display: 'flex',
+        flexDirection: "row",
+        gap: 10
     },
     searchBox: {
         padding: 7,
-        borderRadius: 7,
+        borderRadius: 10,
         fontSize: 16,
-        paddingLeft: 20
+        paddingLeft: 20,
     },
     noItemsText: {
         textAlign: 'center',

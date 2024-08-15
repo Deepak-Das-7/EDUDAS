@@ -5,6 +5,7 @@ import { AuthContext } from '@/Context/AuthContext';
 import { router, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { Question, Result } from '@/Constants/types';
+import { BASE_URL } from '@env';
 
 
 
@@ -26,7 +27,7 @@ const SingleTest = () => {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get(`https://edudas.onrender.com/tests/${id}`);
+                const response = await axios.get(`${BASE_URL}/tests/${id}`);
                 setQuestions(response.data.questions);
             } catch (error) {
                 setError('Failed to fetch courses');
@@ -91,7 +92,7 @@ const SingleTest = () => {
         const total_marks = calculateScore();
         const marks_string = `${total_marks}/${questions.length}`;
         try {
-            const response = await axios.post('https://edudas.onrender.com/submit-test', {
+            const response = await axios.post(`${BASE_URL}/submit-test`, {
                 test_id: id,
                 user_id: userDetails.id,
                 questions: results,

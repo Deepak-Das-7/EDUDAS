@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { ThemeContext } from '../../Context/ThemeContext';
 import { router } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
@@ -8,17 +8,33 @@ import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import { AuthContext } from '@/Context/AuthContext';
+import { BASE_URL } from '@env';
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course, onRefresh }) => {
     const { theme } = useContext(ThemeContext);
     const { userDetails } = useContext(AuthContext);
 
     const handleFavoritePress = async () => {
-        console.log('Favorite icon pressed');
         try {
-            const response = await axios.post(`https://edudas.onrender.com/coursesAddToUser/${userDetails.id}/${course._id}`);
+            const response = await axios.post(`${BASE_URL}/coursesAddToUser/${userDetails.id}/${course._id}`);
             if (response.status === 200) {
-                console.log('Course added to favorites successfully');
+                onRefresh();
+                Alert.alert(
+                    'Successfull',
+                    'Course added!! Go to dashboard.',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => router.replace('/Dashboard/Course/')
+
+                        },
+                    ],
+                    { cancelable: false }
+                );
             } else {
                 console.log('Unexpected response status:', response.status);
             }

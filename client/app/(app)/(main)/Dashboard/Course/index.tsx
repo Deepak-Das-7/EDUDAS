@@ -1,17 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { useRefresh } from '@/Context/RefreshContext'; // Correctly import useRefresh
+import { useRefresh } from '@/Context/RefreshContext';
 import axios from 'axios';
 import CourseCard from '@/Components/Cards/CourseCard';
 import { Course } from '@/Constants/types';
 import { AuthContext } from '@/Context/AuthContext';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { BASE_URL } from '@env';
+import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
+import Loader from '@/Components/Loader';
+import Count from '@/Components/Count';
 
 const Home = () => {
     const { theme } = useContext(ThemeContext);
-    const { refreshing, setRefreshing } = useRefresh(); // Use useRefresh correctly
+    const { refreshing, setRefreshing } = useRefresh();
     const [courses, setCourses] = useState<Course[]>([]);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -20,29 +24,30 @@ const Home = () => {
     const { userDetails } = useContext(AuthContext);
 
     const fetchCourses = async () => {
-        if (!userDetails || !userDetails.id) return; // Early return if userDetails or userDetails.id is null
+        if (!userDetails || !userDetails.id) return;
 
         try {
-            // console.log(userDetails.id);
-            const response = await axios.get(`https://edudas.onrender.com/coursesOfUser/${userDetails.id}`);
-            // console.log(response.data);
+            const response = await axios.get(`${BASE_URL}/coursesOfUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);
-            setError(''); // Clear any previous error
+            setError('');
         } catch (error) {
-            console.error('Error fetching courses:', error);
             setError('Failed to fetch courses');
         } finally {
             setLoading(false);
-            setRefreshing(false); // Stop the refresh indicator
+            setRefreshing(false);
         }
     };
 
-    useEffect(() => {
-        if (userDetails && userDetails.id) {
-            fetchCourses();
-        }
-    }, [userDetails]);
+    // Use useFocusEffect to refresh courses when the component is focused
+    useFocusEffect(
+        useCallback(() => {
+            if (userDetails && userDetails.id) {
+                setLoading(true);
+                fetchCourses();
+            }
+        }, [userDetails])
+    );
 
     useEffect(() => {
         const results = courses.filter(course =>
@@ -57,8 +62,8 @@ const Home = () => {
         fetchCourses();
     };
 
-    if (loading && !refreshing) { // Show loading only on initial load, not during refresh
-        return <Text>Loading...</Text>;
+    if (loading && !refreshing) {
+        return <Loader />;
     }
 
     if (error) {
@@ -73,7 +78,7 @@ const Home = () => {
                     <Ionicons name="add-circle" size={50} color="black" />
                 </TouchableOpacity>
                 <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
-                    {error} {/* Display the actual error message */}
+                    Add course {/* Display the actual error message */}
                 </Text>
             </View>
         );
@@ -81,7 +86,7 @@ const Home = () => {
 
     return (
         <ScrollView
-            style={{ backgroundColor: theme.colors.background, padding: 16 }}
+            style={{ backgroundColor: theme.colors.background, padding: 10 }}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -93,12 +98,16 @@ const Home = () => {
         >
             <View style={styles.searchContainer}>
                 <TextInput
-                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText }]}
+                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
                     placeholder="Search courses"
                     placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
+                {searchQuery &&
+                    <Count count={filteredCourses.length} />
+                }
+
             </View>
             {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (
@@ -113,7 +122,10 @@ const Home = () => {
 
 const styles = StyleSheet.create({
     searchContainer: {
-        marginBottom: 10,
+        marginBottom: 7,
+        display: 'flex',
+        flexDirection: "row",
+        gap: 10
     },
     searchBox: {
         padding: 7,
