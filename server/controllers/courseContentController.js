@@ -24,7 +24,7 @@ exports.getCourseContents = async (req, res) => {
 // Get a course content by ID
 exports.getCourseContentById = async (req, res) => {
     try {
-        const courseContent = await CourseContent.findById(req.params.id);
+        const courseContent = await CourseContent.findById(req.params.id).populate('practicePaperList');
 
         if (!courseContent) {
             return res.status(404).send({ message: 'Course content not found' });

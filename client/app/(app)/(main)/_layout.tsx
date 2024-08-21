@@ -27,7 +27,7 @@ export default function _layout() {
                         focused ? (
                             <MaterialIcons name="dashboard" size={30} color={theme.colors.primary} />
                         ) : (
-                            <MaterialIcons name="dashboard" size={26} color={theme.textColors.secondaryText} />
+                            <MaterialIcons name="dashboard" size={24} color={theme.textColors.secondaryText} />
                         ),
                 }}
             />
@@ -40,7 +40,7 @@ export default function _layout() {
                         focused ? (
                             <Ionicons name="search" size={30} color={theme.colors.primary} />
                         ) : (
-                            <Ionicons name="search" size={26} color={theme.textColors.secondaryText} />
+                            <Ionicons name="search" size={24} color={theme.textColors.secondaryText} />
                         ),
                 }}
             />
@@ -53,7 +53,7 @@ export default function _layout() {
                         focused ? (
                             <Ionicons name="add-circle" size={30} color={theme.colors.primary} />
                         ) : (
-                            <Ionicons name="add-circle" size={26} color={theme.textColors.secondaryText} />
+                            <Ionicons name="add-circle" size={24} color={theme.textColors.secondaryText} />
                         ),
                 }}
             />
@@ -66,10 +66,24 @@ export default function _layout() {
                         focused ? (
                             <Ionicons name="people" size={30} color={theme.colors.primary} />
                         ) : (
-                            <Ionicons name="people" size={26} color={theme.textColors.secondaryText} />
+                            <Ionicons name="people" size={24} color={theme.textColors.secondaryText} />
                         ),
                 }}
             />
+            <Tabs.Screen
+                name="Admin"
+                options={{
+                    headerShown: false,
+                    title: "Admin",
+                    tabBarIcon: ({ focused }) =>
+                        focused ? (
+                            <MaterialIcons name="admin-panel-settings" size={30} color={theme.colors.primary} />
+                        ) : (
+                            <MaterialIcons name="admin-panel-settings" size={24} color={theme.textColors.secondaryText} />
+                        ),
+                }}
+            />
+
         </Tabs>
     );
 }

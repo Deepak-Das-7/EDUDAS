@@ -35,6 +35,7 @@ export interface Result {
 
 //Course
 export interface Course {
+    _id: string,
     is_deleted: boolean;
     courseName: string;
     description: string;
@@ -51,3 +52,4 @@ export interface Course {
     createdAt: Date;
     updatedAt: Date;
 }
+

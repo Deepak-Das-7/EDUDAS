@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import axios, { AxiosResponse } from 'axios';
-import { View, Text, Button, Alert, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
+import axios from 'axios';
+import { View, Text, Button, Alert, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { AuthContext } from '../Context/AuthContext';
 import { ThemeContext } from '../Context/ThemeContext';
 import TeacherLoginForm from '../Components/Login/TeacherLoginForm';
@@ -9,6 +9,7 @@ import TeacherSignupForm from '../Components/Login/TeacherSignupForm';
 import StudentSignupForm from '../Components/Login/StudentSignupForm';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
+import Loader from '@/Components/Loader';
 
 type FormData = {
     email: string;
@@ -22,43 +23,41 @@ export default function Auth() {
     const [isSignup, setIsSignup] = useState<boolean>(false);
     const [userType, setUserType] = useState<'teacher' | 'student'>('student');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
     const { login } = useContext(AuthContext);
     const { theme } = useContext(ThemeContext);
 
     const handleLoginError = (error: any) => {
         if (axios.isAxiosError(error) && error.response) {
-            const status = error.response.status;
-            const data = error.response.data;
+            const { status, data } = error.response;
 
             switch (status) {
                 case 400:
-                    if (data.message === 'Email and password are required') {
-                        Alert.alert('Error', 'Please provide both email and password.');
-                    } else if (data.message === 'Invalid credentials') {
-                        Alert.alert('Error', 'The email or password you entered is incorrect.');
-                    } else {
-                        Alert.alert('Error', data.message || 'Bad Request');
-                    }
+                    Alert.alert(
+                        'Error',
+                        data.message === 'Email and password are required'
+                            ? 'Please provide both email and password.'
+                            : data.message === 'Invalid credentials'
+                                ? 'The email or password you entered is incorrect.'
+                                : data.message || 'Bad Request'
+                    );
                     break;
-
                 case 404:
-                    if (data.message === 'Student not found' || data.message === 'Teacher not found') {
-                        Alert.alert('Error', 'No account found for this email.');
-                    } else {
-                        Alert.alert('Error', data.message || 'Resource not found');
-                    }
+                    Alert.alert(
+                        'Error',
+                        data.message === 'Student not found' || data.message === 'Teacher not found'
+                            ? 'No account found for this email.'
+                            : data.message || 'Resource not found'
+                    );
                     break;
-
                 case 500:
                     Alert.alert('Error', 'An internal server error occurred. Please try again later.');
                     break;
-
                 default:
                     Alert.alert('Error', 'An unexpected error occurred.');
                     break;
             }
         } else {
-            // Network or other error without a response
             Alert.alert('Error', 'Network Error: Unable to connect to the server.');
         }
     };
@@ -66,17 +65,11 @@ export default function Auth() {
     const handleLogin = async (formData: { email: string; password: string }) => {
         setIsLoading(true);
         try {
-            let response: AxiosResponse<any, any>;
-            if (userType === 'teacher') {
-                response = await axios.post(`${BASE_URL}/teachers/login`, formData);
-            } else {
-                response = await axios.post(`${BASE_URL}/students/login`, formData);
-            }
-            const token = response.data.token;
-            login(token);
+            const endpoint = userType === 'teacher' ? 'teachers/login' : 'students/login';
+            const response = await axios.post(`${BASE_URL}/${endpoint}`, formData);
+            login(response.data.token);
             router.replace('/(main)/Dashboard/Course');
         } catch (error) {
-            console.error('Error logging in:', error);
             handleLoginError(error);
         } finally {
             setIsLoading(false);
@@ -86,17 +79,11 @@ export default function Auth() {
     const handleSignup = async (formData: FormData) => {
         setIsLoading(true);
         try {
-            console.log("input", formData);
-            let response: AxiosResponse<any, any>;
-            if (userType === 'teacher') {
-                response = await axios.post(`${BASE_URL}/teachers`, formData);
-            } else {
-                response = await axios.post(`${BASE_URL}/students`, formData);
-            }
+            const endpoint = userType === 'teacher' ? 'teachers' : 'students';
+            await axios.post(`${BASE_URL}/${endpoint}`, formData);
             Alert.alert('Success', 'Registration successful!');
             setIsSignup(false);
         } catch (error) {
-            console.error('Error registering:', error);
             Alert.alert('Error', 'An error occurred while registering.');
         } finally {
             setIsLoading(false);
@@ -105,54 +92,57 @@ export default function Auth() {
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <ScrollView contentContainerStyle={styles.innerContainer}>
-                <Text style={[styles.title, { color: theme.textColors.primaryText }]}>
-                    {isSignup ? 'Create Your Account' : 'Login to Your Account'}
-                </Text>
-                <View style={styles.buttonContainer}>
-                    <Button
-                        title="Teacher"
-                        onPress={() => setUserType('teacher')}
-                        color={userType === 'teacher' ? theme.buttonColors.primaryButtonBackground : theme.buttonColors.disabledButtonBackground}
-                    />
-                    <Button
-                        title="Student"
-                        onPress={() => setUserType('student')}
-                        color={userType === 'student' ? theme.buttonColors.primaryButtonBackground : theme.buttonColors.disabledButtonBackground}
-                    />
-                </View>
-
-                {isLoading ? (
-                    <ActivityIndicator size="large" color={theme.buttonColors.primaryButtonBackground} />
-                ) : (
-                    <>
-                        {userType === 'teacher' && (
-                            isSignup
-                                ? <TeacherSignupForm onSubmit={handleSignup} />
-                                : <TeacherLoginForm onSubmit={handleLogin} />
-                        )}
-                        {userType === 'student' && (
-                            isSignup
-                                ? <StudentSignupForm onSubmit={handleSignup} />
-                                : <StudentLoginForm onSubmit={handleLogin} />
-                        )}
-                    </>
-                )}
-
-                <View style={styles.switchContainer}>
-                    {!isSignup ? (
-                        <Text style={{ color: theme.textColors.primaryText }}>
-                            Don’t have an account?{' '}
-                            <Text style={[styles.link, { color: theme.textColors.linkText }]} onPress={() => setIsSignup(true)}>Sign Up</Text>
-                        </Text>
+            {isLoading ? (
+                <Loader text={isSignup ? "Creating Account..." : "Authenticating..."} />
+            ) : (
+                <ScrollView contentContainerStyle={styles.innerContainer}>
+                    <Text style={[styles.title, { color: theme.textColors.primaryText }]}>
+                        {isSignup ? 'Create Your Account' : 'Login to Your Account'}
+                    </Text>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title="Teacher"
+                            onPress={() => setUserType('teacher')}
+                            color={
+                                userType === 'teacher'
+                                    ? theme.buttonColors.primaryButtonBackground
+                                    : theme.buttonColors.disabledButtonBackground
+                            }
+                        />
+                        <Button
+                            title="Student"
+                            onPress={() => setUserType('student')}
+                            color={
+                                userType === 'student'
+                                    ? theme.buttonColors.primaryButtonBackground
+                                    : theme.buttonColors.disabledButtonBackground
+                            }
+                        />
+                    </View>
+                    {isSignup ? (
+                        userType === 'teacher' ? (
+                            <TeacherSignupForm onSubmit={handleSignup} />
+                        ) : (
+                            <StudentSignupForm onSubmit={handleSignup} />
+                        )
+                    ) : userType === 'teacher' ? (
+                        <TeacherLoginForm onSubmit={handleLogin} />
                     ) : (
-                        <Text style={{ color: theme.textColors.primaryText }}>
-                            Already have an account?{' '}
-                            <Text style={[styles.link, { color: theme.textColors.linkText }]} onPress={() => setIsSignup(false)}>Login</Text>
-                        </Text>
+                        <StudentLoginForm onSubmit={handleLogin} />
                     )}
-                </View>
-            </ScrollView>
+                    <View style={styles.switchContainer}>
+                        <Text style={{ color: theme.textColors.primaryText }}>
+                            {isSignup ? 'Already have an account? ' : 'Don’t have an account? '}
+                            <Text
+                                style={[styles.link, { color: theme.textColors.linkText }]}
+                                onPress={() => setIsSignup(!isSignup)}
+                            >
+                                {isSignup ? 'Login' : 'Sign Up'}
+                            </Text>
+                        </Text>
+                    </View>
+                </ScrollView>
+            )}
         </SafeAreaView>
     );
 }
@@ -174,7 +164,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         marginBottom: 20,
     },
     switchContainer: {

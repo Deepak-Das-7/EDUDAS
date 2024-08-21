@@ -35,9 +35,13 @@ const Layout = () => {
                 tabBarScrollEnabled: true,
             }}
         >
+            <MaterialTopTabs.Screen name='Video' options={{ title: 'Video' }} />
             <MaterialTopTabs.Screen name='Course' options={{ title: 'Courses' }} />
             <MaterialTopTabs.Screen name='Performance' options={{ title: 'Performance' }} />
+            <MaterialTopTabs.Screen name='PracticePaper' options={{ title: 'PracticePaper' }} />
+            <MaterialTopTabs.Screen name='Test' options={{ title: 'Test' }} />
             <MaterialTopTabs.Screen name='Tests' options={{ title: 'Tests' }} />
+            <MaterialTopTabs.Screen name='Theory' options={{ title: 'Theory' }} />
         </MaterialTopTabs>
     );
 };

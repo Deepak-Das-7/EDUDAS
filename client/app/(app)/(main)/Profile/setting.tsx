@@ -1,14 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Drawer } from 'expo-router/drawer';
+import React from 'react';
 
-const setting = () => {
+export default function Layout() {
     return (
-        <View>
-            <Text>setting</Text>
-        </View>
-    )
+        <GestureHandlerRootView style={{}}>
+            <Drawer />
+        </GestureHandlerRootView>
+    );
 }
-
-export default setting
-
-const styles = StyleSheet.create({})

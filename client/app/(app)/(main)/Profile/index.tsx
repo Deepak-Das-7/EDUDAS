@@ -34,6 +34,12 @@ const Home = () => {
                 }}>
                     <Text>Go to settings tab</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    // console.log("goingggggg");
+                    router.push("/Profile/Testing")
+                }}>
+                    <Text>Go to testing tab</Text>
+                </TouchableOpacity>
             </View>
         </DrawerLayoutAndroid>
     );

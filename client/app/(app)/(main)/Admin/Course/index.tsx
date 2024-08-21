@@ -1,51 +1,53 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'react-native';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl, Alert, TouchableOpacity } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { useRefresh } from '@/Context/RefreshContext'; // Correctly import useRefresh
+import { useRefresh } from '@/Context/RefreshContext';
 import axios from 'axios';
+import CourseCard from '@/Components/Cards/CourseCard';
 import { Course } from '@/Constants/types';
-import AddCourse from '@/Components/Cards/AddCourse';
 import { AuthContext } from '@/Context/AuthContext';
+import { router } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URL } from '@env';
-import Count from '@/Components/Count';
+import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
 import Loader from '@/Components/Loader';
+import Count from '@/Components/Count';
 
 const Home = () => {
     const { theme } = useContext(ThemeContext);
-    const { refreshing, setRefreshing } = useRefresh(); // Use useRefresh correctly
+    const { refreshing, setRefreshing } = useRefresh();
     const [courses, setCourses] = useState<Course[]>([]);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
     const { userDetails } = useContext(AuthContext);
 
     const fetchCourses = async () => {
-
         if (!userDetails || !userDetails.id) return;
-        setIsLoading(true);
+
         try {
-            const response = await axios.get(`${BASE_URL}/coursesOfNotUser/${userDetails.id}`);
+            const response = await axios.get(`${BASE_URL}/coursesOfUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);
             setError('');
         } catch (error) {
             setError('Failed to fetch courses');
         } finally {
-            setIsLoading(false)
-            setRefreshing(false); // Stop the refresh indicator
+            setLoading(false);
+            setRefreshing(false);
         }
     };
 
-    useEffect(() => {
-        if (userDetails && userDetails.id) {
-            fetchCourses();
-        }
-    }, [userDetails]);
-
-
-
+    // Use useFocusEffect to refresh courses when the component is focused
+    useFocusEffect(
+        useCallback(() => {
+            if (userDetails && userDetails.id) {
+                setLoading(true);
+                fetchCourses();
+            }
+        }, [userDetails])
+    );
 
     useEffect(() => {
         const results = courses.filter(course =>
@@ -55,18 +57,31 @@ const Home = () => {
         setFilteredCourses(results);
     }, [searchQuery, courses]);
 
-    // Handler for pull-to-refresh action
     const onRefresh = () => {
         setRefreshing(true);
         fetchCourses();
     };
 
-    if (isLoading && !refreshing) {
-        return <Loader />
+    if (loading && !refreshing) {
+        return <Loader />;
     }
 
     if (error) {
-        return <Text>All courses are added to your account!!</Text>;
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                    style={{ alignItems: 'center' }}
+                    onPress={() => {
+                        router.push("/AddCourse/");
+                    }}
+                >
+                    <Ionicons name="add-circle" size={50} color="black" />
+                </TouchableOpacity>
+                <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
+                    Add course {/* Display the actual error message */}
+                </Text>
+            </View>
+        );
     }
 
     return (
@@ -89,13 +104,14 @@ const Home = () => {
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
-                {
-                    searchQuery && <Count count={filteredCourses.length} />
+                {searchQuery &&
+                    <Count count={filteredCourses.length} />
                 }
+
             </View>
             {filteredCourses.length > 0 ? (
                 filteredCourses.map((course) => (
-                    <AddCourse key={course._id} course={course} onRefresh={onRefresh} />
+                    <CourseCard key={course._id} course={course} />
                 ))
             ) : (
                 <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>

@@ -17,6 +17,7 @@ const testController = require('../controllers/testController')
 const submittedTestController = require('../controllers/submitted_testController')
 const courseContentController = require('../controllers/courseContentController')
 const videosListController = require('../controllers/videosListController')
+const practicePaperController = require('../controllers/practicePaperController');
 
 // Course routes
 router.post('/courses', courseController.createCourse);
@@ -133,6 +134,13 @@ router.get('/videos', videosListController.getAllVideoLists);
 router.put('/videos/:id', videosListController.updateVideoList);
 router.get('/videos/:id', videosListController.getVideoListById);
 router.delete('/videos/:id', videosListController.deleteVideoList);
+
+// Get all practice papers
+router.post('/practice-papers', practicePaperController.createPracticePaper);
+router.get('/practice-papers', practicePaperController.getAllPracticePapers);
+router.put('/practice-papers/:id', practicePaperController.updatePracticePaper);
+router.get('/practice-papers/:id', practicePaperController.getPracticePaperById);
+router.delete('/practice-papers/:id', practicePaperController.deletePracticePaper);
 
 
 module.exports = router;

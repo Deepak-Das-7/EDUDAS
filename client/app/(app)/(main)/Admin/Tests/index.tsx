@@ -1,72 +1,55 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { useRefresh } from '@/Context/RefreshContext'; // Correctly import useRefresh
 import axios from 'axios';
-import { Course } from '@/Constants/types';
-import AddCourse from '@/Components/Cards/AddCourse';
-import { AuthContext } from '@/Context/AuthContext';
+import TestCard from '@/Components/Cards/TestCard';
 import { BASE_URL } from '@env';
 import Count from '@/Components/Count';
-import Loader from '@/Components/Loader';
 
 const Home = () => {
-    const { theme } = useContext(ThemeContext);
-    const { refreshing, setRefreshing } = useRefresh(); // Use useRefresh correctly
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+    const [tests, setTests] = useState([]);
+    const [filteredTests, setFilteredTests] = useState([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState<string>('');
-    const { userDetails } = useContext(AuthContext);
+    const { theme } = useContext(ThemeContext);
 
-    const fetchCourses = async () => {
-
-        if (!userDetails || !userDetails.id) return;
-        setIsLoading(true);
+    const fetchTests = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/coursesOfNotUser/${userDetails.id}`);
-            setCourses(response.data);
-            setFilteredCourses(response.data);
-            setError('');
+            const response = await axios.get(`${BASE_URL}/tests`);
+            setTests(response.data);
+            setFilteredTests(response.data); // Initialize filteredTests
         } catch (error) {
-            setError('Failed to fetch courses');
+            setError('Failed to fetch tests');
         } finally {
-            setIsLoading(false)
-            setRefreshing(false); // Stop the refresh indicator
+            setLoading(false);
+            setRefreshing(false);
         }
     };
 
     useEffect(() => {
-        if (userDetails && userDetails.id) {
-            fetchCourses();
-        }
-    }, [userDetails]);
-
-
-
+        fetchTests();
+    }, []);
 
     useEffect(() => {
-        const results = courses.filter(course =>
-            (course.courseName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (course.class.toLowerCase().includes(searchQuery.toLowerCase()))
+        const results = tests.filter(test =>
+            (test.name.toLowerCase().includes(searchQuery.toLowerCase()) || test.course.class.toLowerCase().includes(searchQuery.toLowerCase()))
         );
-        setFilteredCourses(results);
-    }, [searchQuery, courses]);
+        setFilteredTests(results);
+    }, [searchQuery, tests]);
 
-    // Handler for pull-to-refresh action
     const onRefresh = () => {
         setRefreshing(true);
-        fetchCourses();
+        fetchTests();
     };
 
-    if (isLoading && !refreshing) {
-        return <Loader />
+    if (loading) {
+        return <Text>Loading...</Text>;
     }
 
     if (error) {
-        return <Text>All courses are added to your account!!</Text>;
+        return <Text>Error: {error}</Text>;
     }
 
     return (
@@ -84,18 +67,18 @@ const Home = () => {
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
-                    placeholder="Search courses"
+                    placeholder="Search tests"
                     placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                 />
-                {
-                    searchQuery && <Count count={filteredCourses.length} />
+                {searchQuery &&
+                    <Count count={filteredTests.length} />
                 }
             </View>
-            {filteredCourses.length > 0 ? (
-                filteredCourses.map((course) => (
-                    <AddCourse key={course._id} course={course} onRefresh={onRefresh} />
+            {filteredTests.length > 0 ? (
+                filteredTests.map((test) => (
+                    <TestCard key={test._id} test={test} />
                 ))
             ) : (
                 <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>
