@@ -7,8 +7,8 @@ import { Course } from '@/Constants/types';
 import AddCourse from '@/Components/Cards/AddCourse';
 import { AuthContext } from '@/Context/AuthContext';
 import { BASE_URL } from '@env';
-import Count from '@/Components/Count';
-import Loader from '@/Components/Loader';
+import Count from '@/Components/General/Count';
+import Loader from '@/Components/General/Loader';
 
 const Home = () => {
     const { theme } = useContext(ThemeContext);

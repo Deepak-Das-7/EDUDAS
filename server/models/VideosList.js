@@ -10,6 +10,7 @@ const videoSchema = new mongoose.Schema({
 const videosListSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
     videos: { type: [videoSchema], required: true },
+    videoName: { type: String, required: true },
 }, {
     timestamps: true
 });

@@ -9,7 +9,7 @@ import TeacherSignupForm from '../Components/Login/TeacherSignupForm';
 import StudentSignupForm from '../Components/Login/StudentSignupForm';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
-import Loader from '@/Components/Loader';
+import Loader from '@/Components/General/Loader';
 
 type FormData = {
     email: string;

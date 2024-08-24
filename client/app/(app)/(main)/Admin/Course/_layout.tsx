@@ -2,19 +2,22 @@ import { Stack } from 'expo-router'
 import * as React from 'react'
 
 const _layout = () => {
-
     return (
         <Stack screenOptions={{
+            headerStyle: {
+                backgroundColor: '#009170',
+            },
+            headerTintColor: "white",
+            headerTitleStyle: {
+                color: 'white',
+                fontWeight: "400"
+            },
             headerTitleAlign: "center",
             headerShadowVisible: false,
-            headerShown: false
         }}>
-            <Stack.Screen name="index" options={{ title: "Home" }} />
-            <Stack.Screen name="SingleCourse" options={{ title: "SingleCourse" }} />
-            <Stack.Screen name="Tests" options={{ title: "Tests" }} />
-            <Stack.Screen name="Videos" options={{ title: "Videos" }} />
-            <Stack.Screen name="Theories" options={{ title: "Theories" }} />
-            <Stack.Screen name="DoubtSection" options={{ title: "DoubtSection" }} />
+            <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
+            <Stack.Screen name="create" options={{ title: "create", headerShown: false }} />
+            <Stack.Screen name="[id]" options={{ title: "ID", headerShown: false }} />
         </Stack>
     )
 }

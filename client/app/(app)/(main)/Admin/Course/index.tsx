@@ -1,131 +1,127 @@
-import React, { useContext, useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl, Alert, TouchableOpacity } from 'react-native';
-import { ThemeContext } from '@/Context/ThemeContext';
-import { useRefresh } from '@/Context/RefreshContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
-import CourseCard from '@/Components/Cards/CourseCard';
-import { Course } from '@/Constants/types';
-import { AuthContext } from '@/Context/AuthContext';
 import { router } from 'expo-router';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URL } from '@env';
-import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
-import Loader from '@/Components/Loader';
-import Count from '@/Components/Count';
+import { Course } from '@/Constants/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { ThemeContext } from '@/Context/ThemeContext';
+import CourseRow from '@/Components/Course/CourseRow';
+import PaginationControls from '@/Components/General/PaginationControls';
 
-const Home = () => {
-    const { theme } = useContext(ThemeContext);
-    const { refreshing, setRefreshing } = useRefresh();
+const ITEMS_PER_PAGE = 10;
+
+const CoursesList: React.FC = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string>('');
-    const { userDetails } = useContext(AuthContext);
-
-    const fetchCourses = async () => {
-        if (!userDetails || !userDetails.id) return;
-
-        try {
-            const response = await axios.get(`${BASE_URL}/coursesOfUser/${userDetails.id}`);
-            setCourses(response.data);
-            setFilteredCourses(response.data);
-            setError('');
-        } catch (error) {
-            setError('Failed to fetch courses');
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
-        }
-    };
-
-    // Use useFocusEffect to refresh courses when the component is focused
-    useFocusEffect(
-        useCallback(() => {
-            if (userDetails && userDetails.id) {
-                setLoading(true);
-                fetchCourses();
-            }
-        }, [userDetails])
-    );
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
-        const results = courses.filter(course =>
-            (course.courseName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (course.class.toLowerCase().includes(searchQuery.toLowerCase()))
-        );
-        setFilteredCourses(results);
-    }, [searchQuery, courses]);
+        axios.get(`${BASE_URL}/courses`)
+            .then(response => {
+                setCourses(response.data);
+                applyPagination(response.data, 1, searchQuery);
+            })
+            .catch(error => console.error(error));
+    }, []);
 
-    const onRefresh = () => {
-        setRefreshing(true);
-        fetchCourses();
+    useEffect(() => {
+        applyPagination(courses, currentPage, searchQuery);
+    }, [currentPage, courses, searchQuery]);
+
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        applyPagination(courses, 1, query);
     };
 
-    if (loading && !refreshing) {
-        return <Loader />;
-    }
-
-    if (error) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity
-                    style={{ alignItems: 'center' }}
-                    onPress={() => {
-                        router.push("/AddCourse/");
-                    }}
-                >
-                    <Ionicons name="add-circle" size={50} color="black" />
-                </TouchableOpacity>
-                <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
-                    Add course {/* Display the actual error message */}
-                </Text>
-            </View>
+    const applyPagination = (allCourses: Course[], page: number, query: string) => {
+        const filtered = allCourses.filter(course =>
+            course.courseName.toLowerCase().includes(query.toLowerCase())
         );
-    }
+        const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        setTotalPages(totalPages);
+
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        setFilteredCourses(filtered.slice(startIndex, endIndex));
+        setCurrentPage(page);
+    };
+
+    const handlePageChange = (direction: 'prev' | 'next') => {
+        const newPage = direction === 'next'
+            ? Math.min(currentPage + 1, totalPages)
+            : Math.max(currentPage - 1, 1);
+
+        applyPagination(courses, newPage, searchQuery);
+    };
+
+
+    const handleDelete = (courseId: string) => {
+        Alert.alert(
+            "Delete Confirmation",
+            "Are you sure you want to delete this course?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Deletion cancelled"),
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        axios.delete(`${BASE_URL}/courses/${courseId}`)
+                            .then(() => {
+                                const updatedCourses = courses.filter(course => course._id !== courseId);
+                                setCourses(updatedCourses);
+                                applyPagination(updatedCourses, currentPage, searchQuery);
+                            })
+                            .catch(error => console.error(error));
+                    },
+                    style: "destructive"
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+
+
 
     return (
-        <ScrollView
-            style={{ backgroundColor: theme.colors.background, padding: 10 }}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    colors={[theme.colors.primary]}
-                    tintColor={theme.colors.primary}
-                />
-            }
-        >
+        <View style={styles.container}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
-                    placeholder="Search courses"
-                    placeholderTextColor={theme.textColors.secondaryText}
+                    placeholder="Search Courses"
                     value={searchQuery}
-                    onChangeText={setSearchQuery}
+                    onChangeText={handleSearch}
                 />
-                {searchQuery &&
-                    <Count count={filteredCourses.length} />
-                }
-
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Course/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
             </View>
-            {filteredCourses.length > 0 ? (
-                filteredCourses.map((course) => (
-                    <CourseCard key={course._id} course={course} />
-                ))
-            ) : (
-                <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>
-            )}
-        </ScrollView>
+            <FlatList
+                data={filteredCourses}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                    <CourseRow course={item} onDelete={handleDelete} />
+                )}
+                contentContainerStyle={styles.table}
+            />
+            <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    searchContainer: {
-        marginBottom: 7,
-        display: 'flex',
-        flexDirection: "row",
-        gap: 10
+    container: {
+        flex: 1,
+        paddingHorizontal: 16,
+        padding: 5
     },
     searchBox: {
         padding: 7,
@@ -133,11 +129,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 20,
     },
-    noItemsText: {
-        textAlign: 'center',
-        fontSize: 18,
-        marginTop: 20,
+    table: {
+        borderTopWidth: 1,
     },
+    searchContainer: {
+        marginBottom: 7,
+        display: 'flex',
+        flexDirection: "row",
+        gap: 10
+    }
 });
 
-export default Home;
+export default CoursesList;

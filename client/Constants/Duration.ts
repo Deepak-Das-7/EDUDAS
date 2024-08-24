@@ -1,0 +1,18 @@
+export const durationOptions = [
+    { label: '1 Day', value: '1_day' },
+    { label: '2 Days', value: '2_days' },
+    { label: '1 Week', value: '1_week' },
+    { label: '2 Weeks', value: '2_weeks' },
+    { label: '3 Weeks', value: '3_weeks' },
+    { label: '1 Month', value: '1_month' },
+    { label: '2 Months', value: '2_months' },
+    { label: '3 Months', value: '3_months' },
+    { label: '6 Months', value: '6_months' },
+    { label: '1 Year', value: '1_year' },
+    { label: '2 Years', value: '2_years' },
+    { label: '3 Years', value: '3_years' },
+    { label: '4 Years', value: '4_years' },
+    { label: '5 Years', value: '5_years' },
+    { label: '10 Years', value: '10_years' },
+    { label: 'Indefinite', value: 'indefinite' },
+];

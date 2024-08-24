@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, FlatList, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
+import { BOOKS_KEY } from '@env';
 
-const API_KEY = 'AIzaSyDxLFewVjVkRgS5D_onpevC0clrVEdNO34'; // Replace with your actual Google Books API key
 
 const SearchBooks = () => {
     const [query, setQuery] = useState('');
@@ -13,7 +13,7 @@ const SearchBooks = () => {
     const searchBooks = async () => {
         try {
             const response = await axios.get(
-                `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${API_KEY}`
+                `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${BOOKS_KEY}`
             );
             setBooks(response.data.items);
         } catch (error) {

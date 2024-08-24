@@ -1,100 +1,116 @@
-// app/Admin/CoursesList.tsx
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
-import { router, useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { BASE_URL } from '@env';
-import { Course } from '@/Constants/types';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { VideosList } from '@/Constants/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ThemeContext } from '@/Context/ThemeContext';
+import PaginationControls from '@/Components/General/PaginationControls';
+import VideoRow from '@/Components/Video/VideoRow';
 
-const ITEMS_PER_PAGE = 3; // Number of items to show per page
+const ITEMS_PER_PAGE = 10;
 
-const CoursesList: React.FC = () => {
-    const [courses, setCourses] = useState<Course[]>([]);
-    const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+const testsList: React.FC = () => {
+    const [tests, setTests] = useState<VideosList[]>([]);
+    const [filteredTests, setFilteredTests] = useState<VideosList[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const { theme } = useContext(ThemeContext);
 
-
     useEffect(() => {
-        axios.get(`${BASE_URL}/courses`)
+        axios.get(`${BASE_URL}/videos`)
             .then(response => {
-                setCourses(response.data);
-                setFilteredCourses(response.data);
-                setTotalPages(Math.ceil(response.data.length / ITEMS_PER_PAGE));
+                setTests(response.data);
+                applyPagination(response.data, 1, searchQuery);
             })
             .catch(error => console.error(error));
     }, []);
 
     useEffect(() => {
-        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-        const endIndex = startIndex + ITEMS_PER_PAGE;
-        setFilteredCourses(courses.slice(startIndex, endIndex));
-    }, [currentPage, courses]);
+        applyPagination(tests, currentPage, searchQuery);
+    }, [currentPage, tests, searchQuery]);
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        const filtered = courses.filter(course =>
-            course.courseName.toLowerCase().includes(query.toLowerCase())
+        applyPagination(tests, 1, query);
+    };
+
+    const applyPagination = (alltests: VideosList[], page: number, query: string) => {
+        const filtered = alltests.filter(test =>
+            test.videoName.toLowerCase().includes(query.toLowerCase())
         );
-        setFilteredCourses(filtered);
-        setTotalPages(Math.ceil(filtered.length / ITEMS_PER_PAGE));
-        setCurrentPage(1); // Reset to first page when searching
+        const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        setTotalPages(totalPages);
+
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        setFilteredTests(filtered.slice(startIndex, endIndex));
+        setCurrentPage(page);
     };
 
     const handlePageChange = (direction: 'prev' | 'next') => {
-        setCurrentPage(prevPage => {
-            if (direction === 'next') {
-                return Math.min(prevPage + 1, totalPages);
-            } else {
-                return Math.max(prevPage - 1, 1);
-            }
-        });
+        const newPage = direction === 'next'
+            ? Math.min(currentPage + 1, totalPages)
+            : Math.max(currentPage - 1, 1);
+
+        applyPagination(tests, newPage, searchQuery);
     };
+
+    const handleDelete = (courseId: string) => {
+        Alert.alert(
+            "Delete Confirmation",
+            "Are you sure you want to delete this test?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Deletion cancelled!"),
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        axios.delete(`${BASE_URL}/tests/${courseId}`)
+                            .then(() => {
+                                const updatedtests = tests.filter(course => course._id !== courseId);
+                                setTests(updatedtests);
+                                applyPagination(updatedtests, currentPage, searchQuery);
+                            })
+                            .catch(error => console.error(error));
+                    },
+                    style: "destructive"
+                }
+            ],
+            { cancelable: true }
+        );
+    };
+
 
     return (
         <View style={styles.container}>
-            <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Video/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
-            <TextInput
-                style={styles.searchBox}
-                placeholder="Search Courses"
-                value={searchQuery}
-                onChangeText={handleSearch}
-            />
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
+                    placeholder="Search tests"
+                    value={searchQuery}
+                    onChangeText={handleSearch}
+                />
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Test/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
+            </View>
             <FlatList
-                data={filteredCourses}
+                data={filteredTests}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <View style={styles.row}>
-                        <View style={styles.cell}>
-                            <Text style={styles.cellText}>{item.courseName}</Text>
-                        </View>
-                        <View style={styles.cell2}>
-                            <MaterialIcons name="edit" size={24} color="black" onPress={() => router.push(`/Admin/Video/${item._id}`)} />
-                            <MaterialIcons name="delete" size={24} color="black" onPress={() => {
-                                axios.delete(`${BASE_URL}/courses/${item._id}`)
-                                    .then(() => {
-                                        const updatedCourses = courses.filter(course => course._id !== item._id);
-                                        setCourses(updatedCourses);
-                                        handleSearch(searchQuery); // Refresh filtered courses
-                                    })
-                                    .catch(error => console.error(error));
-                            }} />
-                        </View>
-                    </View>
+                    <VideoRow test={item} onDelete={handleDelete} />
                 )}
                 contentContainerStyle={styles.table}
             />
-            <View style={styles.pagination}>
-                <FontAwesome name="arrow-circle-left" size={24} color={theme.buttonColors.primaryButtonBackground} onPress={() => handlePageChange('prev')} disabled={currentPage === 1} />
-                <Text style={styles.pageInfo}>Page {currentPage} of {totalPages}</Text>
-                <FontAwesome name="arrow-circle-right" size={24} color={theme.buttonColors.primaryButtonBackground} onPress={() => handlePageChange('next')} disabled={currentPage === totalPages} />
-            </View>
+            <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
         </View>
     );
 };
@@ -102,48 +118,24 @@ const CoursesList: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        paddingHorizontal: 16,
+        padding: 5
     },
-
     searchBox: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 4,
-        padding: 8,
-        marginBottom: 16,
+        padding: 7,
+        borderRadius: 10,
+        fontSize: 16,
+        paddingLeft: 20,
     },
     table: {
         borderTopWidth: 1,
-        borderColor: '#ccc',
     },
-    row: {
-        flexDirection: 'row',
-        borderBottomWidth: 1,
-        borderColor: '#ddd',
-        paddingVertical: 8,
-        alignItems: 'center',
-    },
-    cell: {
-        flex: 1,
-        paddingHorizontal: 8,
-    },
-    cell2: {
-        gap: 10,
-        paddingHorizontal: 8,
-        display: "flex",
+    searchContainer: {
+        marginBottom: 7,
+        display: 'flex',
         flexDirection: "row",
-    },
-    cellText: {
-        fontSize: 16,
-    },
-    pagination: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    pageInfo: {
-        fontSize: 10,
-    },
+        gap: 10
+    }
 });
 
-export default CoursesList;
+export default testsList;

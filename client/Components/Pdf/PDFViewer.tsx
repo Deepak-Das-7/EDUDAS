@@ -3,7 +3,7 @@ import { View, Text, Modal, StyleSheet, TouchableOpacity, Dimensions } from 'rea
 import { WebView } from 'react-native-webview';
 import { ThemeContext } from '@/Context/ThemeContext';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Loader from '../Loader';
+import Loader from '../General/Loader';
 
 interface PDFViewerProps {
     selectedBook: string | null;

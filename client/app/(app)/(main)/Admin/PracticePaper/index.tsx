@@ -4,7 +4,7 @@ import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import TestCard from '@/Components/Cards/TestCard';
 import { BASE_URL } from '@env';
-import Count from '@/Components/Count';
+import Count from '@/Components/General/Count';
 
 const Home = () => {
     const [tests, setTests] = useState([]);

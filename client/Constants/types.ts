@@ -41,7 +41,7 @@ export interface Course {
     description: string;
     duration: string;
     photo: string;
-    language: [];
+    language: string;
     class: string;
     isFree: boolean;
     price: number;
@@ -52,4 +52,35 @@ export interface Course {
     createdAt: Date;
     updatedAt: Date;
 }
+//Test
+export interface Test {
+    _id: string;
+    is_deleted: boolean;
+    name: string;
+    questions: any; // Adjust the type based on the structure of questions
+    description: string;
+    duration: string;
+    photo: string;
+    language: string; // Assuming language is referenced by an ObjectId
+    class: string;
+    startDate: Date;
+    createdAt: Date;
+    updatedAt: Date;
+}
 
+export interface Video {
+    _id: string,
+    videoId: string;
+    videoName: string;
+    class: string;
+    duration: string;
+}
+
+export interface VideosList {
+    _id: string,
+    is_deleted: boolean;
+    videos: Video[];
+    videoName: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
