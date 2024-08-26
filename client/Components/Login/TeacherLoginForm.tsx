@@ -7,8 +7,8 @@ interface TeacherLoginFormProps {
 }
 
 const TeacherLoginForm: React.FC<TeacherLoginFormProps> = ({ onSubmit }) => {
-    const [email, setEmail] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [email, setEmail] = useState<string>('teacher@a');
+    const [password, setPassword] = useState<string>('teacher');
     const [error, setError] = useState<string>('');
 
     const { theme } = useContext(ThemeContext); // Access the color context

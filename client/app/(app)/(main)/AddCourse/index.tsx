@@ -26,7 +26,7 @@ const Home = () => {
         if (!userDetails || !userDetails.id) return;
         setIsLoading(true);
         try {
-            const response = await axios.get(`${BASE_URL}/coursesOfNotUser/${userDetails.id}`);
+            const response = await axios.get(`${BASE_URL}/courses/exceptUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);
             setError('');

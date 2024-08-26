@@ -11,7 +11,6 @@ const courseSchema = new mongoose.Schema({
     isFree: { type: Boolean, default: false },
     price: { type: Number, default: 0 },
     startDate: { type: Date }, // Start date of the course
-    subjects: { type: mongoose.Schema.Types.ObjectId, ref: 'Subject' },
     content: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent' },
     videos: { type: mongoose.Schema.Types.ObjectId, ref: 'VideoList' },
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],

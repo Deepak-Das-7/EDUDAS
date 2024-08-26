@@ -7,7 +7,7 @@ const testSchema = new mongoose.Schema({
     description: String,
     duration: String,
     photo: String,
-    language: { type: mongoose.Schema.Types.ObjectId, ref: 'Language' },
+    language: { type: String },
     class: { type: String },
     startDate: { type: Date },
 }, {

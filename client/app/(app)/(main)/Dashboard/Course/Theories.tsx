@@ -20,7 +20,7 @@ const Theories = () => {
     useEffect(() => {
         const fetchCourseContent = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/CourseContent/${id}`);
+                const response = await axios.get(`${BASE_URL}/courseContent/${id}`);
                 setCourseContent(response.data);
             } catch (err) {
                 setError('Failed to fetch course content');

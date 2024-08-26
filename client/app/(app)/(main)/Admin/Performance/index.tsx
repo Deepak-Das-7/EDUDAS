@@ -3,12 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
-import TestCard from '@/Components/Cards/TestCard';
 import { AuthContext } from '@/Context/AuthContext';
 import TestList from '@/Components/Cards/TestList';
-import AllChart from '@/Components/Charts/AllChart';
 import { BASE_URL } from '@env';
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Performance = () => {
     const { userDetails } = useContext(AuthContext);
@@ -21,10 +19,9 @@ const Performance = () => {
         const fetchTests = async () => {
             try {
                 if (!userDetails || !userDetails.id) return;
-                const response = await axios.get(`${BASE_URL}/submitted-tests-user/${userDetails.id}`);
+                const response = await axios.get(`${BASE_URL}/tests/submit/user/${userDetails.id}`);
                 setTests(response.data);
             } catch (error) {
-                console.error(error);
                 setError('Failed to fetch tests');
             } finally {
                 setLoading(false);
@@ -39,7 +36,14 @@ const Performance = () => {
     }
 
     if (error) {
-        return <Text>Error: {error}</Text>;
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <MaterialIcons name="analytics" size={50} color="black" />
+                <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
+                    No performance
+                </Text>
+            </View>
+        );
     }
 
     return (

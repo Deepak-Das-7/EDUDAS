@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { ThemeContext } from '../../../Context/ThemeContext';
+import { AuthContext } from '@/Context/AuthContext';
+import { ActivityIndicator, View } from 'react-native';
 
 export default function _layout() {
     const { theme } = useContext(ThemeContext);
+    const { userDetails } = useContext(AuthContext);
+
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (userDetails) {
+            setIsLoading(false);
+        }
+    }, [userDetails]);
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background }}>
+                <ActivityIndicator size="large" color={theme.colors.primary} />
+            </View>
+        );
+    }
 
     return (
         <Tabs screenOptions={{
@@ -72,6 +92,7 @@ export default function _layout() {
             />
             <Tabs.Screen
                 name="Admin"
+                redirect={userDetails.type !== "teacher"}
                 options={{
                     headerShown: false,
                     title: "Admin",

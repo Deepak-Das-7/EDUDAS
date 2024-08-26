@@ -28,17 +28,29 @@ const Home = () => {
                     title="Open drawer"
                     onPress={() => drawer.current?.openDrawer()}
                 />
-                <TouchableOpacity onPress={() => {
-                    // console.log("goingggggg");
-                    router.push("/Profile/Setting")
-                }}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        // console.log("goingggggg");
+                        router.push("/Profile/Setting")
+                    }}>
                     <Text>Go to settings tab</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => {
-                    // console.log("goingggggg");
-                    router.push("/Profile/Testing")
-                }}>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        // console.log("goingggggg");
+                        router.push("/Profile/Testing")
+                    }}>
                     <Text>Go to testing tab</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                        // console.log("goingggggg");
+                        router.push("/Profile/ProfileTesting")
+                    }}>
+                    <Text>profile page</Text>
                 </TouchableOpacity>
             </View>
         </DrawerLayoutAndroid>
@@ -52,6 +64,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 16,
     },
+    button: {
+        padding: 30,
+        alignContent: 'center',
+        justifyContent: "center",
+        display: "flex",
+        backgroundColor: "gray",
+        borderRadius: 10,
+        margin: 10
+    }
 });
 
 export default Home;

@@ -17,7 +17,7 @@ const Tests = () => {
 
     const fetchTests = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/course_tests/${id}`);
+            const response = await axios.get(`${BASE_URL}/tests/course/${id}`);
             setTests(response.data.tests);
             setError(''); // Clear any previous error
         } catch (error) {

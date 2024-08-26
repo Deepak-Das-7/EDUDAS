@@ -9,7 +9,7 @@ const studentSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     dateOfBirth: Date,
     lastLogin: Date,
-    class: { type: mongoose.Schema.Types.ObjectId, ref: 'Class' },
+    class: { type: String },
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Enrollment' }]
 }, {
     timestamps: true // adds createdAt and updatedAt fields

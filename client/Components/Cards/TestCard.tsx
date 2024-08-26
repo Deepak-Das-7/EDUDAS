@@ -22,7 +22,7 @@ const TestCard = ({ test }) => {
     useEffect(() => {
         const checkTestStatus = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/submitted-tests/${userDetails.id}/${test._id}`);
+                const response = await axios.get(`${BASE_URL}/tests/submit/${userDetails.id}/${test._id}`);
                 if (response.data) {
                     setGiven(true);
                 }

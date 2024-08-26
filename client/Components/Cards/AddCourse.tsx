@@ -16,7 +16,7 @@ const CourseCard = ({ course, onRefresh }) => {
 
     const handleFavoritePress = async () => {
         try {
-            const response = await axios.post(`${BASE_URL}/coursesAddToUser/${userDetails.id}/${course._id}`);
+            const response = await axios.post(`${BASE_URL}/courses/add/${userDetails.id}/${course._id}`);
             if (response.status === 200) {
                 onRefresh();
                 Alert.alert(

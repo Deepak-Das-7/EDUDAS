@@ -92,7 +92,7 @@ const SingleTest = () => {
         const total_marks = calculateScore();
         const marks_string = `${total_marks}/${questions.length}`;
         try {
-            const response = await axios.post(`${BASE_URL}/submit-test`, {
+            const response = await axios.post(`${BASE_URL}/tests/submit`, {
                 test_id: id,
                 user_id: userDetails.id,
                 questions: results,

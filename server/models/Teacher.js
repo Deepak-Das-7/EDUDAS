@@ -9,7 +9,6 @@ const teacherSchema = new mongoose.Schema({
     lastName: { type: String, required: true },
     lastLogin: Date,
     dateOfBirth: Date,
-    subjects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subject' }]
 }, {
     timestamps: true // adds createdAt and updatedAt fields
 });
