@@ -1,16 +1,17 @@
-const express = require('express');
+import { Router } from 'express';
 
-const getCourse = require('./getCourse');
-const addCourse = require('./addCourse');
-const getCourseById = require('./getCourseById');
-const updateCourseByID = require('./updateCourseByID');
-const deleteCourse = require('./deleteCourse');
-const addCourseByUserId = require('./addCourseByUserId');
-const getCourseByUserId = require('./getCourseByUserId');
-const updateCourseByUserId = require('./updateCourseByUserId');
-const getOtherCourseByUserId = require('./getOtherCourseByUserId');
+import getCourse from './getCourse.js';
+import addCourse from './addCourse.js';
+import getCourseById from './getCourseById.js';
+import updateCourseByID from './updateCourseByID.js';
+import deleteCourse from './deleteCourse.js';
+import addCourseByUserId from './addCourseByUserId.js';
+import getCourseByUserId from './getCourseByUserId.js';
+import updateCourseByUserId from './updateCourseByUserId.js';
+import getOtherCourseByUserId from './getOtherCourseByUserId.js';
 
-const CourseRouter = express.Router();
+
+const CourseRouter = Router();
 
 CourseRouter.post('/', addCourse);
 CourseRouter.get('/', getCourse);
@@ -22,4 +23,4 @@ CourseRouter.get('/user/:id', getCourseByUserId);
 CourseRouter.put('/user/:id', updateCourseByUserId);
 CourseRouter.get('/exceptuser/:id', getOtherCourseByUserId);
 
-module.exports = CourseRouter;
+export default CourseRouter;

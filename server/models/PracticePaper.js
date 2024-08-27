@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const practicePaperSchema = new mongoose.Schema({
     title: { type: String, required: true },
@@ -7,4 +7,4 @@ const practicePaperSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('PracticePaper', practicePaperSchema);
+export default mongoose.model('PracticePaper', practicePaperSchema);

@@ -1,10 +1,6 @@
-const Teacher = require('../../models/Teacher');
-const User = require('../../models/User');
-const bcrypt = require('bcryptjs');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
+import Teacher from '../../models/Teacher.js';
+import User from '../../models/User.js';
+import bcrypt from 'bcryptjs';
 
 const createTeacher = async (req, res) => {
     const { firstName, lastName, email, password, dateOfBirth } = req.body;
@@ -36,7 +32,7 @@ const createTeacher = async (req, res) => {
             email,
             password1: password,
             password: hashedPassword,
-            userType: "Teacher",
+            userType: 'Teacher',
             teacher_id: teacher._id,
         });
 
@@ -47,4 +43,4 @@ const createTeacher = async (req, res) => {
     }
 };
 
-module.exports = createTeacher
+export default createTeacher;

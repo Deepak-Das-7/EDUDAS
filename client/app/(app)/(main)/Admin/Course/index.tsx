@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Alert, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -17,20 +17,32 @@ const CoursesList: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [refreshing, setRefreshing] = useState(false);
     const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/courses`)
-            .then(response => {
-                setCourses(response.data);
-                applyPagination(response.data, 1, searchQuery);
-            })
-            .catch(error => console.error(error));
+        fetchCourses();
     }, []);
+
+    const fetchCourses = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/courses`);
+            setCourses(response.data);
+            applyPagination(response.data, 1, searchQuery);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         applyPagination(courses, currentPage, searchQuery);
     }, [currentPage, courses, searchQuery]);
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchCourses();
+        setRefreshing(false);
+    };
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
@@ -57,7 +69,6 @@ const CoursesList: React.FC = () => {
 
         applyPagination(courses, newPage, searchQuery);
     };
-
 
     const handleDelete = (courseId: string) => {
         Alert.alert(
@@ -87,8 +98,6 @@ const CoursesList: React.FC = () => {
         );
     };
 
-
-
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
@@ -107,6 +116,13 @@ const CoursesList: React.FC = () => {
                     <CourseRow course={item} onDelete={handleDelete} />
                 )}
                 contentContainerStyle={styles.table}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={[theme.buttonColors.primaryButtonBackground]}
+                    />
+                }
             />
             <PaginationControls
                 currentPage={currentPage}

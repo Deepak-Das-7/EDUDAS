@@ -17,8 +17,8 @@ export default function Index() {
             if (!storedToken) {
                 router.replace('/auth');
             } else {
-                router.replace('/Admin/Course');
-                // router.replace('/Dashboard/Course/');
+                // router.replace('/Admin/Course');
+                router.replace('/Dashboard/Course/');
             }
         };
 

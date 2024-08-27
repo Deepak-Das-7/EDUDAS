@@ -1,5 +1,4 @@
-const VideosList = require('../../models/VideosList')
-
+import VideosList from '../../models/VideosList.js';
 
 const deleteVideoList = async (req, res) => {
     try {
@@ -14,4 +13,5 @@ const deleteVideoList = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-module.exports = deleteVideoList
+
+export default deleteVideoList;

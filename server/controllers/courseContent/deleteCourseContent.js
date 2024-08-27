@@ -1,5 +1,4 @@
-const CourseContent = require('../../models/CourseContent');
-
+import CourseContent from '../../models/CourseContent.js'; // Adjust the path and extension as needed
 
 const deleteCourseContent = async (req, res) => {
     try {
@@ -18,4 +17,4 @@ const deleteCourseContent = async (req, res) => {
     }
 };
 
-module.exports = deleteCourseContent;
+export default deleteCourseContent;

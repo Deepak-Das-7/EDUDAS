@@ -1,5 +1,4 @@
-const CourseContent = require('../../models/CourseContent');
-
+import CourseContent from '../../models/CourseContent.js';
 
 const updateCourseContent = async (req, res) => {
     try {
@@ -18,4 +17,4 @@ const updateCourseContent = async (req, res) => {
     }
 };
 
-module.exports = updateCourseContent;
+export default updateCourseContent;

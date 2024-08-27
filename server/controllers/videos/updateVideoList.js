@@ -1,5 +1,4 @@
-const VideosList = require('../../models/VideosList')
-
+import VideosList from '../../models/VideosList.js';
 
 const updateVideoList = async (req, res) => {
     try {
@@ -17,4 +16,5 @@ const updateVideoList = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
-module.exports = updateVideoList
+
+export default updateVideoList;

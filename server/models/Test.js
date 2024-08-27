@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const testSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
     name: { type: String, required: true },
-    questions: { type: JSON, required: true },
+    questions: { type: Map, of: mongoose.Schema.Types.Mixed, required: true }, // Use Map with Mixed type for JSON
     description: String,
     duration: String,
     photo: String,
@@ -14,4 +14,4 @@ const testSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Test', testSchema);
+export default mongoose.model('Test', testSchema);

@@ -1,8 +1,9 @@
-const SubmittedTest = require('../../models/SubmittedTests');
+import SubmittedTest from '../../models/SubmittedTests.js';
 
 const getSubmittedTestByUserIdAndTestID = async (req, res) => {
     try {
         const { user_id, test_id } = req.params;
+
         // Find the submitted test by user_id and test_id
         const submittedTest = await SubmittedTest.findOne({ user_id, test_id })
             .populate('test_id')
@@ -13,7 +14,8 @@ const getSubmittedTestByUserIdAndTestID = async (req, res) => {
         }
         res.status(200).json(submittedTest);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching submitted test', error });
+        res.status(500).json({ message: 'Error fetching submitted test', error: error.message });
     }
 };
-module.exports = getSubmittedTestByUserIdAndTestID
+
+export default getSubmittedTestByUserIdAndTestID;

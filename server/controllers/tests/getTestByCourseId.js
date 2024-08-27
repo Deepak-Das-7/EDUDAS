@@ -1,7 +1,5 @@
-
-const mongoose = require('mongoose');
-const Course = require('../../models/Course');
-
+import mongoose from 'mongoose';
+import Course from '../../models/Course.js';
 
 const getTestByCourseId = async (req, res) => {
     try {
@@ -10,8 +8,9 @@ const getTestByCourseId = async (req, res) => {
         const course = await Course.findById(courseId)
             .populate({
                 path: 'tests',
-                match: { is_deleted: false } // Filter out deleted tests
-            }).sort({ createdAt: -1 });
+                match: { is_deleted: false }, // Filter out deleted tests
+            })
+            .sort({ createdAt: -1 });
 
         if (!course) {
             return res.status(404).json({ message: 'Course not found' });
@@ -23,5 +22,4 @@ const getTestByCourseId = async (req, res) => {
     }
 };
 
-
-module.exports = getTestByCourseId
+export default getTestByCourseId;

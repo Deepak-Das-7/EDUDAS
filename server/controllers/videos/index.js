@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 
-const createVideoList = require('./createVideoList');
-const getAllVideoLists = require('./getAllVideoLists');
-const updateVideoList = require('./updateVideoList');
-const getVideoListById = require('./getVideoListById');
-const deleteVideoList = require('./deleteVideoList');
+import createVideoList from './createVideoList.js';
+import getAllVideoLists from './getAllVideoLists.js';
+import updateVideoList from './updateVideoList.js';
+import getVideoListById from './getVideoListById.js';
+import deleteVideoList from './deleteVideoList.js';
 
 const VideoRouter = express.Router();
 
@@ -14,4 +14,4 @@ VideoRouter.put('/:id', updateVideoList);
 VideoRouter.get('/:id', getVideoListById);
 VideoRouter.delete('/:id', deleteVideoList);
 
-module.exports = VideoRouter;
+export default VideoRouter;

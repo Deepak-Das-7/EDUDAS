@@ -1,5 +1,4 @@
-const Test = require('../../models/Test');
-
+import Test from '../../models/Test.js';
 
 const deleteTest = async (req, res) => {
     try {
@@ -15,4 +14,4 @@ const deleteTest = async (req, res) => {
     }
 };
 
-module.exports = deleteTest
+export default deleteTest;

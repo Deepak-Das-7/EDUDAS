@@ -1,5 +1,4 @@
-const PracticePaper = require('../../models/PracticePaper');
-
+import PracticePaper from '../../models/PracticePaper.js';
 
 const updatePracticePaper = async (req, res) => {
     try {
@@ -12,6 +11,6 @@ const updatePracticePaper = async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
-};
+}
 
-module.exports = updatePracticePaper
+export default updatePracticePaper;

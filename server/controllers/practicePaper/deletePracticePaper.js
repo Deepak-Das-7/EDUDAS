@@ -1,5 +1,4 @@
-const PracticePaper = require('../../models/PracticePaper');
-
+import PracticePaper from '../../models/PracticePaper.js';
 
 const deletePracticePaper = async (req, res) => {
     try {
@@ -12,7 +11,6 @@ const deletePracticePaper = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}
 
-
-module.exports = deletePracticePaper
+export default deletePracticePaper;

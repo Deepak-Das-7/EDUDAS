@@ -1,19 +1,19 @@
-const express = require('express');
+import express from 'express';
 
-const createTest = require('./createTest');
-const getAllTests = require('./getAllTests');
-const getTestById = require('./getTestById');
-const updateTest = require('./updateTest');
-const deleteTest = require('./deleteTest');
-const getTestByCourseId = require('./getTestByCourseId');
+import createTest from './createTest.js';
+import getAllTests from './getAllTests.js';
+import getTestById from './getTestById.js';
+import updateTest from './updateTest.js';
+import deleteTest from './deleteTest.js';
+import getTestByCourseId from './getTestByCourseId.js';
 
-const submitTest = require('./submitTest');
-const getAllSubmittedTests = require('./getAllSubmittedTests');
-const getSubmittedTestByUserIdAndTestID = require('./getSubmittedTestByUserIdAndTestID');
-const getSubmittedTestById = require('./getSubmittedTestById');
-const getSubmittedTestByUserId = require('./getSubmittedTestByUserId');
-const updateSubmittedTestById = require('./updateSubmittedTestById');
-const deleteSubmittedTestById = require('./deleteSubmittedTestById');
+import submitTest from './submitTest.js';
+import getAllSubmittedTests from './getAllSubmittedTests.js';
+import getSubmittedTestByUserIdAndTestID from './getSubmittedTestByUserIdAndTestID.js';
+import getSubmittedTestById from './getSubmittedTestById.js';
+import getSubmittedTestByUserId from './getSubmittedTestByUserId.js';
+import updateSubmittedTestById from './updateSubmittedTestById.js';
+import deleteSubmittedTestById from './deleteSubmittedTestById.js';
 
 const TestRouter = express.Router();
 
@@ -32,4 +32,4 @@ TestRouter.put('/submit/:id', updateSubmittedTestById);
 TestRouter.get('/submit/user/:id', getSubmittedTestByUserId);
 TestRouter.delete('/submit/:id', deleteSubmittedTestById);
 
-module.exports = TestRouter;
+export default TestRouter;

@@ -1,4 +1,4 @@
-const SubmittedTest = require('../../models/SubmittedTests');
+import SubmittedTest from '../../models/SubmittedTests.js';
 
 const updateSubmittedTestById = async (req, res) => {
     try {
@@ -13,7 +13,8 @@ const updateSubmittedTestById = async (req, res) => {
 
         res.status(200).json({ message: 'Submitted test updated successfully', data: updatedSubmittedTest });
     } catch (error) {
-        res.status(500).json({ message: 'Error updating submitted test', error });
+        res.status(500).json({ message: 'Error updating submitted test', error: error.message });
     }
 };
-module.exports = updateSubmittedTestById
+
+export default updateSubmittedTestById;

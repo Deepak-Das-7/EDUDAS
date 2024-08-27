@@ -1,4 +1,4 @@
-const SubmittedTest = require('../../models/SubmittedTests');
+import SubmittedTest from '../../models/SubmittedTests.js';
 
 const deleteSubmittedTestById = async (req, res) => {
     try {
@@ -14,4 +14,5 @@ const deleteSubmittedTestById = async (req, res) => {
         res.status(500).json({ message: 'Error deleting submitted test', error });
     }
 };
-module.exports = deleteSubmittedTestById
+
+export default deleteSubmittedTestById;

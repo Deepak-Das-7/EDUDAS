@@ -1,4 +1,4 @@
-const CourseContent = require('../../models/CourseContent');
+import CourseContent from '../../models/CourseContent.js';
 
 const createCourseContent = async (req, res) => {
     try {
@@ -10,4 +10,4 @@ const createCourseContent = async (req, res) => {
     }
 };
 
-module.exports = createCourseContent;
+export default createCourseContent;

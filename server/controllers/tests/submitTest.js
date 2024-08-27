@@ -1,4 +1,4 @@
-const SubmittedTest = require('../../models/SubmittedTests');
+import SubmittedTest from '../../models/SubmittedTests.js';
 
 const submitTest = async (req, res) => {
     try {
@@ -15,7 +15,8 @@ const submitTest = async (req, res) => {
         const savedTest = await newSubmittedTest.save();
         res.status(201).json({ message: 'Test results submitted successfully', data: savedTest });
     } catch (error) {
-        res.status(500).json({ message: 'Error submitting test results', error });
+        res.status(500).json({ message: 'Error submitting test results', error: error.message });
     }
 };
-module.exports = submitTest
+
+export default submitTest;

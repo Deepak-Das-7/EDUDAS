@@ -1,12 +1,12 @@
-const express = require('express');
+import { Router } from 'express';
 
-const createCourseContent = require('./createCourseContent');
-const getCourseContents = require('./getCourseContents');
-const getCourseContentById = require('./getCourseContentById');
-const updateCourseContent = require('./updateCourseContent');
-const deleteCourseContent = require('./deleteCourseContent');
+import createCourseContent from './createCourseContent.js';
+import getCourseContents from './getCourseContents.js';
+import getCourseContentById from './getCourseContentById.js';
+import updateCourseContent from './updateCourseContent.js';
+import deleteCourseContent from './deleteCourseContent.js';
 
-const CourseContentRouter = express.Router();
+const CourseContentRouter = Router();
 
 CourseContentRouter.post('/', createCourseContent);
 CourseContentRouter.get('/', getCourseContents);
@@ -14,4 +14,4 @@ CourseContentRouter.get('/:id', getCourseContentById);
 CourseContentRouter.put('/:id', updateCourseContent);
 CourseContentRouter.delete('/:id', deleteCourseContent);
 
-module.exports = CourseContentRouter;
+export default CourseContentRouter;

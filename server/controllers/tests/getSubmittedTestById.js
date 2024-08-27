@@ -1,4 +1,4 @@
-const SubmittedTest = require('../../models/SubmittedTests');
+import SubmittedTest from '../../models/SubmittedTests.js';
 
 const getSubmittedTestById = async (req, res) => {
     try {
@@ -14,4 +14,5 @@ const getSubmittedTestById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching submitted test', error });
     }
 };
-module.exports = getSubmittedTestById
+
+export default getSubmittedTestById;

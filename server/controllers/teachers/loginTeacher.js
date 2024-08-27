@@ -1,10 +1,7 @@
-const Teacher = require('../../models/Teacher');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-
-dotenv.config();
-
+import Teacher from '../../models/Teacher.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 const loginTeacher = async (req, res) => {
     const { email, password } = req.body;
@@ -33,7 +30,7 @@ const loginTeacher = async (req, res) => {
                 firstName: teacher.firstName,
                 email: teacher.email,
                 lastName: teacher.lastName,
-                type: "teacher"
+                type: 'teacher'
             },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
@@ -46,5 +43,4 @@ const loginTeacher = async (req, res) => {
     }
 };
 
-
-module.exports = loginTeacher
+export default loginTeacher;

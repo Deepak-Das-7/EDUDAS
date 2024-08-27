@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const submitted_testSchema = new mongoose.Schema({
+const submittedTestSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
     test_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Test' },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    questions: { type: JSON, required: true },
+    questions: { type: Map, of: mongoose.Schema.Types.Mixed, required: true }, // Use Map with Mixed type for JSON
     total_marks: { type: String, required: true },
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model('submitted_test', submitted_testSchema);
+export default mongoose.model('SubmittedTest', submittedTestSchema);

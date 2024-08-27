@@ -1,5 +1,4 @@
-const CourseContent = require('../../models/CourseContent');
-
+import CourseContent from '../../models/CourseContent.js'; // Adjust the path and extension as needed
 
 const getCourseContentById = async (req, res) => {
     try {
@@ -14,4 +13,4 @@ const getCourseContentById = async (req, res) => {
     }
 };
 
-module.exports = getCourseContentById;
+export default getCourseContentById;

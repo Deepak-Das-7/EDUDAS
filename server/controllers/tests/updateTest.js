@@ -1,5 +1,4 @@
-const Test = require('../../models/Test');
-
+import Test from '../../models/Test.js';
 
 const updateTest = async (req, res) => {
     try {
@@ -9,13 +8,15 @@ const updateTest = async (req, res) => {
             { name, questions },
             { new: true, runValidators: true }
         );
+
         if (!test || test.is_deleted) {
             return res.status(404).json({ message: 'Test not found' });
         }
+
         res.status(200).json(test);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
-module.exports = updateTest
+export default updateTest;

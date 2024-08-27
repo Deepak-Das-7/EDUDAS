@@ -1,6 +1,5 @@
-const VideosList = require('../../models/VideosList')
-const mongoose = require('mongoose');
-
+import VideosList from '../../models/VideosList.js';
+import mongoose from 'mongoose';
 
 const getVideoListById = async (req, res) => {
     try {
@@ -15,4 +14,4 @@ const getVideoListById = async (req, res) => {
     }
 };
 
-module.exports = getVideoListById
+export default getVideoListById;

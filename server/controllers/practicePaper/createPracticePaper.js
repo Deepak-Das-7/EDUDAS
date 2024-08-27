@@ -1,4 +1,4 @@
-const PracticePaper = require('../../models/PracticePaper');
+import PracticePaper from '../../models/PracticePaper.js';
 
 
 const createPracticePaper = async (req, res) => {
@@ -11,4 +11,4 @@ const createPracticePaper = async (req, res) => {
     }
 };
 
-module.exports = createPracticePaper;
+export default createPracticePaper;

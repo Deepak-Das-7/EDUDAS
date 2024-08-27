@@ -1,5 +1,4 @@
-const Test = require('../../models/Test');
-
+import Test from '../../models/Test.js';
 
 const createTest = async (req, res) => {
     try {
@@ -12,4 +11,4 @@ const createTest = async (req, res) => {
     }
 };
 
-module.exports = createTest
+export default createTest;

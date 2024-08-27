@@ -1,16 +1,15 @@
-const Student = require('../../models/Student');
-const dotenv = require('dotenv');
-dotenv.config();
+import Student from '../../models/Student.js';
 
 const updateStudent = async (req, res) => {
     try {
         const student = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!student) {
-            return res.status(404).send();
+            return res.status(404).json({ message: 'Student not found' });
         }
-        res.status(200).send(student);
+        res.status(200).json(student);
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).json({ error: error.message });
     }
 };
-module.exports = updateStudent
+
+export default updateStudent;

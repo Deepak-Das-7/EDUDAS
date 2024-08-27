@@ -1,14 +1,12 @@
-const Teacher = require('../../models/Teacher');
-
+import Teacher from '../../models/Teacher.js';
 
 const getTeachers = async (req, res) => {
     try {
-        const teachers = await Teacher.find({ is_deleted: false })
-
-        res.status(200).send(teachers);
+        const teachers = await Teacher.find({ is_deleted: false });
+        res.status(200).json(teachers);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ error: error.message });
     }
 };
 
-module.exports = getTeachers
+export default getTeachers;

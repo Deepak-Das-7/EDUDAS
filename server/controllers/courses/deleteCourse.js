@@ -1,5 +1,4 @@
-const Course = require('../../models/Course');
-
+import Course from '../../models/Course.js';
 
 const deleteCourse = async (req, res) => {
     try {
@@ -9,12 +8,12 @@ const deleteCourse = async (req, res) => {
             { new: true } // Return the updated document
         );
         if (!course) {
-            return res.status(404).json({ error: 'course not found' });
+            return res.status(404).json({ error: 'Course not found' });
         }
         res.status(200).send(course);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send({ error: 'Internal Server Error', details: error.message });
     }
 }
 
-module.exports = deleteCourse
+export default deleteCourse;

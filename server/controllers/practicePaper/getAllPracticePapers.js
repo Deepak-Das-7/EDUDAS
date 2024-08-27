@@ -1,5 +1,4 @@
-const PracticePaper = require('../../models/PracticePaper');
-
+import PracticePaper from '../../models/PracticePaper.js';
 
 const getAllPracticePapers = async (req, res) => {
     try {
@@ -8,6 +7,6 @@ const getAllPracticePapers = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}
 
-module.exports = getAllPracticePapers
+export default getAllPracticePapers;

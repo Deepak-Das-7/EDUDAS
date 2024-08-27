@@ -1,16 +1,15 @@
-const Teacher = require('../../models/Teacher');
+import Teacher from '../../models/Teacher.js';
 
 const getTeacherById = async (req, res) => {
     try {
         const teacher = await Teacher.findById(req.params.id);
         if (!teacher) {
-            return res.status(404).send();
+            return res.status(404).json({ message: 'Teacher not found' });
         }
-        res.status(200).send(teacher);
+        res.status(200).json(teacher);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ error: error.message });
     }
 };
 
-
-module.exports = getTeacherById
+export default getTeacherById;

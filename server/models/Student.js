@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const studentSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
@@ -15,5 +15,4 @@ const studentSchema = new mongoose.Schema({
     timestamps: true // adds createdAt and updatedAt fields
 });
 
-
-module.exports = mongoose.model('Student', studentSchema);
+export default mongoose.model('Student', studentSchema);

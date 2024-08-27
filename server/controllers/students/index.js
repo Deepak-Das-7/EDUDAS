@@ -1,11 +1,11 @@
-const express = require('express');
+import express from 'express';
 
-const createStudent = require('./createStudent');
-const loginStudent = require('./loginStudent');
-const getStudents = require('./getStudents');
-const getStudentById = require('./getStudentById');
-const updateStudent = require('./updateStudent');
-const deleteStudent = require('./deleteStudent');
+import createStudent from './createStudent.js';
+import loginStudent from './loginStudent.js';
+import getStudents from './getStudents.js';
+import getStudentById from './getStudentById.js';
+import updateStudent from './updateStudent.js';
+import deleteStudent from './deleteStudent.js';
 
 const StudentRouter = express.Router();
 
@@ -16,4 +16,4 @@ StudentRouter.get('/:id', getStudentById);
 StudentRouter.put('/:id', updateStudent);
 StudentRouter.delete('/:id', deleteStudent);
 
-module.exports = StudentRouter;
+export default StudentRouter;

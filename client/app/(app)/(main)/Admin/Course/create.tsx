@@ -1,32 +1,114 @@
-// app/courses/create.tsx
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
+import { Text, StyleSheet, View, Alert } from 'react-native';
 import axios from 'axios';
-import { useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { BASE_URL } from '@env';
+import Loader from '@/Components/General/Loader';
+import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import { languageOptions } from '@/Constants/Languages';
+import { durationOptions } from '@/Constants/Duration';
+import { classLevelOptions } from '@/Constants/Class';
+import Toast from 'react-native-root-toast';
 
-const CreateCourse: React.FC = () => {
+const CourseDetail: React.FC = () => {
+    const [loading, setLoading] = useState(true);
+
+    // State variables for form fields
     const [courseName, setCourseName] = useState('');
-    const router = useRouter();
+    const [description, setDescription] = useState('');
+    const [duration, setDuration] = useState('Duration');
+    const [language, setLanguage] = useState('');
+    const [classLevel, setClassLevel] = useState('');
+    const [isFree, setIsFree] = useState(false);
+    const [price, setPrice] = useState('0');
+    const [startDate, setStartDate] = useState<{ date: Date; showPicker: boolean }>({ date: new Date(), showPicker: false });
 
-    const handleCreate = () => {
-        axios.post(`${BASE_URL}/courses/`, { courseName })
-            .then(() => {
-                Alert.alert('Course created successfully');
-                router.push('/Admin/Video');
-            })
-            .catch(error => {
-                Alert.alert('Error creating course');
-                console.error(error);
+    const addCourse = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${BASE_URL}/courses`, {
+                courseName,
+                description,
+                duration,
+                language,
+                class: classLevel,
+                isFree,
+                price: Number(price),
+                startDate
             });
+            if (response.status === 201) {
+                setLoading(false)
+                //show toast
+                let toast = Toast.show('Course added!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+
+                Alert.alert(
+                    "Course Added",
+                    "Go to course list!",
+                    [
+                        {
+                            text: "Add more course",
+                            onPress: () => {
+                                setCourseName("");
+                                setDescription('');
+                                setDuration('');
+                                setLanguage('');
+                                setClassLevel('');
+                                setIsFree(false);
+                                setPrice('0');
+                                setStartDate({ date: new Date(), showPicker: false });
+                            },
+                            style: "cancel"
+                        },
+                        {
+                            text: "Go",
+                            onPress: () => { router.replace('/Admin/Course') },
+                            style: "destructive"
+                        }
+                    ],
+                    { cancelable: true }
+                );
+            }
+        } catch (error) {
+            console.error('Error creating course:', error);
+        }
     };
 
+    const fields: FieldType[] = [
+        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName },
+        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
+        { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
+        { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
+        { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
+        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree },
+        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice },
+        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
+    ];
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
-        <View>
-            <TextInput placeholder="Course Name" value={courseName} onChangeText={setCourseName} />
-            <Button title="Create Course" onPress={handleCreate} />
+        <View style={styles.container}>
+            <Text style={styles.title}>Adding Course</Text>
+            <CommonFormCRUD
+                fields={fields}
+                onSave={addCourse}
+            />
         </View>
     );
 };
 
-export default CreateCourse;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingVertical: 10,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: "center"
+    }
+});
+
+export default CourseDetail;

@@ -1,5 +1,4 @@
-const Teacher = require('../../models/Teacher');
-
+import Teacher from '../../models/Teacher.js';
 
 const deleteTeacher = async (req, res) => {
     try {
@@ -11,10 +10,10 @@ const deleteTeacher = async (req, res) => {
         if (!teacher) {
             return res.status(404).json({ error: 'Teacher not found' });
         }
-        res.status(200).send(teacher);
+        res.status(200).json(teacher);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ error: error.message });
     }
 };
 
-module.exports = deleteTeacher
+export default deleteTeacher;

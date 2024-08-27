@@ -1,8 +1,6 @@
-
-const Test = require('../../models/Test');
-const mongoose = require('mongoose');
-const Course = require('../../models/Course');
-
+import mongoose from 'mongoose';
+import Test from '../../models/Test.js';
+import Course from '../../models/Course.js';
 
 const getTestById = async (req, res) => {
     try {
@@ -31,5 +29,4 @@ const getTestById = async (req, res) => {
     }
 };
 
-
-module.exports = getTestById
+export default getTestById;

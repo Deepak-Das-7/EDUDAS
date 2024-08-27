@@ -1,29 +1,19 @@
-import React from 'react';
-import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
-import { ThemeContext } from '@/Context/ThemeContext';
+import { showToast } from '@/Components/General/Toast';
+import React, { useState } from 'react';
+import { Button, View } from 'react-native';
+import Toast from 'react-native-root-toast';
 
-const Spinner = () => {
-    const { theme } = React.useContext(ThemeContext);
+const MyPage = () => {
+    const handleAction = () => {
+        let toast = Toast.show('Request failed to send.', { duration: Toast.durations.LONG });
+        setTimeout(function hideToast() { Toast.hide(toast); }, 1000);
+    };
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            <ActivityIndicator size='large' color={theme.colors.primary || theme.colors.primary} />
-            <Text style={[styles.message, { color: theme.textColors.primaryText }]}>Loading...</Text>
+        <View>
+            <Button title="Perform Action" onPress={handleAction} />
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    message: {
-        marginTop: 10,
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-});
-
-export default Spinner;
+export default MyPage;

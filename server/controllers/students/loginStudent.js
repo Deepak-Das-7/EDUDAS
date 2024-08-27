@@ -1,9 +1,7 @@
-const User = require('../../models/User');
-const Student = require('../../models/Student');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-dotenv.config();
+import Student from '../../models/Student.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 const loginStudent = async (req, res) => {
     const { email, password } = req.body;
@@ -39,7 +37,6 @@ const loginStudent = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        // console.log("Token in DB (server login call) is:", token);
         // Send success response with token
         res.status(200).json({ token, studentId: student._id });
     } catch (error) {
@@ -47,4 +44,5 @@ const loginStudent = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-module.exports = loginStudent
+
+export default loginStudent;

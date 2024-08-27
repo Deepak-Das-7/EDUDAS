@@ -1,5 +1,6 @@
-const Course = require('../../models/Course');
+import mongoose from 'mongoose';
 
+import Course from '../../models/Course.js';
 
 const addCourseByUserId = async (req, res) => {
     const { user_id, course_id } = req.params;
@@ -38,4 +39,4 @@ const addCourseByUserId = async (req, res) => {
     }
 }
 
-module.exports = addCourseByUserId
+export default addCourseByUserId;

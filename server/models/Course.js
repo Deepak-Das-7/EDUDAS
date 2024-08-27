@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
@@ -19,4 +19,4 @@ const courseSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Course', courseSchema);
+export default mongoose.model('Course', courseSchema);

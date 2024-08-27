@@ -1,6 +1,4 @@
-const Student = require('../../models/Student');
-const dotenv = require('dotenv');
-dotenv.config();
+import Student from '../../models/Student.js';
 
 const deleteStudent = async (req, res) => {
     try {
@@ -14,8 +12,8 @@ const deleteStudent = async (req, res) => {
         }
         res.status(200).send(student);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).send({ error: error.message });
     }
 };
 
-module.exports = deleteStudent
+export default deleteStudent;

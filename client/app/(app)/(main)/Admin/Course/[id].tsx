@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, StyleSheet } from 'react-native';
 import axios from 'axios';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
 import { Course } from '@/Constants/types';
 import Loader from '@/Components/General/Loader';
@@ -9,6 +9,8 @@ import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
+import Toast from 'react-native-root-toast';
+
 
 const CourseDetail: React.FC = () => {
     const { id } = useLocalSearchParams();
@@ -56,28 +58,30 @@ const CourseDetail: React.FC = () => {
         }
     }, [course]);
 
-    const handleUpdate = () => {
-        console.log("Updating");
-        // console.log(courseName);
-        // console.log(description);
-        // console.log(duration);
-        // console.log(language);
-        // console.log(classLevel);
-        // console.log(isFree);
-        // console.log(price);
-        // console.log(startDate);
+    const handleUpdate = async () => {
+        try {
+            const response = await axios.put(`${BASE_URL}/courses/${id}`, {
+                courseName,
+                description,
+                duration,
+                language,
+                class: classLevel,
+                isFree,
+                price: Number(price),
+                startDate: startDate.date
+            });
 
-        // if (id) {
-        //     axios.put(`${BASE_URL}/courses/${id}`, { courseName })
-        //         .then(() => {
-        //             Alert.alert('Course updated successfully');
-        //             router.push('/Admin/Video');
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error updating course');
-        //             console.error(error);
-        //         });
-        // }
+            if (response.status === 200) {
+                //show toast
+                let toast = Toast.show('Course updated!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Course')
+            }
+
+        } catch (error) {
+            console.error('Error editing course:', error);
+        }
     };
 
     const handleDelete = () => {
