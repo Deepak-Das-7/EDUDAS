@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -120,16 +120,27 @@ const CourseDetail: React.FC = () => {
         { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
     ];
 
-    return (
-        course &&
-        <CommonFormCRUD
-            fields={fields}
-            onSave={handleUpdate}
-            onDelete={handleDelete}
-        />
+    return (course &&
+        <View style={styles.container}>
+            <Text style={styles.title}>Updating Course</Text>
+            <CommonFormCRUD
+                fields={fields}
+                onSave={handleUpdate}
+                onDelete={handleDelete}
+            />
+        </View>
     );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: "center"
+    }
+});
 
 export default CourseDetail;

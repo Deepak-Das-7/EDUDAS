@@ -49,7 +49,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'number':
                 return (
                     <View key={field.name}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <TextInput
                             placeholder={field.label}
                             value={field.value?.toString() || ''}
@@ -66,7 +66,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'textarea':
                 return (
                     <View key={field.name}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <TextInput
                             placeholder={field.label}
                             value={field.value?.toString() || ''}
@@ -84,7 +84,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'date':
                 return (
                     <View key={field.name}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <View style={styles.dateContainer}>
                             <TextInput
                                 style={[
@@ -124,7 +124,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'boolean':
                 return (
                     <View key={field.name} style={styles.switchContainer}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <Switch
                             value={field.value}
                             onValueChange={field.onChange}
@@ -138,7 +138,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'image':
                 return (
                     <View key={field.name}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <View style={styles.imageContainer}>
                             <TextInput
                                 placeholder={field.label}
@@ -159,7 +159,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
             case 'select':
                 return (
                     <View key={field.name}>
-                        <Text style={[styles.label, { color: theme.textColors.primaryText }]}>{field.label}</Text>
+                        <Text style={[styles.label, { color: theme.textColors.secondaryText }]}>{field.label}</Text>
                         <Picker
                             selectedValue={field.value}
                             onValueChange={(itemValue) => field.onChange(itemValue)}
@@ -207,19 +207,19 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     input: {
-        borderWidth: 1,
+        // borderWidth: 1,
         borderRadius: 9,
         padding: 7,
-        marginVertical: 7,
+        marginBottom: 7,
         fontSize: 14,
     },
     textarea: {
-        borderWidth: 1,
+        // borderWidth: 1,
         borderRadius: 10,
         padding: 7,
         marginBottom: 7,
         fontSize: 14,
-        height: 70
+        height: "auto"
     },
     dateContainer: {
         flexDirection: 'row',
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 10,
         fontWeight: '500',
+        color: "gray",
     },
     buttonContainer: {
         marginVertical: 20,

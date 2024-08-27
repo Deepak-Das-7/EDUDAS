@@ -5,9 +5,10 @@ import { BASE_URL } from '@env';
 import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
 import { Test } from '@/Constants/types';
 import Loader from '@/Components/General/Loader';
-import { Text } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
+import { classLevelOptions } from '@/Constants/Class';
 
 const TestDetail: React.FC = () => {
     const { id } = useLocalSearchParams();
@@ -18,7 +19,6 @@ const TestDetail: React.FC = () => {
     const fetchTest = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/tests/${id}`);
-            console.log(response.data.startDate);
             setTest(response.data);
             setError('');
         } catch (error) {
@@ -100,18 +100,33 @@ const TestDetail: React.FC = () => {
         { name: 'testName', label: 'Test Name', type: 'text', value: testName, onChange: setTestName },
         { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
-        { name: 'classLevel', label: 'Class Level', type: 'text', value: classLevel, onChange: setClassLevel },
+        { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
         { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
     ];
 
-    return (
-        test &&
-        <CommonFormCRUD
-            fields={fields}
-            onSave={handleUpdate}
-            onDelete={handleDelete}
-        />
+
+
+
+    return (test &&
+        <View style={styles.container}>
+            <Text style={styles.title}>Updating Test</Text>
+            <CommonFormCRUD
+                fields={fields}
+                onSave={handleUpdate}
+                onDelete={handleDelete}
+            />
+        </View>
     );
 };
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: "center"
+    }
+});
 export default TestDetail;

@@ -39,7 +39,7 @@ const testsList: React.FC = () => {
 
     const applyPagination = (alltests: Test[], page: number, query: string) => {
         const filtered = alltests.filter(test =>
-            test.name.toLowerCase().includes(query.toLowerCase())
+            test.name.toLowerCase().includes(query.toLowerCase()) || test.class.toLowerCase().includes(query.toLowerCase())
         );
         const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
         setTotalPages(totalPages);
@@ -88,11 +88,12 @@ const testsList: React.FC = () => {
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
                     placeholder="Search tests"
+                    placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={handleSearch}
                 />

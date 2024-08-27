@@ -5,14 +5,18 @@ import { BASE_URL } from '@env';
 import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
 import { VideosList, Video } from '@/Constants/types';  // Ensure this import is correct
 import Loader from '@/Components/General/Loader';
-import { Text } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { durationOptions } from '@/Constants/Duration';
+import { classLevelOptions } from '@/Constants/Class';
 
 const VideoDetail: React.FC = () => {
     const { id } = useLocalSearchParams();
     const [video, setVideo] = useState<VideosList>();  // Changed from Test to Video
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
+
+    const [videoName, setVideoName] = useState('');
+    const [classLevel, setClassLevel] = useState('');
 
     const fetchVideo = async () => {
         try {
@@ -27,14 +31,19 @@ const VideoDetail: React.FC = () => {
     };
 
     useEffect(() => {
+        if (video) {
+            setVideoName(video.videoName);
+            setClassLevel(video.class);
+        }
+    }, [video]);
+
+
+    useEffect(() => {
         setLoading(true);
         fetchVideo();
     }, [id]);
 
-    const [videoId, setVideoId] = useState('');  // Changed from testName to videoName
-    const [videoName, setVideoName] = useState('');
-    const [classLevel, setClassLevel] = useState('');
-    const [duration, setDuration] = useState('');
+
 
 
     const handleUpdate = () => {
@@ -79,19 +88,31 @@ const VideoDetail: React.FC = () => {
 
     const fields: FieldType[] = [
         { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName },
-        { name: 'videoId', label: 'videoId', type: 'text', value: videoId, onChange: setVideoId },
-        { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
-        { name: 'classLevel', label: 'Class Level', type: 'text', value: classLevel, onChange: setClassLevel },
+        { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
     ];
 
-    return (
-        video &&
-        <CommonFormCRUD
-            fields={fields}
-            onSave={handleUpdate}
-            onDelete={handleDelete}
-        />
+
+    return (video &&
+        <View style={styles.container}>
+            <Text style={styles.title}>Updating Video</Text>
+            <CommonFormCRUD
+                fields={fields}
+                onSave={handleUpdate}
+                onDelete={handleDelete}
+            />
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: "center"
+    }
+});
 
 export default VideoDetail;

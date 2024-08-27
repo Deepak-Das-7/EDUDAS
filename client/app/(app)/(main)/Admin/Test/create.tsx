@@ -11,7 +11,7 @@ import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 
 const CourseDetail: React.FC = () => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     // State variables for form fields
     const [courseName, setCourseName] = useState('');
@@ -102,7 +102,6 @@ const CourseDetail: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 10,
     },
     title: {
         fontSize: 20,

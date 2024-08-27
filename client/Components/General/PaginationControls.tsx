@@ -1,4 +1,3 @@
-// app/Admin/PaginationControls.tsx
 import React, { useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -12,6 +11,8 @@ interface PaginationControlsProps {
 
 const PaginationControls: React.FC<PaginationControlsProps> = ({ currentPage, totalPages, onPageChange }) => {
     const { theme } = useContext(ThemeContext);
+
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.pagination}>
@@ -34,14 +35,16 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({ currentPage, to
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     pagination: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: theme.backgroundColor
     },
     pageInfo: {
         fontSize: 10,
+        color: theme.textColors.primaryText,
     },
 });
 

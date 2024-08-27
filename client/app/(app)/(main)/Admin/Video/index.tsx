@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Alert, Text } from 'react-native';
 import axios from 'axios';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -8,45 +8,61 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '@/Context/ThemeContext';
 import PaginationControls from '@/Components/General/PaginationControls';
 import VideoRow from '@/Components/Video/VideoRow';
+import { useRefresh } from '@/Context/RefreshContext';
+import Loader from '@/Components/General/Loader';
 
 const ITEMS_PER_PAGE = 10;
 
-const testsList: React.FC = () => {
-    const [tests, setTests] = useState<VideosList[]>([]);
-    const [filteredTests, setFilteredTests] = useState<VideosList[]>([]);
+const videosList: React.FC = () => {
+    const [videos, setVideos] = useState<VideosList[]>([]);
+    const [filteredVideos, setFilteredVideos] = useState<VideosList[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const { theme } = useContext(ThemeContext);
 
-    useEffect(() => {
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string>('');
+
+    const fetchVideos = async () => {
         axios.get(`${BASE_URL}/videos`)
             .then(response => {
-                setTests(response.data);
+                setVideos(response.data);
                 applyPagination(response.data, 1, searchQuery);
+                setError('');
             })
-            .catch(error => console.error(error));
-    }, []);
+            .catch(error => setError('Failed to fetch courses'))
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
 
     useEffect(() => {
-        applyPagination(tests, currentPage, searchQuery);
-    }, [currentPage, tests, searchQuery]);
+        fetchVideos();
+    }, []);
+
+
+    useEffect(() => {
+        applyPagination(videos, currentPage, searchQuery);
+    }, [currentPage, videos, searchQuery]);
 
     const handleSearch = (query: string) => {
         setSearchQuery(query);
-        applyPagination(tests, 1, query);
+        applyPagination(videos, 1, query);
     };
 
-    const applyPagination = (alltests: VideosList[], page: number, query: string) => {
-        const filtered = alltests.filter(test =>
-            test.videoName.toLowerCase().includes(query.toLowerCase())
+    const applyPagination = (allvideos: VideosList[], page: number, query: string) => {
+        const filtered = allvideos.filter(video =>
+            video.videoName.toLowerCase().includes(query.toLowerCase()) || video.class.toLowerCase().includes(query.toLowerCase())
         );
         const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
         setTotalPages(totalPages);
 
         const startIndex = (page - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
-        setFilteredTests(filtered.slice(startIndex, endIndex));
+        setFilteredVideos(filtered.slice(startIndex, endIndex));
         setCurrentPage(page);
     };
 
@@ -55,7 +71,7 @@ const testsList: React.FC = () => {
             ? Math.min(currentPage + 1, totalPages)
             : Math.max(currentPage - 1, 1);
 
-        applyPagination(tests, newPage, searchQuery);
+        applyPagination(videos, newPage, searchQuery);
     };
 
     const handleDelete = (courseId: string) => {
@@ -71,11 +87,11 @@ const testsList: React.FC = () => {
                 {
                     text: "Delete",
                     onPress: () => {
-                        axios.delete(`${BASE_URL}/tests/${courseId}`)
+                        axios.delete(`${BASE_URL}/videos/${courseId}`)
                             .then(() => {
-                                const updatedtests = tests.filter(course => course._id !== courseId);
-                                setTests(updatedtests);
-                                applyPagination(updatedtests, currentPage, searchQuery);
+                                const updatedVideos = videos.filter(course => course._id !== courseId);
+                                setVideos(updatedVideos);
+                                applyPagination(updatedVideos, currentPage, searchQuery);
                             })
                             .catch(error => console.error(error));
                     },
@@ -86,20 +102,28 @@ const testsList: React.FC = () => {
         );
     };
 
+    if (loading) {
+        return <Loader />;
+    }
+
+    if (error) {
+        return <Text>{error}</Text>;
+    }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
-                    placeholder="Search tests"
+                    placeholder="Search videos"
+                    placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={handleSearch}
                 />
-                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Test/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Video/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
             </View>
             <FlatList
-                data={filteredTests}
+                data={filteredVideos}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
                     <VideoRow test={item} onDelete={handleDelete} />
@@ -138,4 +162,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default testsList;
+export default videosList;

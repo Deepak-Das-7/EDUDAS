@@ -80,6 +80,7 @@ export interface VideosList {
     _id: string,
     is_deleted: boolean;
     videos: Video[];
+    class: string;
     videoName: string;
     createdAt: Date;
     updatedAt: Date;

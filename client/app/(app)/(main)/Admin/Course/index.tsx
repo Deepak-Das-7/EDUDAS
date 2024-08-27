@@ -51,7 +51,7 @@ const CoursesList: React.FC = () => {
 
     const applyPagination = (allCourses: Course[], page: number, query: string) => {
         const filtered = allCourses.filter(course =>
-            course.courseName.toLowerCase().includes(query.toLowerCase())
+            course.courseName.toLowerCase().includes(query.toLowerCase()) || course.class.toLowerCase().includes(query.toLowerCase())
         );
         const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
         setTotalPages(totalPages);
@@ -99,11 +99,12 @@ const CoursesList: React.FC = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
                     placeholder="Search Courses"
+                    placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
                     onChangeText={handleSearch}
                 />
