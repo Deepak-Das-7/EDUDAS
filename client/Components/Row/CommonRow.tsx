@@ -1,38 +1,45 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { Course } from '@/Constants/types';
-import { router } from 'expo-router';
 import { ThemeContext } from '@/Context/ThemeContext';
+import { router, Href } from 'expo-router';
 
-interface CourseRowProps {
-    course: Course;
-    onDelete: (courseId: string) => void;
+interface CommonRowProps {
+    item: {
+        _id: string;
+        name: string;
+        photo: string;
+        class?: string;
+    };
+    onDelete: (id: string) => void;
+    editRoute: Href<string>;
 }
 
-const CourseRow: React.FC<CourseRowProps> = ({ course, onDelete }) => {
+const CommonRow: React.FC<CommonRowProps> = ({ item, onDelete, editRoute }) => {
     const { theme } = useContext(ThemeContext);
-
     const styles = getStyles(theme);
 
     return (
         <View style={styles.row}>
+            <View style={styles.cell0}>
+                <Image source={{ uri: item.photo || 'https://picsum.photos/200' }} style={styles.image} />
+            </View>
             <View style={styles.cell}>
-                <Text style={styles.cellText1}>{course.courseName}</Text>
-                <Text style={styles.cellText2}>{course.class ? course.class.slice(0, -6) : 'N/A'}</Text>
+                <Text style={styles.cellText1}>{item.name}</Text>
+                <Text style={styles.cellText2}>{item.class ? item.class : 'N/A'}</Text>
             </View>
             <View style={styles.cell2}>
                 <MaterialIcons
                     name="edit"
                     size={24}
                     color={theme.buttonColors.secondaryButtonBackground}
-                    onPress={() => router.push(`/Admin/Course/${course._id}`)}
+                    onPress={() => router.push(editRoute)}
                 />
                 <MaterialIcons
                     name="delete"
                     size={24}
                     color={theme.buttonColors.errorButtonBackground}
-                    onPress={() => onDelete(course._id)}
+                    onPress={() => onDelete(item._id)}
                 />
             </View>
         </View>
@@ -43,10 +50,21 @@ const getStyles = (theme: any) => StyleSheet.create({
     row: {
         flexDirection: 'row',
         borderBottomWidth: 0.3,
-        borderColor: theme.borderColors.defaultBorder, // Using theme's border color
+        borderColor: theme.borderColors.defaultBorder,
         paddingVertical: 8,
         alignItems: 'center',
-        backgroundColor: theme.backgroundColor, // Background color for the row
+        backgroundColor: theme.backgroundColor,
+    },
+    cell0: {
+        width: 30,
+        height: 30,
+        borderRadius: 10,
+        backgroundColor: "gray",
+    },
+    image: {
+        width: 30,
+        height: 30,
+        borderRadius: 7,
     },
     cell: {
         flex: 1,
@@ -62,12 +80,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     cellText1: {
         fontSize: 16,
         flex: 1,
-        color: theme.textColors.primaryText, // Primary text color from theme
+        color: theme.textColors.primaryText,
     },
     cellText2: {
         fontSize: 10,
-        color: theme.textColors.secondaryText, // Secondary text color from theme
+        color: theme.textColors.secondaryText,
     },
 });
 
-export default CourseRow;
+export default CommonRow;

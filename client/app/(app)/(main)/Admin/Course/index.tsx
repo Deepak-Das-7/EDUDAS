@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, TextInput, FlatList, StyleSheet, Alert, RefreshControl } from 'react-native';
 import axios from 'axios';
-import { router } from 'expo-router';
+import { Href, router } from 'expo-router';
 import { BASE_URL } from '@env';
 import { Course } from '@/Constants/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '@/Context/ThemeContext';
-import CourseRow from '@/Components/Course/CourseRow';
 import PaginationControls from '@/Components/General/PaginationControls';
+import CommonRow from '@/Components/Row/CommonRow';
 
 const ITEMS_PER_PAGE = 10;
 
-const CoursesList: React.FC = () => {
+const CoursesList = () => {
     const [courses, setCourses] = useState<Course[]>([]);
     const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -51,7 +51,7 @@ const CoursesList: React.FC = () => {
 
     const applyPagination = (allCourses: Course[], page: number, query: string) => {
         const filtered = allCourses.filter(course =>
-            course.courseName.toLowerCase().includes(query.toLowerCase()) || course.class.toLowerCase().includes(query.toLowerCase())
+            course.name.toLowerCase().includes(query.toLowerCase()) || course.class.toLowerCase().includes(query.toLowerCase())
         );
         const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
         setTotalPages(totalPages);
@@ -114,7 +114,11 @@ const CoursesList: React.FC = () => {
                 data={filteredCourses}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <CourseRow course={item} onDelete={handleDelete} />
+                    <CommonRow
+                        item={{ _id: item._id, name: item.name, photo: item.photo, class: item.class }}
+                        onDelete={handleDelete}
+                        editRoute={`/Admin/Course/${item._id}` as Href<string>}
+                    />
                 )}
                 contentContainerStyle={styles.table}
                 refreshControl={

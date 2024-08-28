@@ -12,7 +12,7 @@ import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 
 
-const CourseDetail: React.FC = () => {
+const CourseDetail = () => {
     const { id } = useLocalSearchParams();
     const [course, setCourse] = useState<Course>();
     const [loading, setLoading] = useState(true);
@@ -47,7 +47,7 @@ const CourseDetail: React.FC = () => {
     // Update form field states when course data is fetched
     useEffect(() => {
         if (course) {
-            setCourseName(course.courseName);
+            setCourseName(course.name);
             setDescription(course.description);
             setDuration(course.duration);
             setLanguage(course.language);
@@ -60,6 +60,7 @@ const CourseDetail: React.FC = () => {
 
     const handleUpdate = async () => {
         try {
+            setLoading(true);
             const response = await axios.put(`${BASE_URL}/courses/${id}`, {
                 courseName,
                 description,
@@ -73,6 +74,7 @@ const CourseDetail: React.FC = () => {
 
             if (response.status === 200) {
                 //show toast
+                setLoading(false);
                 let toast = Toast.show('Course updated!!', { duration: Toast.durations.LONG });
                 setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
                 //Go to list
@@ -84,19 +86,23 @@ const CourseDetail: React.FC = () => {
         }
     };
 
-    const handleDelete = () => {
-        console.log("Course deleted");
-        // if (id) {
-        //     axios.delete(`${BASE_URL}/courses/${id}`)
-        //         .then(() => {
-        //             Alert.alert('Course deleted successfully');
-        //             router.push('/Admin/Video');
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error deleting course');
-        //             console.error(error);
-        //         });
-        // }
+    const handleDelete = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${BASE_URL}/courses/${id}`);
+
+            if (response.status === 200) {
+                //show toast
+                setLoading(false);
+                let toast = Toast.show('Course deleted!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Course')
+            }
+
+        } catch (error) {
+            console.error('Error deleting course:', error);
+        }
     };
 
     if (loading) {

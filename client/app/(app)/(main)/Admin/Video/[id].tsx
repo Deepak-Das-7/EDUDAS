@@ -9,7 +9,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
 
-const VideoDetail: React.FC = () => {
+const VideoDetail = () => {
     const { id } = useLocalSearchParams();
     const [video, setVideo] = useState<VideosList>();  // Changed from Test to Video
     const [loading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ const VideoDetail: React.FC = () => {
 
     useEffect(() => {
         if (video) {
-            setVideoName(video.videoName);
+            setVideoName(video.name);
             setClassLevel(video.class);
         }
     }, [video]);

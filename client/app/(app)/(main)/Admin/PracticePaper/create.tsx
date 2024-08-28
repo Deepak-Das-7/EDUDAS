@@ -7,46 +7,48 @@ import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
 import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 import { router } from 'expo-router';
+import { languageOptions } from '@/Constants/Languages';
 
-const VideoListDetail = () => {
+const PaperDetail = () => {
     const [loading, setLoading] = useState(false);
 
     // State variables for form fields
-    const [videoName, setVideoName] = useState('');
+    const [paperName, setPaperName] = useState('');
     const [classLevel, setClassLevel] = useState('');
-    const [url, setUrl] = useState('https://picsum.photos/200');
+    const [language, setLanguage] = useState('');
+    const [paperUrl, setPaperUrl] = useState('https://picsum.photos/200');
 
-
-    const addVideo = async () => {
+    const addPaper = async () => {
         try {
             setLoading(true);
-            console.log(videoName, classLevel);
-            const response = await axios.post(`${BASE_URL}/videos`, {
-                video: videoName,
+            const response = await axios.post(`${BASE_URL}/practice-papers`, {
+                name: paperName,
                 class: classLevel,
-                photo: url
+                language,
+                photo: paperUrl
             });
             if (response.status === 201) {
                 setLoading(false)
                 //show toast
-                let toast = Toast.show('Video added!!', { duration: Toast.durations.LONG });
+                let toast = Toast.show('Paper added!!', { duration: Toast.durations.LONG });
                 setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
 
                 Alert.alert(
-                    "Video Added",
-                    "Go to Video list!",
+                    "Paper Added",
+                    "Go to Paper list!",
                     [
                         {
-                            text: "Add more Video",
+                            text: "Add more Paper",
                             onPress: () => {
                                 setClassLevel('');
-                                setVideoName('');
+                                setPaperName('');
+                                setLanguage('');
                             },
                             style: "cancel"
                         },
                         {
                             text: "Go",
-                            onPress: () => { router.replace('/Admin/Video') },
+                            onPress: () => { router.replace('/Admin/Theory') },
                             style: "destructive"
                         }
                     ],
@@ -54,14 +56,15 @@ const VideoListDetail = () => {
                 );
             }
         } catch (error) {
-            console.error('Error creating video:', error);
+            console.error('Error creating Paper:', error);
         }
     };
 
     const fields: FieldType[] = [
-        { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName },
-        { name: 'url', label: 'Video Photo', type: 'text', value: url, onChange: setUrl },
+        { name: 'paperName', label: 'Paper Name', type: 'text', value: paperName, onChange: setPaperName },
+        { name: 'paperUrl', label: 'Paper URL', type: 'text', value: paperUrl, onChange: setPaperUrl },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
+        { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
     ];
 
     if (loading) {
@@ -70,10 +73,10 @@ const VideoListDetail = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Adding Video</Text>
+            <Text style={styles.title}>Adding Practice Paper</Text>
             <CommonFormCRUD
                 fields={fields}
-                onSave={addVideo}
+                onSave={addPaper}
             />
         </View>
     );
@@ -91,4 +94,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default VideoListDetail;
+export default PaperDetail;

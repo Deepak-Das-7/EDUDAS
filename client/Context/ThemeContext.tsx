@@ -87,23 +87,24 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }, [isDarkMode, systemTheme]);
 
     const toggleTheme = () => {
-        Alert.alert(
-            'Confirm to change mode',
-            'Are you sure you want to change mode?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Yes',
-                    onPress: () => {
-                        setIsDarkMode(!isDarkMode);
-                    },
-                },
-            ],
-            { cancelable: true }
-        );
+        setIsDarkMode(!isDarkMode);
+        // Alert.alert(
+        //     'Confirm to change mode',
+        //     'Are you sure you want to change mode?',
+        //     [
+        //         {
+        //             text: 'Cancel',
+        //             style: 'cancel',
+        //         },
+        //         {
+        //             text: 'Yes',
+        //             onPress: () => {
+
+        //             },
+        //         },
+        //     ],
+        //     { cancelable: true }
+        // );
     };
 
     return (

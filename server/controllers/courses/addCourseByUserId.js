@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
-
 import Course from '../../models/Course.js';
 
 const addCourseByUserId = async (req, res) => {
     const { user_id, course_id } = req.params;
-
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(user_id) || !mongoose.Types.ObjectId.isValid(course_id)) {
         return res.status(400).send({ message: 'Invalid user or course ID format.' });

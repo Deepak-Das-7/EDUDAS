@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import Navbar from '../../../../Components/Navbar/Navbar';
-import { ThemeContext } from '../../../../Context/ThemeContext';
+import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
-import CourseCard from '../../../../Components/Cards/CourseCard';
+import CourseCard from '@/Components/Cards/CourseCard';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
-
+import { Course } from '@/Constants/types';
 
 const Home = () => {
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const { theme } = useContext(ThemeContext);
@@ -30,36 +29,55 @@ const Home = () => {
     }, []);
 
     if (loading) {
-        return <Text>Loading...</Text>;
+        return <Text style={[styles.loadingText, { color: theme.textColors.primaryText }]}>Loading...</Text>;
     }
 
     if (error) {
-        return <Text>Error: {error}</Text>;
+        return <Text style={[styles.errorText, { color: theme.textColors.errorText }]}>Error: {error}</Text>;
     }
 
     return (
-        <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
-            <Navbar />
-            <TouchableOpacity onPress={() => {
-                console.log("Going to search")
-                router.push('/Search/setting')
-            }}>
-                <Text>Go to search test page</Text>
+        <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]}>
+            <TouchableOpacity
+                style={[styles.searchButton, { backgroundColor: theme.buttonColors.primaryButtonBackground }]}
+                onPress={() => router.push('/Search/setting')}
+            >
+                <Text style={[styles.searchButtonText, { color: theme.buttonColors.primaryButtonText }]}>
+                    Go to search test page
+                </Text>
             </TouchableOpacity>
-            <ScrollView style={styles.container}>
+            <ScrollView >
                 {courses.map((course) => (
                     <CourseCard key={course._id} course={course} />
                 ))}
             </ScrollView>
         </SafeAreaView>
     );
-
 };
 
-
 const styles = StyleSheet.create({
-    container: {
-        padding: 16,
+    safeArea: {
+        flex: 1,
+        padding: 10,
+    },
+
+    loadingText: {
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    errorText: {
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    searchButton: {
+        padding: 10,
+        borderRadius: 5,
+        margin: 16,
+        alignItems: 'center',
+    },
+    searchButtonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 

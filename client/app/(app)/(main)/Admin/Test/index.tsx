@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
-import { router } from 'expo-router';
+import { Href, router } from 'expo-router';
 import { BASE_URL } from '@env';
 import { Test } from '@/Constants/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ThemeContext } from '@/Context/ThemeContext';
 import PaginationControls from '@/Components/General/PaginationControls';
-import TestRow from '@/Components/Test/TestRow';
+import CommonRow from '@/Components/Row/CommonRow';
 
 const ITEMS_PER_PAGE = 10;
 
-const testsList: React.FC = () => {
+const testsList = () => {
     const [tests, setTests] = useState<Test[]>([]);
     const [filteredTests, setFilteredTests] = useState<Test[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -103,7 +103,11 @@ const testsList: React.FC = () => {
                 data={filteredTests}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <TestRow test={item} onDelete={handleDelete} />
+                    <CommonRow
+                        item={{ _id: item._id, name: item.name, photo: item.photo, class: item.class }}
+                        onDelete={handleDelete}
+                        editRoute={`/Admin/Test/${item._id}` as Href<string>}
+                    />
                 )}
                 contentContainerStyle={styles.table}
             />

@@ -37,7 +37,7 @@ export interface Result {
 export interface Course {
     _id: string,
     is_deleted: boolean;
-    courseName: string;
+    name: string;
     description: string;
     duration: string;
     photo: string;
@@ -70,10 +70,11 @@ export interface Test {
 
 export interface Video {
     _id: string,
-    videoId: string;
     videoName: string;
+    videoId: string;
     class: string;
     duration: string;
+    photo: string
 }
 
 export interface VideosList {
@@ -81,7 +82,19 @@ export interface VideosList {
     is_deleted: boolean;
     videos: Video[];
     class: string;
-    videoName: string;
+    name: string;
     createdAt: Date;
     updatedAt: Date;
+    photo: string;
+}
+
+export interface Paper {
+    _id: string;
+    name: string;
+    pdfUrl: string;
+    class: string;
+    photo: string;
+    createdAt: Date;
+    updatedAt: Date;
+    language: string;
 }

@@ -16,7 +16,8 @@ const _layout = () => {
             headerShadowVisible: false,
         }}>
             <Stack.Screen name="index" options={{ title: "Home", headerShown: false }} />
-            <Stack.Screen name="SingleTest" options={{ title: "SingleTest", headerShown: false }} />
+            <Stack.Screen name="create" options={{ title: "create", headerShown: false }} />
+            <Stack.Screen name="[id]" options={{ title: "ID", headerShown: false }} />
         </Stack>
     )
 }

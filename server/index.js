@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 1000;
 (async () => {
     try {
         await connectDB();
-        console.log('Database connected successfully');
     } catch (err) {
         console.error('Database connection failed', err);
         process.exit(1);

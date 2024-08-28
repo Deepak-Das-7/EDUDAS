@@ -1,98 +1,148 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'react-native';
-import { ThemeContext } from '@/Context/ThemeContext';
+import { View, TextInput, FlatList, StyleSheet, Alert, RefreshControl } from 'react-native';
 import axios from 'axios';
-import TestCard from '@/Components/Cards/TestCard';
+import { Href, router } from 'expo-router';
 import { BASE_URL } from '@env';
-import Count from '@/Components/General/Count';
+import { Paper } from '@/Constants/types';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { ThemeContext } from '@/Context/ThemeContext';
+import PaginationControls from '@/Components/General/PaginationControls';
+import CommonRow from '@/Components/Row/CommonRow';
 
-const Home = () => {
-    const [tests, setTests] = useState([]);
-    const [filteredTests, setFilteredTests] = useState([]);
-    const [searchQuery, setSearchQuery] = useState<string>('');
-    const [loading, setLoading] = useState(true);
+const ITEMS_PER_PAGE = 10;
+
+const PracticePaperList = () => {
+    const [papers, setPapers] = useState<Paper[]>([]);
+    const [filteredPapers, setfilteredPapers] = useState<Paper[]>([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [refreshing, setRefreshing] = useState(false);
-    const [error, setError] = useState<string>('');
     const { theme } = useContext(ThemeContext);
 
-    const fetchTests = async () => {
+    useEffect(() => {
+        fetchPapers();
+    }, []);
+
+    const fetchPapers = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/tests`);
-            setTests(response.data);
-            setFilteredTests(response.data); // Initialize filteredTests
+            const response = await axios.get(`${BASE_URL}/practice-papers`);
+            setPapers(response.data);
+            applyPagination(response.data, 1, searchQuery);
         } catch (error) {
-            setError('Failed to fetch tests');
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
+            console.error(error);
         }
     };
 
     useEffect(() => {
-        fetchTests();
-    }, []);
+        applyPagination(papers, currentPage, searchQuery);
+    }, [currentPage, papers, searchQuery]);
 
-    useEffect(() => {
-        const results = tests.filter(test =>
-            (test.name.toLowerCase().includes(searchQuery.toLowerCase()) || test.course.class.toLowerCase().includes(searchQuery.toLowerCase()))
-        );
-        setFilteredTests(results);
-    }, [searchQuery, tests]);
-
-    const onRefresh = () => {
+    const onRefresh = async () => {
         setRefreshing(true);
-        fetchTests();
+        await fetchPapers();
+        setRefreshing(false);
     };
 
-    if (loading) {
-        return <Text>Loading...</Text>;
-    }
+    const handleSearch = (query: string) => {
+        setSearchQuery(query);
+        applyPagination(papers, 1, query);
+    };
 
-    if (error) {
-        return <Text>Error: {error}</Text>;
-    }
+    const applyPagination = (allPapers: Paper[], page: number, query: string) => {
+        const filtered = allPapers.filter(Paper =>
+            Paper.name.toLowerCase().includes(query.toLowerCase()) || Paper.class?.toLowerCase().includes(query.toLowerCase())
+        );
+        const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        setTotalPages(totalPages);
+
+        const startIndex = (page - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        setfilteredPapers(filtered.slice(startIndex, endIndex));
+        setCurrentPage(page);
+    };
+
+    const handlePageChange = (direction: 'prev' | 'next') => {
+        const newPage = direction === 'next'
+            ? Math.min(currentPage + 1, totalPages)
+            : Math.max(currentPage - 1, 1);
+
+        applyPagination(papers, newPage, searchQuery);
+    };
+
+    const handleDelete = (PaperId: string) => {
+        Alert.alert(
+            "Delete Confirmation",
+            "Are you sure you want to delete this Paper?",
+            [
+                {
+                    text: "Cancel",
+                    onPress: () => console.log("Deletion cancelled"),
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: () => {
+                        axios.delete(`${BASE_URL}/practice-papers/${PaperId}`)
+                            .then(() => {
+                                const updatedPapers = papers.filter(Paper => Paper._id !== PaperId);
+                                setPapers(updatedPapers);
+                                applyPagination(updatedPapers, currentPage, searchQuery);
+                            })
+                            .catch(error => console.error(error));
+                    },
+                    style: "destructive"
+                }
+            ],
+            { cancelable: true }
+        );
+    };
 
     return (
-        <ScrollView
-            style={{ backgroundColor: theme.colors.background, padding: 10 }}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    colors={[theme.colors.primary]}
-                    tintColor={theme.colors.primary}
-                />
-            }
-        >
+        <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>
                 <TextInput
                     style={[styles.searchBox, { backgroundColor: theme.colors.surface, color: theme.textColors.primaryText, flex: 1 }]}
-                    placeholder="Search tests"
+                    placeholder="Search papers"
                     placeholderTextColor={theme.textColors.secondaryText}
                     value={searchQuery}
-                    onChangeText={setSearchQuery}
+                    onChangeText={handleSearch}
                 />
-                {searchQuery &&
-                    <Count count={filteredTests.length} />
-                }
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Theory/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
             </View>
-            {filteredTests.length > 0 ? (
-                filteredTests.map((test) => (
-                    <TestCard key={test._id} test={test} />
-                ))
-            ) : (
-                <Text style={[styles.noItemsText, { color: theme.textColors.errorText }]}>No items found</Text>
-            )}
-        </ScrollView>
+            <FlatList
+                data={filteredPapers}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                    <CommonRow
+                        item={{ _id: item._id, name: item.name, photo: item.photo, class: item.class }}
+                        onDelete={handleDelete}
+                        editRoute={`/Admin/Theory/${item._id}` as Href<string>}
+                    />
+                )}
+                contentContainerStyle={styles.table}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={[theme.buttonColors.primaryButtonBackground]}
+                    />
+                }
+            />
+            <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    searchContainer: {
-        marginBottom: 7,
-        display: 'flex',
-        flexDirection: "row",
-        gap: 10
+    container: {
+        flex: 1,
+        paddingHorizontal: 16,
+        padding: 5
     },
     searchBox: {
         padding: 7,
@@ -100,11 +150,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         paddingLeft: 20,
     },
-    noItemsText: {
-        textAlign: 'center',
-        fontSize: 18,
-        marginTop: 20,
+    table: {
+        borderTopWidth: 1,
     },
+    searchContainer: {
+        marginBottom: 7,
+        display: 'flex',
+        flexDirection: "row",
+        gap: 10
+    }
 });
 
-export default Home;
+export default PracticePaperList;

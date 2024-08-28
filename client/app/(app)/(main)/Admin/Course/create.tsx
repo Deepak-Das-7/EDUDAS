@@ -10,7 +10,7 @@ import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 
-const CourseDetail: React.FC = () => {
+const CourseDetail = () => {
     const [loading, setLoading] = useState(false);
 
     // State variables for form fields
@@ -21,6 +21,7 @@ const CourseDetail: React.FC = () => {
     const [classLevel, setClassLevel] = useState('');
     const [isFree, setIsFree] = useState(false);
     const [price, setPrice] = useState('0');
+    const [url, setUrl] = useState('https://picsum.photos/200');
     const [startDate, setStartDate] = useState<{ date: Date; showPicker: boolean }>({ date: new Date(), showPicker: false });
 
     const addCourse = async () => {
@@ -34,7 +35,8 @@ const CourseDetail: React.FC = () => {
                 class: classLevel,
                 isFree,
                 price: Number(price),
-                startDate
+                startDate,
+                photo: url
             });
             if (response.status === 201) {
                 setLoading(false)
@@ -76,6 +78,7 @@ const CourseDetail: React.FC = () => {
 
     const fields: FieldType[] = [
         { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName },
+        { name: 'url', label: 'Course Photo', type: 'text', value: url, onChange: setUrl },
         { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },

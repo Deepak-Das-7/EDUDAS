@@ -12,7 +12,7 @@ const studentSchema = new mongoose.Schema({
     class: { type: String },
     enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Enrollment' }]
 }, {
-    timestamps: true // adds createdAt and updatedAt fields
+    timestamps: true
 });
 
 export default mongoose.model('Student', studentSchema);

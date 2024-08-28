@@ -3,11 +3,13 @@ import PracticePaper from '../../models/PracticePaper.js';
 
 const createPracticePaper = async (req, res) => {
     try {
-        const practicePaper = new PracticePaper(req.body);
+        const { ...rest } = req.body;
+        const practicePaper = new PracticePaper({ ...rest });
         await practicePaper.save();
         res.status(201).json(practicePaper);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error:', error);
+        res.status(400).send(error);
     }
 };
 

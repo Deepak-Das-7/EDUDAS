@@ -15,7 +15,7 @@ export const Colors = {
       "onSurface": "#000000",
       "onError": "#FFFFFF",
       "onSuccess": "#FFFFFF", // Added success text color
-      "shadow": "#000000"
+      "shadow": "#000000",
     },
     "textColors": {
       "primaryText": "#000000",

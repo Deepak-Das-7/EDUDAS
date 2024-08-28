@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
 import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
 import { Test } from '@/Constants/types';
@@ -9,8 +9,9 @@ import { Text, View, StyleSheet } from 'react-native';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
+import Toast from 'react-native-root-toast';
 
-const TestDetail: React.FC = () => {
+const TestDetail = () => {
     const { id } = useLocalSearchParams();
     const [test, setTest] = useState<Test>();
     const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ const TestDetail: React.FC = () => {
     const [description, setDescription] = useState('');
     const [duration, setDuration] = useState('');
     const [classLevel, setClassLevel] = useState('');
+    const [language, setLanguage] = useState('');
     const [startDate, setStartDate] = useState<{ date: Date; showPicker: boolean }>({ date: new Date(), showPicker: false });
     // Update form state when test data is fetched
     useEffect(() => {
@@ -45,45 +47,54 @@ const TestDetail: React.FC = () => {
             setDescription(test.description);
             setDuration(test.duration);
             setClassLevel(test.class);
+            setLanguage(test.language);
             setStartDate({ date: new Date(test.startDate), showPicker: false });
         }
     }, [test]);
 
-    const handleUpdate = () => {
-        console.log("Updating");
-        // console.log(testName);
-        // console.log(description);
-        // console.log(duration);
-        // console.log(language);
-        // console.log(classLevel);
-        // console.log(startDate);
+    const handleUpdate = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.put(`${BASE_URL}/tests/${id}`, {
+                name: testName,
+                description,
+                duration,
+                language,
+                classLevel,
+                startDate: startDate.date
+            });
 
-        // if (id) {
-        //     axios.put(${BASE_URL}/tests/${id}, { testName })
-        //         .then(() => {
-        //             Alert.alert('test updated successfully');
-        //             router.replace('/Admin/Test');
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error updating test');
-        //             console.error(error);
-        //         });
-        // }
+            if (response.status === 200) {
+                //show toast
+                setLoading(false);
+                let toast = Toast.show('Test updated!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Test')
+            }
+
+        } catch (error) {
+            console.error('Error editing test:', error);
+        }
     };
 
-    const handleDelete = () => {
-        console.log("test deleted");
-        // if (id) {
-        //     axios.delete(${BASE_URL}/tests/${id})
-        //         .then(() => {
-        //             Alert.alert('test deleted successfully');
-        //             router.replace('/Admin/Test');
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error deleting test');
-        //             console.error(error);
-        //         });
-        // }
+    const handleDelete = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${BASE_URL}/tests/${id}`);
+
+            if (response.status === 200) {
+                //show toast
+                setLoading(false);
+                let toast = Toast.show('Test deleted!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Test')
+            }
+
+        } catch (error) {
+            console.error('Error deleting test:', error);
+        }
     };
 
     if (loading) {
@@ -100,6 +111,7 @@ const TestDetail: React.FC = () => {
         { name: 'testName', label: 'Test Name', type: 'text', value: testName, onChange: setTestName },
         { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
+        { name: 'language', label: 'Language', type: 'select', value: duration, onChange: setLanguage, options: languageOptions },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
         { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
     ];

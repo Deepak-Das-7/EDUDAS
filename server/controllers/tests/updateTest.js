@@ -2,20 +2,20 @@ import Test from '../../models/Test.js';
 
 const updateTest = async (req, res) => {
     try {
-        const { name, questions } = req.body;
-        const test = await Test.findByIdAndUpdate(
+        const { name, description, duration, language, classLevel, startDate } = req.body;
+        const updatedTest = await Test.findByIdAndUpdate(
             req.params.id,
-            { name, questions },
+            { name, description, duration, language, class: classLevel, startDate },
             { new: true, runValidators: true }
         );
 
-        if (!test || test.is_deleted) {
+        if (!updatedTest || updatedTest.is_deleted) {
             return res.status(404).json({ message: 'Test not found' });
         }
-
-        res.status(200).json(test);
+        res.status(200).json(updatedTest);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error updating test:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 

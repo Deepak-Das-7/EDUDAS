@@ -2,19 +2,19 @@ import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
-    courseName: { type: String },
-    description: String,
-    duration: String,
-    photo: String,
-    language: { type: String },
-    class: { type: String }, // Class or level of the course
+    name: { type: String, required: true },
+    description: { type: String, default: '' },
+    duration: { type: String, default: '' },
+    photo: { type: String, default: '' },
+    language: { type: String, default: '' },
+    class: { type: String, default: '' },
     isFree: { type: Boolean, default: false },
     price: { type: Number, default: 0 },
-    startDate: { type: Date }, // Start date of the course
+    startDate: { type: Date, default: new Date() },
     content: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent' },
     videos: { type: mongoose.Schema.Types.ObjectId, ref: 'VideoList' },
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
-    tests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Test' }],
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student', default: [] }],
+    tests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Test', default: [] }],
 }, {
     timestamps: true
 });

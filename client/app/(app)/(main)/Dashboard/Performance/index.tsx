@@ -1,6 +1,6 @@
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
 import { AuthContext } from '@/Context/AuthContext';
@@ -32,31 +32,29 @@ const Performance = () => {
     }, [userDetails]);
 
     if (loading) {
-        return <Text>Loading...</Text>;
+        return <Text style={[styles.loadingText, { color: theme.textColors.primaryText }]}>Loading...</Text>;
     }
 
     if (error) {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <MaterialIcons name="analytics" size={50} color="black" />
-                <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
-                    No performance {/* Display the actual error message */}
+            <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+                <MaterialIcons name="analytics" size={50} color={theme.textColors.errorText} />
+                <Text style={[styles.errorText, { color: theme.textColors.errorText }]}>
+                    No performance
                 </Text>
             </View>
         );
     }
 
     return (
-        <View
-            style={{ backgroundColor: theme.colors.background, padding: 16 }}
-        >
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
             <TouchableOpacity
                 onPress={() => {
-                    router.push('/Dashboard/Performance/Chart')
+                    router.push('/Dashboard/Performance/Chart');
                 }}
-                style={{ backgroundColor: theme.colors.background, padding: 16, alignContent: "center" }}
+                style={[styles.button, { backgroundColor: theme.colors.primary }]}
             >
-                <Text>Show chart</Text>
+                <Text style={[styles.buttonText, { color: theme.textColors.primaryText }]}>Show chart</Text>
             </TouchableOpacity>
             <TestList tests={tests} />
         </View>
@@ -64,5 +62,29 @@ const Performance = () => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    loadingText: {
+        textAlign: 'center',
+        fontSize: 16,
+    },
+    errorText: {
+        textAlign: 'center',
+        fontSize: 15,
+        marginTop: 20,
+    },
+    button: {
+        padding: 16,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
+
 export default Performance;

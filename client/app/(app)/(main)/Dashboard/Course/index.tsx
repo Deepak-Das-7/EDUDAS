@@ -9,7 +9,6 @@ import { AuthContext } from '@/Context/AuthContext';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URL } from '@env';
-import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
 import Loader from '@/Components/General/Loader';
 import Count from '@/Components/General/Count';
 
@@ -39,19 +38,13 @@ const Home = () => {
         }
     };
 
-    // Use useFocusEffect to refresh courses when the component is focused
-    useFocusEffect(
-        useCallback(() => {
-            if (userDetails && userDetails.id) {
-                setLoading(true);
-                fetchCourses();
-            }
-        }, [userDetails])
-    );
+    useEffect(() => {
+        fetchCourses()
+    }, []);
 
     useEffect(() => {
         const results = courses.filter(course =>
-            (course.courseName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (course.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (course.class.toLowerCase().includes(searchQuery.toLowerCase()))
         );
         setFilteredCourses(results);

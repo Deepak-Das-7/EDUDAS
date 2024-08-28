@@ -16,7 +16,7 @@ const CourseCard = ({ course }) => {
 
     return (
         <View style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}>
-            <Text style={[styles.title, { color: theme.colors.primary }]}>{course.courseName}</Text>
+            <Text style={[styles.title, { color: theme.colors.primary }]}>{course.name}</Text>
             {course.photo ? (
                 <Image source={{ uri: course.photo }} style={styles.image} />
             ) : (
