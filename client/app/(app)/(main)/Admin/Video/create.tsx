@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Alert } from 'react-native';
 import axios from 'axios';
 import { BASE_URL } from '@env';
 import Loader from '@/Components/General/Loader';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 import { router } from 'expo-router';
@@ -58,9 +58,9 @@ const VideoListDetail = () => {
         }
     };
 
-    const fields: FieldType[] = [
-        { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName },
-        { name: 'url', label: 'Video Photo', type: 'text', value: url, onChange: setUrl },
+    const fields: Field[] = [
+        { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName, options: undefined },
+        { name: 'url', label: 'Video Photo', type: 'text', value: url, onChange: setUrl, options: undefined },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
     ];
 

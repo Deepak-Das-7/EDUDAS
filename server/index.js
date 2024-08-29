@@ -1,11 +1,22 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import http from 'http';
+import { Server } from 'socket.io';
 import connectDB from './config/db.js';
 import ApiRouter from './controllers/Routes.js';
 
-
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:8081',
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
+});
+
 const PORT = process.env.PORT || 1000;
 
 (async () => {
@@ -24,6 +35,20 @@ const PORT = process.env.PORT || 1000;
     // Routes setup
     app.use('/', ApiRouter);
 
+    // Socket.IO setup
+    io.on('connection', (socket) => {
+        // console.log(socket.id, 'is online');
+
+        socket.on('send_message', (message) => {
+            // console.log(message);
+            io.emit('receive_message', message);
+        });
+
+        socket.on('disconnect', () => {
+            // console.log(socket.id, 'went offline');
+        });
+    });
+
     // Start server
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })();

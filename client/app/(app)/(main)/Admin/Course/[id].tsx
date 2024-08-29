@@ -5,7 +5,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
 import { Course } from '@/Constants/types';
 import Loader from '@/Components/General/Loader';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
@@ -62,7 +62,7 @@ const CourseDetail = () => {
         try {
             setLoading(true);
             const response = await axios.put(`${BASE_URL}/courses/${id}`, {
-                courseName,
+                name: courseName,
                 description,
                 duration,
                 language,
@@ -115,15 +115,15 @@ const CourseDetail = () => {
         );
     }
 
-    const fields: FieldType[] = [
-        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName },
-        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
+    const fields: Field[] = [
+        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName, options: undefined },
+        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription, options: undefined },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
-        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree },
-        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice },
-        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
+        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree, options: undefined },
+        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice, options: undefined },
+        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate, options: undefined },
     ];
 
     return (course &&

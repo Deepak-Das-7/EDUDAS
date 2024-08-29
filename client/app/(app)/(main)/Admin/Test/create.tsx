@@ -4,68 +4,62 @@ import axios from 'axios';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
 import Loader from '@/Components/General/Loader';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 
-const CourseDetail = () => {
+const TestDetail = () => {
     const [loading, setLoading] = useState(false);
 
     // State variables for form fields
-    const [courseName, setCourseName] = useState('');
+    const [testName, setTestName] = useState('');
     const [description, setDescription] = useState('');
-    const [duration, setDuration] = useState('Duration');
-    const [language, setLanguage] = useState('');
+    const [duration, setDuration] = useState('');
     const [classLevel, setClassLevel] = useState('');
-    const [isFree, setIsFree] = useState(false);
-    const [price, setPrice] = useState('0');
+    const [language, setLanguage] = useState('');
     const [url, setUrl] = useState('https://picsum.photos/200');
 
     const [startDate, setStartDate] = useState<{ date: Date; showPicker: boolean }>({ date: new Date(), showPicker: false });
 
-    const addCourse = async () => {
+    const addTest = async () => {
         try {
             setLoading(true);
             const response = await axios.post(`${BASE_URL}/tests`, {
-                courseName,
+                name: testName,
                 description,
                 duration,
                 language,
                 class: classLevel,
-                isFree,
-                price: Number(price),
                 startDate: startDate.date,
                 photo: url
             });
             if (response.status === 201) {
                 setLoading(false)
                 //show toast
-                let toast = Toast.show('Course added!!', { duration: Toast.durations.LONG });
+                let toast = Toast.show('test added!!', { duration: Toast.durations.LONG });
                 setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
 
                 Alert.alert(
-                    "Course Added",
-                    "Go to course list!",
+                    "test Added",
+                    "Go to test list!",
                     [
                         {
-                            text: "Add more course",
+                            text: "Add more test",
                             onPress: () => {
-                                setCourseName("");
+                                setTestName("");
                                 setDescription('');
                                 setDuration('');
                                 setLanguage('');
                                 setClassLevel('');
-                                setIsFree(false);
-                                setPrice('0');
                                 setStartDate({ date: new Date(), showPicker: false });
                             },
                             style: "cancel"
                         },
                         {
                             text: "Go",
-                            onPress: () => { router.replace('/Admin/Course') },
+                            onPress: () => { router.replace('/Admin/Test') },
                             style: "destructive"
                         }
                     ],
@@ -73,20 +67,18 @@ const CourseDetail = () => {
                 );
             }
         } catch (error) {
-            console.error('Error creating course:', error);
+            console.error('Error creating test:', error);
         }
     };
 
-    const fields: FieldType[] = [
-        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName },
-        { name: 'url', label: 'Course Photo', type: 'text', value: url, onChange: setUrl },
-        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
+    const fields: Field[] = [
+        { name: 'testName', label: 'Test Name', type: 'text', value: testName, onChange: setTestName, options: undefined },
+        { name: 'url', label: 'Test Photo', type: 'text', value: url, onChange: setUrl, options: undefined },
+        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription, options: undefined },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
-        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree },
-        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice },
-        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
+        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate, options: undefined },
     ];
     if (loading) {
         return <Loader />;
@@ -94,10 +86,10 @@ const CourseDetail = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Adding Course</Text>
+            <Text style={styles.title}>Adding Tourse</Text>
             <CommonFormCRUD
                 fields={fields}
-                onSave={addCourse}
+                onSave={addTest}
             />
         </View>
     );
@@ -114,4 +106,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CourseDetail;
+export default TestDetail;

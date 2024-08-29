@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { VideosList, Video } from '@/Constants/types';  // Ensure this import is correct
 import Loader from '@/Components/General/Loader';
 import { Text, View, StyleSheet } from 'react-native';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
+import Toast from 'react-native-root-toast';
 
 const VideoDetail = () => {
     const { id } = useLocalSearchParams();
@@ -46,34 +47,45 @@ const VideoDetail = () => {
 
 
 
-    const handleUpdate = () => {
-        console.log("Updating video");
-        // if (id) {
-        //     axios.put(${BASE_URL}/videos/${id}, { videoName })  // Changed from tests to videos
-        //         .then(() => {
-        //             Alert.alert('Video updated successfully');  // Changed message
-        //             router.replace('/Admin/Video');  // Changed route
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error updating video');  // Changed message
-        //             console.error(error);
-        //         });
-        // }
+    const handleUpdate = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.put(`${BASE_URL}/videos/${id}`, {
+                name: videoName,
+                class: classLevel,
+            });
+
+            if (response.status === 200) {
+                //show toast
+                setLoading(false);
+                let toast = Toast.show('Video updated!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Video')
+            }
+
+        } catch (error) {
+            console.error('Error editing Video:', error);
+        }
     };
 
-    const handleDelete = () => {
-        console.log("Video deleted");
-        // if (id) {
-        //     axios.delete(${BASE_URL}/videos/${id})  // Changed from tests to videos
-        //         .then(() => {
-        //             Alert.alert('Video deleted successfully');  // Changed message
-        //             router.replace('/Admin/Video');  // Changed route
-        //         })
-        //         .catch(error => {
-        //             Alert.alert('Error deleting video');  // Changed message
-        //             console.error(error);
-        //         });
-        // }
+    const handleDelete = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.delete(`${BASE_URL}/videos/${id}`);
+
+            if (response.status === 200) {
+                //show toast
+                setLoading(false);
+                let toast = Toast.show('Video deleted!!', { duration: Toast.durations.LONG });
+                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                //Go to list
+                router.replace('/Admin/Video')
+            }
+
+        } catch (error) {
+            console.error('Error deleting Video:', error);
+        }
     };
 
     if (loading) {
@@ -82,12 +94,12 @@ const VideoDetail = () => {
 
     if (error || !video) {
         return (
-            <Text>{error || "Video not found"}</Text>  // Changed message
+            <Text>{error || "Video not found"}</Text>
         );
     }
 
-    const fields: FieldType[] = [
-        { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName },
+    const fields: Field[] = [
+        { name: 'videoName', label: 'Video Name', type: 'text', value: videoName, onChange: setVideoName, options: undefined },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
     ];
 

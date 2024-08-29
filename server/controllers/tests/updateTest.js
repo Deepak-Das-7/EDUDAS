@@ -2,10 +2,9 @@ import Test from '../../models/Test.js';
 
 const updateTest = async (req, res) => {
     try {
-        const { name, description, duration, language, classLevel, startDate } = req.body;
         const updatedTest = await Test.findByIdAndUpdate(
             req.params.id,
-            { name, description, duration, language, class: classLevel, startDate },
+            req.body,
             { new: true, runValidators: true }
         );
 

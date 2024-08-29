@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { Test } from '@/Constants/types';
 import Loader from '@/Components/General/Loader';
 import { Text, View, StyleSheet } from 'react-native';
@@ -107,13 +107,13 @@ const TestDetail = () => {
         );
     }
 
-    const fields: FieldType[] = [
-        { name: 'testName', label: 'Test Name', type: 'text', value: testName, onChange: setTestName },
-        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
+    const fields: Field[] = [
+        { name: 'testName', label: 'Test Name', type: 'text', value: testName, onChange: setTestName, options: undefined },
+        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription, options: undefined },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
         { name: 'language', label: 'Language', type: 'select', value: duration, onChange: setLanguage, options: languageOptions },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
-        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
+        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate, options: undefined },
     ];
 
 

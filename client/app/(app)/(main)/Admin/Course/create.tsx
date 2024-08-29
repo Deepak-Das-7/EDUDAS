@@ -4,7 +4,7 @@ import axios from 'axios';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
 import Loader from '@/Components/General/Loader';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { languageOptions } from '@/Constants/Languages';
 import { durationOptions } from '@/Constants/Duration';
 import { classLevelOptions } from '@/Constants/Class';
@@ -26,23 +26,29 @@ const CourseDetail = () => {
 
     const addCourse = async () => {
         try {
+            console.log('Adding course...');
             setLoading(true);
             const response = await axios.post(`${BASE_URL}/courses`, {
-                courseName,
+                name: courseName,
                 description,
                 duration,
                 language,
-                class: classLevel,
+                classLevel,
                 isFree,
                 price: Number(price),
-                startDate,
+                startDate: startDate.date,
                 photo: url
             });
+
+            console.log('Response Status:', response.status);
+            console.log('Response Data:', response.data);
+            setLoading(false);
+
             if (response.status === 201) {
-                setLoading(false)
-                //show toast
+                console.log('Course added successfully!');
+
                 let toast = Toast.show('Course added!!', { duration: Toast.durations.LONG });
-                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
+                setTimeout(() => { Toast.hide(toast); }, 3000);
 
                 Alert.alert(
                     "Course Added",
@@ -73,19 +79,24 @@ const CourseDetail = () => {
             }
         } catch (error) {
             console.error('Error creating course:', error);
+        } finally {
+            setLoading(false); // Ensure loading state is updated even if an error occurs
         }
     };
 
-    const fields: FieldType[] = [
-        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName },
-        { name: 'url', label: 'Course Photo', type: 'text', value: url, onChange: setUrl },
-        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription },
+
+
+
+    const fields: Field[] = [
+        { name: 'courseName', label: 'Course Name', type: 'text', value: courseName, onChange: setCourseName, options: undefined },
+        { name: 'url', label: 'Course Photo', type: 'text', value: url, onChange: setUrl, options: undefined },
+        { name: 'description', label: 'Description', type: 'textarea', value: description, onChange: setDescription, options: undefined },
         { name: 'duration', label: 'Duration', type: 'select', value: duration, onChange: setDuration, options: durationOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
-        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree },
-        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice },
-        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate },
+        { name: 'isFree', label: 'Is Free', type: 'boolean', value: isFree, onChange: setIsFree, options: undefined },
+        { name: 'price', label: 'Price', type: 'number', value: price, onChange: setPrice, options: undefined },
+        { name: 'startDate', label: 'Start Date', type: 'date', value: startDate, onChange: setStartDate, options: undefined },
     ];
     if (loading) {
         return <Loader />;

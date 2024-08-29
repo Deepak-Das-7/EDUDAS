@@ -2,8 +2,7 @@ import VideosList from '../../models/VideosList.js';
 
 const createVideoList = async (req, res) => {
     try {
-        const { ...rest } = req.body;
-        const videoList = new VideosList({ ...rest });
+        const videoList = new VideosList(req.body);
         await videoList.save();
         res.status(201).json(videoList);
     } catch (error) {

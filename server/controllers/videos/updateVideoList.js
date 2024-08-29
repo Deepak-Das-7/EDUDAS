@@ -2,10 +2,9 @@ import VideosList from '../../models/VideosList.js';
 
 const updateVideoList = async (req, res) => {
     try {
-        const { videos } = req.body;
         const videoList = await VideosList.findByIdAndUpdate(
             req.params.id,
-            { videos },
+            req.body,
             { new: true, runValidators: true }
         );
         if (!videoList || videoList.is_deleted) {

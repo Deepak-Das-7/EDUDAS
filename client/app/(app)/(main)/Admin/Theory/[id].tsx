@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import Loader from '@/Components/General/Loader';
 import { Text, View, StyleSheet } from 'react-native';
 import { classLevelOptions } from '@/Constants/Class';
@@ -102,8 +102,8 @@ const PracticePaperDetail = () => {
         );
     }
 
-    const fields: FieldType[] = [
-        { name: 'paperName', label: 'Paper Name', type: 'text', value: paperName, onChange: setPaperName },
+    const fields: Field[] = [
+        { name: 'paperName', label: 'Paper Name', type: 'text', value: paperName, onChange: setPaperName, options: undefined },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
 

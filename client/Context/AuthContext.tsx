@@ -1,11 +1,10 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import mongoose from 'mongoose'; // Import mongoose for ObjectId
-
+import mongoose from 'mongoose';
 
 interface DecodedToken {
-    id: mongoose.Types.ObjectId; // Use mongoose.Types.ObjectId
+    id: mongoose.Types.ObjectId;
     firstName: string;
     lastName: string;
     email: string;
@@ -34,7 +33,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
                 try {
                     const decodedToken = jwtDecode<DecodedToken>(token);
                     setUserDetails(decodedToken);
-                    // console.log("Setting user details=", decodedToken);
                 } catch (error) {
                     console.error('Failed to decode token:', error);
                 }
@@ -73,4 +71,12 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     );
 };
 
-export { AuthContext, AuthProvider };
+const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
+export { AuthContext, AuthProvider, useAuth };

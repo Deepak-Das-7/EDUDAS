@@ -21,17 +21,17 @@ const VideoTestCard = ({ course }) => {
                 <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
                     onPress={goTo("Tests", course._id)}
                 >
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <Image source={require('@/assets/photo/quiz.png')} style={styles.image} />
                     <View style={styles.overlay}>
-                        <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Tests</Text>
+                        <Text style={styles.overlayTitle}>Tests</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
                     onPress={goTo("Videos", course.videos)}
                 >
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <Image source={require('@/assets/photo/youtube.png')} style={styles.image} />
                     <View style={styles.overlay}>
-                        <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Videos</Text>
+                        <Text style={styles.overlayTitle}>Videos</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -39,16 +39,16 @@ const VideoTestCard = ({ course }) => {
                 <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
                     onPress={goTo("Theories", course.content)}
                 >
-                    <Image source={{ uri: image }} style={styles.image} />
+                    <Image source={require('@/assets/photo/book.png')} style={styles.image} />
                     <View style={styles.overlay}>
-                        <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>Theories</Text>
+                        <Text style={styles.overlayTitle}>Theories</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
-                    onPress={goTo("DoubtSection", course._id)}>
-                    <Image source={{ uri: image }} style={styles.image} />
+                    onPress={goTo("DoubtSection", course.doubt)}>
+                    <Image source={require('@/assets/photo/doubt.png')} style={styles.image} />
                     <View style={styles.overlay}>
-                        <Text style={[styles.overlayTitle, { color: theme.textColors.primaryText }]}>DoubtSection</Text>
+                        <Text style={styles.overlayTitle}>DoubtSection</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -61,13 +61,11 @@ export default VideoTestCard
 const styles = StyleSheet.create({
     image: {
         width: '100%',
-        height: 100,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
+        height: 120,
     },
     card: {
         flex: 1,
-        borderRadius: 8,
+        borderRadius: 20,
         margin: 5,
         overflow: 'hidden',
         shadowColor: '#000',
@@ -88,11 +86,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.4)',
         padding: 10,
     },
     overlayTitle: {
-        fontSize: 18,
+        fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
     },

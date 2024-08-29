@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { Alert, useColorScheme } from 'react-native';
+import { useColorScheme } from 'react-native';
 import { Colors } from '../Constants/Colors';
 
 // Define types for the theme colors structure
@@ -63,14 +63,14 @@ interface ThemeType {
 interface ThemeContextProps {
     theme: ThemeType;
     toggleTheme: () => void;
-    isDarkMode: boolean; // Ensure this property is included
+    isDarkMode: boolean;
 }
 
 // Create the context with a default value
 export const ThemeContext = createContext<ThemeContextProps>({
-    theme: Colors.lightMode, // Use Colors from the imported module
+    theme: Colors.lightMode,
     toggleTheme: () => { },
-    isDarkMode: false, // Default value
+    isDarkMode: false,
 });
 
 interface ThemeProviderProps {
@@ -88,23 +88,6 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
     const toggleTheme = () => {
         setIsDarkMode(!isDarkMode);
-        // Alert.alert(
-        //     'Confirm to change mode',
-        //     'Are you sure you want to change mode?',
-        //     [
-        //         {
-        //             text: 'Cancel',
-        //             style: 'cancel',
-        //         },
-        //         {
-        //             text: 'Yes',
-        //             onPress: () => {
-
-        //             },
-        //         },
-        //     ],
-        //     { cancelable: true }
-        // );
     };
 
     return (

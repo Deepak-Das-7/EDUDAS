@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, Alert } from 'react-native';
 import axios from 'axios';
 import { BASE_URL } from '@env';
 import Loader from '@/Components/General/Loader';
-import CommonFormCRUD, { FieldType } from '@/Components/General/CommonFormCRUD';
+import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
 import { classLevelOptions } from '@/Constants/Class';
 import Toast from 'react-native-root-toast';
 import { router } from 'expo-router';
@@ -60,9 +60,9 @@ const PaperDetail = () => {
         }
     };
 
-    const fields: FieldType[] = [
-        { name: 'paperName', label: 'Paper Name', type: 'text', value: paperName, onChange: setPaperName },
-        { name: 'paperUrl', label: 'Paper URL', type: 'text', value: paperUrl, onChange: setPaperUrl },
+    const fields: Field[] = [
+        { name: 'paperName', label: 'Paper Name', type: 'text', value: paperName, onChange: setPaperName, options: undefined },
+        { name: 'paperUrl', label: 'Paper URL', type: 'text', value: paperUrl, onChange: setPaperUrl, options: undefined },
         { name: 'classLevel', label: 'Class Level', type: 'select', value: classLevel, onChange: setClassLevel, options: classLevelOptions },
         { name: 'language', label: 'Language', type: 'select', value: language, onChange: setLanguage, options: languageOptions },
     ];

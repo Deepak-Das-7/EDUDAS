@@ -3,8 +3,7 @@ import PracticePaper from '../../models/PracticePaper.js';
 
 const createPracticePaper = async (req, res) => {
     try {
-        const { ...rest } = req.body;
-        const practicePaper = new PracticePaper({ ...rest });
+        const practicePaper = new PracticePaper(req.body);
         await practicePaper.save();
         res.status(201).json(practicePaper);
     } catch (error) {

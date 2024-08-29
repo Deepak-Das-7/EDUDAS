@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 
 
 
-type FieldType = 'text' | 'number' | 'date' | 'boolean' | 'textarea' | 'email' | 'image' | 'select';
+export type FieldType = 'text' | 'number' | 'date' | 'boolean' | 'textarea' | 'email' | 'image' | 'select';
 
 export type Field = {
     name: string;
@@ -19,7 +19,7 @@ export type Field = {
     options: any
 };
 
-type DynamicFormProps = {
+export type DynamicFormProps = {
     fields: Field[];
     onSave: () => void;
     onDelete?: () => void;
