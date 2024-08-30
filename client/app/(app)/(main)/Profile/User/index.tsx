@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function Profile() {
-    const { userDetails, logout } = useContext(AuthContext);
+    const { userDetails, logout } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...userDetails });
     const { theme, toggleTheme } = useContext(ThemeContext);

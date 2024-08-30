@@ -7,13 +7,13 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { BASE_URL } from '@env';
 
 const TestCard = ({ test }) => {
     const { theme } = useContext(ThemeContext);
     const [given, setGiven] = useState(false);
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
     const handlePress = () => {
         router.push(`/Dashboard/Tests/SingleTest?id=${test._id}`);
@@ -21,6 +21,7 @@ const TestCard = ({ test }) => {
 
     useEffect(() => {
         const checkTestStatus = async () => {
+            if (!userDetails) return;
             try {
                 const response = await axios.get(`${BASE_URL}/tests/submit/${userDetails.id}/${test._id}`);
                 if (response.data) {

@@ -8,6 +8,7 @@ import TeacherRouter from './teachers/index.js';
 import TestRouter from './tests/index.js';
 import VideoRouter from './videos/index.js';
 import DoubtRouter from './doubts/index.js';
+import QuestionRouter from './question/index.js';
 
 const ApiRouter = Router();
 
@@ -18,6 +19,7 @@ ApiRouter.use("/practice-papers", PracticePaperRouter);
 ApiRouter.use("/students", StudentRouter);
 ApiRouter.use("/teachers", TeacherRouter);
 ApiRouter.use("/tests", TestRouter);
+ApiRouter.use("/tests/addQuestion", QuestionRouter);
 ApiRouter.use("/videos", VideoRouter);
 ApiRouter.use("/doubts", DoubtRouter);
 

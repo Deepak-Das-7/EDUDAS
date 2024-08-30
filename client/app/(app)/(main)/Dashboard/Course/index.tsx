@@ -5,7 +5,7 @@ import { useRefresh } from '@/Context/RefreshContext';
 import axios from 'axios';
 import CourseCard from '@/Components/Cards/CourseCard';
 import { Course } from '@/Constants/types';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { router } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { BASE_URL } from '@env';
@@ -20,11 +20,10 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
     const fetchCourses = async () => {
-        if (!userDetails || !userDetails.id) return;
-
+        if (!userDetails) return;
         try {
             const response = await axios.get(`${BASE_URL}/courses/user/${userDetails.id}`);
             setCourses(response.data);
@@ -39,7 +38,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        fetchCourses()
+        fetchCourses();
     }, []);
 
     useEffect(() => {
@@ -73,6 +72,14 @@ const Home = () => {
                 <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
                     Add course {/* Display the actual error message */}
                 </Text>
+                <TouchableOpacity
+                    style={{ alignItems: 'center' }}
+                    onPress={() => {
+                        fetchCourses();
+                    }}
+                >
+                    <Ionicons name="refresh" size={20} color="black" />
+                </TouchableOpacity>
             </View>
         );
     }

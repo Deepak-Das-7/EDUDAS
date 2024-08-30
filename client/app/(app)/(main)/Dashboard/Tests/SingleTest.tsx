@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, StyleSheet, Alert } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { router, useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import { Question, Result } from '@/Constants/types';
@@ -13,7 +13,7 @@ const SingleTest = () => {
     const { id } = useLocalSearchParams();
     // console.log(id, "In single test");
     const { theme } = useContext(ThemeContext);
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -91,6 +91,7 @@ const SingleTest = () => {
     const submitTestResults = async (results: Result[]) => {
         const total_marks = calculateScore();
         const marks_string = `${total_marks}/${questions.length}`;
+        if (!userDetails) return Alert.alert('Error', 'Failed to send message');
         try {
             const response = await axios.post(`${BASE_URL}/tests/submit`, {
                 test_id: id,

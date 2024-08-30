@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, Text, Switch, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { router } from 'expo-router';
 import { AntDesign } from '@expo/vector-icons';
 import { ThemeContext } from '@/Context/ThemeContext';
@@ -10,7 +10,7 @@ export default function CustomDrawerContent(props: any) {
     const [isLoggedOut, setIsLoggedOut] = useState(false);
 
     const { theme, toggleTheme, isDarkMode } = useContext(ThemeContext);
-    const { logout } = useContext(AuthContext);
+    const { logout } = useAuth();
 
     const handleLogout = () => {
         Alert.alert(

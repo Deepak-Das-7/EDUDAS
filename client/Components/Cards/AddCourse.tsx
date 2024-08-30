@@ -7,15 +7,16 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { BASE_URL } from '@env';
 
 const CourseCard = ({ course, onRefresh }) => {
     const { theme } = useContext(ThemeContext);
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
     const handleFavoritePress = async () => {
         try {
+            if (!userDetails) return;
             const response = await axios.post(`${BASE_URL}/courses/add/${userDetails.id}/${course._id}`);
             if (response.status === 200) {
                 onRefresh();
@@ -48,7 +49,7 @@ const CourseCard = ({ course, onRefresh }) => {
                     console.log('An error occurred:', error.message);
                 }
             } else {
-                console.log('An unexpected error occurred:', error.message);
+                console.log('An unexpected error occurred:', error);
             }
         }
     };

@@ -26,7 +26,7 @@ const CourseDetail = () => {
 
     const addCourse = async () => {
         try {
-            console.log('Adding course...');
+            // console.log('Adding course...');
             setLoading(true);
             const response = await axios.post(`${BASE_URL}/courses`, {
                 name: courseName,

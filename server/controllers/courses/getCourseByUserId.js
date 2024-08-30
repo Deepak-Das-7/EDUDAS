@@ -6,7 +6,6 @@ const getCourseByUserId = async (req, res) => {
             path: 'students',
             select: 'firstName lastName'
         }).sort({ createdAt: -1 });
-
         if (!courses || courses.length === 0) {
             return res.status(404).send({ message: 'No courses found for this user.' });
         }

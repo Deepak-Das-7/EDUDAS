@@ -3,12 +3,12 @@ import { Tabs } from 'expo-router';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useContext } from 'react';
 import { ThemeContext } from '../../../Context/ThemeContext';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { ActivityIndicator, View } from 'react-native';
 
 export default function _layout() {
     const { theme } = useContext(ThemeContext);
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
 
     const [isLoading, setIsLoading] = useState(true);

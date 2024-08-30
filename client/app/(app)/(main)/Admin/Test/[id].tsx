@@ -13,6 +13,8 @@ import Toast from 'react-native-root-toast';
 
 const TestDetail = () => {
     const { id } = useLocalSearchParams();
+    // console.log(id);
+
     const [test, setTest] = useState<Test>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
@@ -78,23 +80,8 @@ const TestDetail = () => {
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.delete(`${BASE_URL}/tests/${id}`);
-
-            if (response.status === 200) {
-                //show toast
-                setLoading(false);
-                let toast = Toast.show('Test deleted!!', { duration: Toast.durations.LONG });
-                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
-                //Go to list
-                router.replace('/Admin/Test')
-            }
-
-        } catch (error) {
-            console.error('Error deleting test:', error);
-        }
+    const addTestQuestions = async () => {
+        router.push(`/Admin/Test/addTest/?id=${id}`);
     };
 
     if (loading) {
@@ -125,7 +112,7 @@ const TestDetail = () => {
             <CommonFormCRUD
                 fields={fields}
                 onSave={handleUpdate}
-                onDelete={handleDelete}
+                onDelete={addTestQuestions}
             />
         </View>
     );

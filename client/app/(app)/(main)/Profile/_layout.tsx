@@ -15,7 +15,6 @@ export default function Layout() {
                 },
                 headerStyle: {
                     backgroundColor: theme.colors.primary,
-                    height: 50,
                 },
                 headerTintColor: theme.colors.onPrimary,
                 drawerLabelStyle: {

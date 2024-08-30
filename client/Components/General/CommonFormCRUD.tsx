@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, Switch, TouchableOpacity, Pressable, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, Switch, TouchableOpacity, Pressable, Image, KeyboardAvoidingView } from 'react-native';
 import { ThemeContext } from '@/Context/ThemeContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { FontAwesome } from '@expo/vector-icons';
@@ -180,46 +180,49 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
     };
 
     return (
-        <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            {fields.map(renderField)}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={[styles.button, { backgroundColor: theme.buttonColors.primaryButtonBackground }]}
-                    onPress={onSave}
-                >
-                    <Text style={styles.buttonText}>Save</Text>
-                </TouchableOpacity>
-                {onDelete && (
+        <KeyboardAvoidingView
+            style={[styles.container, { backgroundColor: theme.colors.background }]}
+        >
+            <ScrollView>
+                {fields.map(renderField)}
+                <View style={styles.buttonContainer}>
                     <TouchableOpacity
-                        style={[styles.button, { backgroundColor: theme.buttonColors.errorButtonBackground }]}
-                        onPress={onDelete}
+                        style={[styles.button, { backgroundColor: theme.buttonColors.primaryButtonBackground }]}
+                        onPress={onSave}
                     >
-                        <Text style={styles.buttonText}>Delete</Text>
+                        <Text style={styles.buttonText}>Save</Text>
                     </TouchableOpacity>
-                )}
-            </View>
-        </ScrollView>
+                    {onDelete && (
+                        <TouchableOpacity
+                            style={[styles.button, { backgroundColor: theme.buttonColors.errorButtonBackground }]}
+                            onPress={onDelete}
+                        >
+                            <Text style={styles.buttonText}>Add Childs</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         padding: 20,
     },
     input: {
-        // borderWidth: 1,
         borderRadius: 9,
         padding: 7,
         marginBottom: 7,
         fontSize: 14,
     },
     textarea: {
-        // borderWidth: 1,
         borderRadius: 10,
         padding: 7,
         marginBottom: 7,
         fontSize: 14,
-        height: "auto"
+        height: "auto",
     },
     dateContainer: {
         flexDirection: 'row',
@@ -264,11 +267,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 10
-    },
-    imagePickerText: {
-        fontSize: 16,
-        fontWeight: '500',
-        marginBottom: 7,
     },
     imagePreview: {
         width: 50,

@@ -5,7 +5,7 @@ import { useRefresh } from '@/Context/RefreshContext';
 import axios from 'axios';
 import { Course } from '@/Constants/types';
 import AddCourse from '@/Components/Cards/AddCourse';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import { BASE_URL } from '@env';
 import Count from '@/Components/General/Count';
 import Loader from '@/Components/General/Loader';
@@ -18,12 +18,12 @@ const Home = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
 
     const fetchCourses = async () => {
-        if (!userDetails || !userDetails.id) return;
-        setIsLoading(true);
+        if (!userDetails) return;
         try {
+            setIsLoading(true);
             const response = await axios.get(`${BASE_URL}/courses/exceptUser/${userDetails.id}`);
             setCourses(response.data);
             setFilteredCourses(response.data);

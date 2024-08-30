@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { View, Text, Button, Alert, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
-import { AuthContext } from '../Context/AuthContext';
+import { useAuth } from '../Context/AuthContext';
 import { ThemeContext } from '../Context/ThemeContext';
 import TeacherLoginForm from '../Components/Login/TeacherLoginForm';
 import StudentLoginForm from '../Components/Login/StudentLoginForm';
@@ -24,7 +24,7 @@ export default function Auth() {
     const [userType, setUserType] = useState<'teacher' | 'student'>('student');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const { login } = useContext(AuthContext);
+    const { login } = useAuth();
     const { theme } = useContext(ThemeContext);
 
     const handleLoginError = (error: any) => {

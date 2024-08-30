@@ -1,9 +1,10 @@
-import * as React from 'react'
+import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 // import MyTabBar from '@/Components/TopTab/MyTabBar';
 import Home from './index';
 import Spinner from './setting';
 import { ThemeContext } from '@/Context/ThemeContext';
+import { StatusBar } from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -17,6 +18,7 @@ const _layout = () => {
                 tabBarInactiveTintColor: theme.textColors.secondaryText,
                 tabBarStyle: {
                     backgroundColor: theme.colors.primary,
+                    paddingTop: StatusBar.currentHeight
                 },
                 tabBarLabelStyle: {
                     fontWeight: 'bold',

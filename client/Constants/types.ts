@@ -1,6 +1,10 @@
+import mongoose from "mongoose";
+
 export interface DecodedToken {
-    userId: string;
-    username: string;
+    id: mongoose.Types.ObjectId;
+    firstName: string;
+    lastName: string;
+    email: string;
 }
 
 export interface AuthContextType {

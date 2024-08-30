@@ -3,13 +3,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import axios from 'axios';
 import { ThemeContext } from '@/Context/ThemeContext';
-import { AuthContext } from '@/Context/AuthContext';
+import { useAuth } from '@/Context/AuthContext';
 import TestList from '@/Components/Cards/TestList';
 import { BASE_URL } from '@env';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Performance = () => {
-    const { userDetails } = useContext(AuthContext);
+    const { userDetails } = useAuth();
     const [tests, setTests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
@@ -18,7 +18,7 @@ const Performance = () => {
     useEffect(() => {
         const fetchTests = async () => {
             try {
-                if (!userDetails || !userDetails.id) return;
+                if (!userDetails) return;
                 const response = await axios.get(`${BASE_URL}/tests/submit/user/${userDetails.id}`);
                 setTests(response.data);
             } catch (error) {
