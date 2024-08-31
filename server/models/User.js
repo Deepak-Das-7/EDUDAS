@@ -2,14 +2,16 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
-    firstName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     password: { type: String, required: true },
     password1: { type: String },
-    lastName: { type: String, required: true },
-    userType: { type: String, required: true },
-    student_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Student' },
-    teacher_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Teacher' },
+    type: { type: String },
+    dateOfBirth: Date,
+    lastLogin: Date,
+    class: { type: String },
+    enrollments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Enrollment' }]
 }, {
     timestamps: true
 });

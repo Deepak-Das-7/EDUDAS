@@ -14,18 +14,18 @@ const addCourseByUserId = async (req, res) => {
         const course = await Course.findById(course_id);
 
         if (!course) {
-            console.log("Course not found.");
+            // console.log("Course not found.");
             return res.status(404).send({ message: 'Course not found.' });
         }
 
         // Check if user is already enrolled
-        if (course.students.includes(user_id)) {
-            console.log("User already enrolled in the course.");
+        if (course.users.includes(user_id)) {
+            // console.log("User already enrolled in the course.");
             return res.status(400).send({ message: 'User already enrolled in the course.' });
         }
 
         // Add user to the course
-        course.students.push(user_id);
+        course.users.push(user_id);
 
         // Save the updated course
         await course.save();
@@ -33,7 +33,7 @@ const addCourseByUserId = async (req, res) => {
         // Respond with the updated course
         res.status(200).send(course);
     } catch (error) {
-        console.error("Error adding user to course:", error);
+        // console.error("Error adding user to course:", error);
         res.status(500).send({ message: 'Internal Server Error', error });
     }
 }

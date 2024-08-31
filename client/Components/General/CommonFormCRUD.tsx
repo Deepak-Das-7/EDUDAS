@@ -37,7 +37,7 @@ const CommonFormCRUD: React.FC<DynamicFormProps> = ({ fields, onSave, onDelete }
         });
 
         if (!result.canceled) {
-            console.log(result.assets[0].base64)
+            // console.log(result.assets[0].base64)
             onChange(result.assets[0].base64);
         }
     };

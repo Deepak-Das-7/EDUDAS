@@ -16,7 +16,7 @@ const ApiRouter = Router();
 ApiRouter.use("/courseContent", CourseContentRouter);
 ApiRouter.use("/courses", CourseRouter);
 ApiRouter.use("/practice-papers", PracticePaperRouter);
-ApiRouter.use("/students", StudentRouter);
+ApiRouter.use("/user", StudentRouter);
 ApiRouter.use("/teachers", TeacherRouter);
 ApiRouter.use("/tests", TestRouter);
 ApiRouter.use("/tests/addQuestion", QuestionRouter);

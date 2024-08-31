@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, TextInput, FlatList, StyleSheet, Alert, RefreshControl } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Alert, RefreshControl, Text } from 'react-native';
 import axios from 'axios';
 import { Href, router } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -18,6 +18,8 @@ const CoursesList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [refreshing, setRefreshing] = useState(false);
+    const [error, setError] = useState<string>('');
+
     const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
@@ -30,7 +32,8 @@ const CoursesList = () => {
             setCourses(response.data);
             applyPagination(response.data, 1, searchQuery);
         } catch (error) {
-            console.error(error);
+            // console.error(error);
+            setError('Failed to fetch courses');
         }
     };
 
@@ -98,6 +101,16 @@ const CoursesList = () => {
         );
     };
 
+    if (error) {
+        return (
+            <View style={{ backgroundColor: theme.colors.background, flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: theme.textColors.errorText }}>
+                    No courses
+                </Text>
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Course/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
+            </View>
+        );
+    }
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>

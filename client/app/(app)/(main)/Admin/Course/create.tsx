@@ -40,8 +40,6 @@ const CourseDetail = () => {
                 photo: url
             });
 
-            console.log('Response Status:', response.status);
-            console.log('Response Data:', response.data);
             setLoading(false);
 
             if (response.status === 201) {

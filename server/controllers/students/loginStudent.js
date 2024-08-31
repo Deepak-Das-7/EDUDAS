@@ -1,4 +1,4 @@
-import Student from '../../models/Student.js';
+import User from '../../models/User.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
@@ -11,36 +11,36 @@ const loginStudent = async (req, res) => {
     }
 
     try {
-        const student = await Student.findOne({ email });
-        if (!student) {
-            return res.status(404).json({ message: 'Student not found' });
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'user not found' });
         }
 
-        const isMatch = await bcrypt.compare(password, student.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        student.lastLogin = Date.now();
-        await student.save();
+        user.lastLogin = Date.now();
+        await user.save();
 
         // Generate a token
         const token = jwt.sign(
             {
-                id: student._id,
-                firstName: student.firstName,
-                email: student.email,
-                lastName: student.lastName,
-                type: "student"
+                id: user._id,
+                firstName: user.firstName,
+                email: user.email,
+                lastName: user.lastName,
+                type: user.type,
             },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
         // Send success response with token
-        res.status(200).json({ token, studentId: student._id });
+        res.status(200).json({ token, userId: user._id });
     } catch (error) {
-        console.error('Server error:', error);
+        // console.error('Server error:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };

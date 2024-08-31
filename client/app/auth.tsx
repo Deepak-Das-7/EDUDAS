@@ -3,9 +3,7 @@ import axios from 'axios';
 import { View, Text, Button, Alert, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { useAuth } from '../Context/AuthContext';
 import { ThemeContext } from '../Context/ThemeContext';
-import TeacherLoginForm from '../Components/Login/TeacherLoginForm';
 import StudentLoginForm from '../Components/Login/StudentLoginForm';
-import TeacherSignupForm from '../Components/Login/TeacherSignupForm';
 import StudentSignupForm from '../Components/Login/StudentSignupForm';
 import { router } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -21,7 +19,6 @@ type FormData = {
 
 export default function Auth() {
     const [isSignup, setIsSignup] = useState<boolean>(false);
-    const [userType, setUserType] = useState<'teacher' | 'student'>('student');
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { login } = useAuth();
@@ -65,8 +62,7 @@ export default function Auth() {
     const handleLogin = async (formData: { email: string; password: string }) => {
         setIsLoading(true);
         try {
-            const endpoint = userType === 'teacher' ? 'teachers/login' : 'students/login';
-            const response = await axios.post(`${BASE_URL}/${endpoint}`, formData);
+            const response = await axios.post(`${BASE_URL}/user/login`, formData);
             login(response.data.token);
             router.replace('/(main)/Dashboard/Course');
         } catch (error) {
@@ -79,8 +75,7 @@ export default function Auth() {
     const handleSignup = async (formData: FormData) => {
         setIsLoading(true);
         try {
-            const endpoint = userType === 'teacher' ? 'teachers' : 'students';
-            await axios.post(`${BASE_URL}/${endpoint}`, formData);
+            await axios.post(`${BASE_URL}/user`, formData);
             Alert.alert('Success', 'Registration successful!');
             setIsSignup(false);
         } catch (error) {
@@ -99,37 +94,11 @@ export default function Auth() {
                     <Text style={[styles.title, { color: theme.textColors.primaryText }]}>
                         {isSignup ? 'Create Your Account' : 'Login to Your Account'}
                     </Text>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            title="Teacher"
-                            onPress={() => setUserType('teacher')}
-                            color={
-                                userType === 'teacher'
-                                    ? theme.buttonColors.primaryButtonBackground
-                                    : theme.buttonColors.disabledButtonBackground
-                            }
-                        />
-                        <Button
-                            title="Student"
-                            onPress={() => setUserType('student')}
-                            color={
-                                userType === 'student'
-                                    ? theme.buttonColors.primaryButtonBackground
-                                    : theme.buttonColors.disabledButtonBackground
-                            }
-                        />
-                    </View>
                     {isSignup ? (
-                        userType === 'teacher' ? (
-                            <TeacherSignupForm onSubmit={handleSignup} />
-                        ) : (
-                            <StudentSignupForm onSubmit={handleSignup} />
-                        )
-                    ) : userType === 'teacher' ? (
-                        <TeacherLoginForm onSubmit={handleLogin} />
-                    ) : (
+                        <StudentSignupForm onSubmit={handleSignup} />
+                    ) :
                         <StudentLoginForm onSubmit={handleLogin} />
-                    )}
+                    }
                     <View style={styles.switchContainer}>
                         <Text style={{ color: theme.textColors.primaryText }}>
                             {isSignup ? 'Already have an account? ' : 'Don’t have an account? '}

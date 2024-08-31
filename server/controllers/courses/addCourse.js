@@ -23,7 +23,7 @@ const addCourse = async (req, res) => {
 
         res.status(201).send(course);
     } catch (error) {
-        console.error('Error creating coursesss:', error.message || error);
+        // console.error('Error creating coursesss:', error.message || error);
         res.status(400).send({ error: 'Error creating course' });
     }
 };

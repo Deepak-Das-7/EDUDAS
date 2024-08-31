@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const chatSchema = new mongoose.Schema({
     is_deleted: { type: Boolean, default: false },
-    sender_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Student' },
+    sender_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     chat: { type: String, required: true },
 }, {
     timestamps: true

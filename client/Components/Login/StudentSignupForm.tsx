@@ -3,6 +3,8 @@ import { View, Text, TextInput, Button, StyleSheet, Platform, Alert, Pressable }
 import DateTimePicker from '@react-native-community/datetimepicker';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ThemeContext } from '../../Context/ThemeContext'; // Import ThemeContext
+import { Picker } from '@react-native-picker/picker';
+import { userTypes } from '@/Constants/User';
 
 interface StudentSignupFormProps {
     onSubmit: (formData: {
@@ -11,12 +13,14 @@ interface StudentSignupFormProps {
         email: string;
         password: string;
         dateOfBirth: Date;
+        type: string;
     }) => void;
 }
 
 const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit }) => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
+    const [type, setType] = useState<string>('student');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
@@ -33,7 +37,7 @@ const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit }) => {
     };
 
     const handleSubmit = () => {
-        if (!firstName || !lastName || !email || !password || !dateOfBirth) {
+        if (!firstName || !lastName || !email || !password || !dateOfBirth || !type) {
             Alert.alert('Please fill in all fields.');
             return;
         }
@@ -43,12 +47,23 @@ const StudentSignupForm: React.FC<StudentSignupFormProps> = ({ onSubmit }) => {
             email,
             password,
             dateOfBirth,
+            type
         };
         onSubmit(formData);
     };
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
+            <Text style={[styles.label, { color: theme.textColors.primaryText }]}>User type</Text>
+            <Picker
+                selectedValue={type}
+                onValueChange={(itemValue) => setType(itemValue)}
+                style={[styles.input, { borderColor: theme.borderColors.defaultBorder, color: theme.textColors.primaryText }]}
+            >
+                {userTypes?.map(option => (
+                    <Picker.Item key={option.value} label={option.label} value={option.value} />
+                ))}
+            </Picker>
             <Text style={[styles.label, { color: theme.textColors.primaryText }]}>First Name</Text>
             <TextInput
                 style={[styles.input, { borderColor: theme.borderColors.defaultBorder, color: theme.textColors.primaryText }]}

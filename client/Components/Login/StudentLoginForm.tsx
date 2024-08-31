@@ -7,8 +7,10 @@ interface StudentLoginFormProps {
 }
 
 const StudentLoginForm: React.FC<StudentLoginFormProps> = ({ onSubmit }) => {
-    const [email, setEmail] = useState<string>('indukumari8253@gmail.com');
-    const [password, setPassword] = useState<string>('2005');
+    const [email, setEmail] = useState<string>('student1@gmail.com');
+    // const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('das');
+    // const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>(''); // State to handle form validation errors
 
     const { theme } = useContext(ThemeContext); // Access the color context

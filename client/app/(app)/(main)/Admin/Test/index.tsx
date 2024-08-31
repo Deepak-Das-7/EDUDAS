@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, TextInput, FlatList, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, FlatList, StyleSheet, Alert, Text } from 'react-native';
 import axios from 'axios';
 import { Href, router } from 'expo-router';
 import { BASE_URL } from '@env';
@@ -17,16 +17,27 @@ const testsList = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [error, setError] = useState<string>('');
+
     const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/tests`)
-            .then(response => {
-                setTests(response.data);
-                applyPagination(response.data, 1, searchQuery);
-            })
-            .catch(error => console.error(error));
+        fetchTest();
     }, []);
+
+    const fetchTest = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/tests`);
+            setTests(response.data);
+            applyPagination(response.data, 1, searchQuery);
+            setError('');
+        } catch (error) {
+            // console.error(error);
+            setError('Failed to fetch tests');
+        }
+    };
+
+
 
     useEffect(() => {
         applyPagination(tests, currentPage, searchQuery);
@@ -85,7 +96,16 @@ const testsList = () => {
             { cancelable: true }
         );
     };
-
+    if (error) {
+        return (
+            <View style={{ backgroundColor: theme.colors.background, flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: theme.textColors.errorText }}>
+                    No tests
+                </Text>
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Test/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
+            </View>
+        );
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>

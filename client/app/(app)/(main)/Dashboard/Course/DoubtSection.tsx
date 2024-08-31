@@ -17,6 +17,7 @@ type Message = {
     };
     chat: string;
     createdAt: string;
+    sender: string;
 };
 
 const ChatBox = () => {
@@ -50,7 +51,7 @@ const ChatBox = () => {
     useEffect(() => {
         socket.current.on('receive_message', (newMessage: Message) => {
             setMessages(prevMessages => [...prevMessages, newMessage]);
-            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 50);
+            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
         });
 
         return () => {
@@ -71,9 +72,8 @@ const ChatBox = () => {
 
         try {
             socket.current.emit('send_message', newMessage);
-
-            await axios.post(`${BASE_URL}/doubts/${id}/chats`, { sender_id: userDetails.id, chat: text });
-            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 50);
+            await axios.post(`${BASE_URL}/doubts/${id}/chats`, { sender_id: userDetails.id, chat: text, sender: userDetails.firstName });
+            setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 10);
         } catch (error) {
             console.error('Error sending message:', error);
             Alert.alert('Error', 'Failed to send message');
@@ -88,6 +88,7 @@ const ChatBox = () => {
     };
 
     const renderItem = ({ item }: { item: Message }) => {
+
         if (!userDetails) return <Text>hello</Text>;
         const senderName = item.sender_id.firstName || 'Teacher';
         const isCurrentUser = (item.sender_id._id === userDetails.id);

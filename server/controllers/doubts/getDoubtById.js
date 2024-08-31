@@ -4,7 +4,7 @@ const getDoubtById = async (req, res) => {
     try {
         const { doubtId } = req.params;
         const doubt = await Doubt.findById(doubtId)
-            .populate('chats.sender_id', 'email firstName lastName');
+            .populate('chats.sender_id', 'firstName lastName');
 
         if (!doubt) {
             return res.status(404).json({ error: 'Doubt not found' });

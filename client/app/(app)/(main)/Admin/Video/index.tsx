@@ -106,9 +106,15 @@ const videosList = () => {
     }
 
     if (error) {
-        return <Text>{error}</Text>;
+        return (
+            <View style={{ backgroundColor: theme.colors.background, flex: 1, justifyContent: "center", alignItems: "center" }}>
+                <Text style={{ color: theme.textColors.errorText }}>
+                    No videos: {error}
+                </Text>
+                <Ionicons name="add-circle" size={40} color={theme.buttonColors.primaryButtonBackground} onPress={() => router.push('/Admin/Video/create')} style={{ position: "absolute", top: 0, right: 0, zIndex: 1 }} />
+            </View>
+        );
     }
-
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background, }]}>
             <View style={styles.searchContainer}>

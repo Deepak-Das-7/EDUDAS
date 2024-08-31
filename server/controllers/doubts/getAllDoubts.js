@@ -3,9 +3,10 @@ import Doubt from '../../models/Doubt.js';
 const getAllDoubts = async (req, res) => {
     try {
         const doubts = await Doubt.find()
-            .populate('course_id')
-            .populate('chats.sender_id');
-
+            .populate({
+                path: 'chats.sender_id',
+                select: 'firstName lastName'
+            });
         res.status(200).json(doubts);
     } catch (error) {
         res.status(500).json({ error: error.message });

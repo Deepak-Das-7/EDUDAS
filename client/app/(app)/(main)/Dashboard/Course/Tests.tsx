@@ -13,13 +13,13 @@ const Tests = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
     const { theme } = useContext(ThemeContext);
-    const { refreshing, setRefreshing } = useRefresh(); // Use refresh context
+    const { refreshing, setRefreshing } = useRefresh();
 
     const fetchTests = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/tests/course/${id}`);
             setTests(response.data.tests);
-            setError(''); // Clear any previous error
+            setError('');
         } catch (error) {
             setError('Failed to fetch tests');
         } finally {

@@ -6,7 +6,7 @@ const createVideoList = async (req, res) => {
         await videoList.save();
         res.status(201).json(videoList);
     } catch (error) {
-        console.error('Error:', error);
+        // console.error('Error:', error);
         res.status(400).send(error);
     }
 };
