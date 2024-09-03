@@ -55,6 +55,9 @@ export interface Course {
     tests: []
     createdAt: Date;
     updatedAt: Date;
+    doubt: string;
+    content: string;
+    playlist: string;
 }
 //Test
 export interface Test {

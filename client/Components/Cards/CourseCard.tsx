@@ -30,7 +30,7 @@ const CourseCard = ({ course }) => {
             <View style={styles.infoRow}>
                 <View style={styles.infoRow2}>
                     <FontAwesome name="language" size={20} color={theme.textColors.primaryText} />
-                    <Text style={[styles.language, { color: theme.textColors.primaryText }]}>{course.language?.name || 'N/A'} </Text>
+                    <Text style={[styles.language, { color: theme.textColors.primaryText }]}>{course.language || 'N/A'} </Text>
                 </View>
                 <View style={styles.infoRow2}>
                     <FontAwesome name="group" size={18} color={theme.textColors.primaryText} />
