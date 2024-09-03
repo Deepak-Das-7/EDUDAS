@@ -3,7 +3,6 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 're
 import { ThemeContext } from '@/Context/ThemeContext';
 import axios from 'axios';
 import CourseCard from '@/Components/Cards/CourseCard';
-import { router } from 'expo-router';
 import { BASE_URL } from '@env';
 import { Course } from '@/Constants/types';
 
@@ -38,14 +37,6 @@ const Home = () => {
 
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.colors.background }]}>
-            <TouchableOpacity
-                style={[styles.searchButton, { backgroundColor: theme.buttonColors.primaryButtonBackground }]}
-                onPress={() => router.push('/Search/setting')}
-            >
-                <Text style={[styles.searchButtonText, { color: theme.buttonColors.primaryButtonText }]}>
-                    Go to search test page
-                </Text>
-            </TouchableOpacity>
             <ScrollView >
                 {courses.map((course) => (
                     <CourseCard key={course._id} course={course} />

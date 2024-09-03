@@ -8,9 +8,9 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logoDas.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#FFFF00"
     },
     "ios": {
       "supportsTablet": true
@@ -18,7 +18,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logoDas.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#FFFF00"
       },
       "package": "com.deepak7.eduDas"
     },
@@ -38,7 +38,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "32abe1cd-12ac-49de-a428-d8121b333e22"
+        "projectId": "f62eb657-6e62-4a8d-b3f1-165aab0ebb23"
       }
     }
   }

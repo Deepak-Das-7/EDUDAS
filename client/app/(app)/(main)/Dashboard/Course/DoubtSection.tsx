@@ -31,7 +31,6 @@ const ChatBox = () => {
     const socket = useRef(io(`${BASE_URL}`));
     const [error, setError] = useState<string>('');
 
-
     useEffect(() => {
         const fetchMessages = async () => {
             try {
@@ -88,8 +87,9 @@ const ChatBox = () => {
     };
 
     const renderItem = ({ item }: { item: Message }) => {
-
-        if (!userDetails) return <Text>hello</Text>;
+        // console.log(userDetails)
+        // console.log(item)
+        if (!userDetails || !item.sender_id) return <Text>error message!</Text>;
         const senderName = item.sender_id.firstName || 'Teacher';
         const isCurrentUser = (item.sender_id._id === userDetails.id);
 
@@ -204,9 +204,9 @@ const styles = StyleSheet.create({
     currentUser: {
         alignSelf: 'flex-end',
         backgroundColor: '#DCF8C6',
-        borderBottomLeftRadius: 10,
+        // borderBottomLeftRadius: 10,
         borderBottomRightRadius: 0,
-        borderTopRightRadius: 10,
+        // borderTopRightRadius: 10,
         borderTopLeftRadius: 20,
         paddingLeft: 10,
         paddingRight: 5,
@@ -216,9 +216,9 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         backgroundColor: '#ECECEC',
         borderBottomLeftRadius: 0,
-        borderBottomRightRadius: 10,
+        // borderBottomRightRadius: 10,
         borderTopRightRadius: 20,
-        borderTopLeftRadius: 10,
+        // borderTopLeftRadius: 10,
         paddingRight: 10,
         paddingLeft: 5,
     },

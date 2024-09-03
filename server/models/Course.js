@@ -14,6 +14,7 @@ const courseSchema = new mongoose.Schema({
     content: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent' },
     doubt: { type: mongoose.Schema.Types.ObjectId, ref: 'Doubt' },
     videos: { type: mongoose.Schema.Types.ObjectId, ref: 'VideoList' },
+    playlist: { type: mongoose.Schema.Types.ObjectId, ref: 'Playlist' },
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User', default: [] }],
     tests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Test', default: [] }],
 }, {

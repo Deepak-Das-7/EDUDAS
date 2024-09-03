@@ -32,9 +32,10 @@ export default function _layout() {
             tabBarActiveTintColor: theme.colors.primary,
             tabBarInactiveTintColor: theme.textColors.secondaryText,
             tabBarStyle: {
-                minHeight: 55,
-                padding: 10,
+                minHeight: 60,
+                padding: 5,
                 backgroundColor: theme.colors.background,
+                paddingBottom: 10
             },
             headerShown: false,
         }}>
@@ -53,6 +54,7 @@ export default function _layout() {
             />
             <Tabs.Screen
                 name="Search"
+                redirect={userDetails.type !== "teacher"}
                 options={{
                     headerShown: false,
                     title: "Search",
