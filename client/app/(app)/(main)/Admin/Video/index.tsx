@@ -25,7 +25,7 @@ const videosList = () => {
     const [error, setError] = useState<string>('');
 
     const fetchVideos = async () => {
-        axios.get(`${BASE_URL}/videos`)
+        axios.get(`${BASE_URL}/playlist`)
             .then(response => {
                 setVideos(response.data);
                 applyPagination(response.data, 1, searchQuery);

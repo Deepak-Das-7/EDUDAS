@@ -21,7 +21,7 @@ const VideoListDetail = () => {
         try {
             setLoading(true);
             console.log(videoName, classLevel);
-            const response = await axios.post(`${BASE_URL}/videos`, {
+            const response = await axios.post(`${BASE_URL}/playlist`, {
                 video: videoName,
                 class: classLevel,
                 photo: url

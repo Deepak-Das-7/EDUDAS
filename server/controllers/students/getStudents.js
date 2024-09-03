@@ -1,8 +1,8 @@
-import Student from '../../models/Student.js';
+import User from '../../models/User.js';
 
 const getStudents = async (req, res) => {
     try {
-        const students = await Student.find({ is_deleted: false });
+        const students = await User.find({ is_deleted: false });
 
         res.status(200).send(students);
     } catch (error) {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { router, useLocalSearchParams } from 'expo-router';
 import { BASE_URL } from '@env';
 import CommonFormCRUD, { Field } from '@/Components/General/CommonFormCRUD';
-import { VideosList, Video } from '@/Constants/types';  // Ensure this import is correct
+import { VideosList, Video, Playlist } from '@/Constants/types';  // Ensure this import is correct
 import Loader from '@/Components/General/Loader';
 import { Text, View, StyleSheet } from 'react-native';
 import { durationOptions } from '@/Constants/Duration';
@@ -12,7 +12,7 @@ import Toast from 'react-native-root-toast';
 
 const VideoDetail = () => {
     const { id } = useLocalSearchParams();
-    const [video, setVideo] = useState<VideosList>();  // Changed from Test to Video
+    const [video, setVideo] = useState<Playlist>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>('');
 
@@ -21,7 +21,7 @@ const VideoDetail = () => {
 
     const fetchVideo = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/videos/${id}`);  // Changed endpoint from tests to videos
+            const response = await axios.get(`${BASE_URL}/playlist/${id}`);
             setVideo(response.data);
             setError('');
         } catch (error) {
@@ -50,7 +50,7 @@ const VideoDetail = () => {
     const handleUpdate = async () => {
         try {
             setLoading(true);
-            const response = await axios.put(`${BASE_URL}/videos/${id}`, {
+            const response = await axios.put(`${BASE_URL}/playlist/${id}`, {
                 name: videoName,
                 class: classLevel,
             });
@@ -69,23 +69,8 @@ const VideoDetail = () => {
         }
     };
 
-    const handleDelete = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.delete(`${BASE_URL}/videos/${id}`);
-
-            if (response.status === 200) {
-                //show toast
-                setLoading(false);
-                let toast = Toast.show('Video deleted!!', { duration: Toast.durations.LONG });
-                setTimeout(function hideToast() { Toast.hide(toast); }, 3000);
-                //Go to list
-                router.replace('/Admin/Video')
-            }
-
-        } catch (error) {
-            console.error('Error deleting Video:', error);
-        }
+    const addVideo = async () => {
+        router.push(`/Admin/Video/addVideo/?id=${id}`);
     };
 
     if (loading) {
@@ -110,7 +95,7 @@ const VideoDetail = () => {
             <CommonFormCRUD
                 fields={fields}
                 onSave={handleUpdate}
-                onDelete={handleDelete}
+                onDelete={addVideo}
             />
         </View>
     );

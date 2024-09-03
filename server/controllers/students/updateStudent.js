@@ -1,8 +1,8 @@
-import Student from '../../models/Student.js';
+import User from '../../models/User.js';
 
 const updateStudent = async (req, res) => {
     try {
-        const student = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const student = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
         if (!student) {
             return res.status(404).json({ message: 'Student not found' });
         }

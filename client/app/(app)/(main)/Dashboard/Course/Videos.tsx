@@ -21,8 +21,8 @@ const Videos = () => {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/videos/${id}`);
-                setVideos(response.data.videos);
+                const response = await axios.get(`${BASE_URL}/playlist/${id}`);
+                setVideos(response.data.videos_id);
             } catch (error) {
                 console.error('Error getting video list:', error);
             } finally {
@@ -76,7 +76,6 @@ const Videos = () => {
             />
             <View style={styles.videoInfo}>
                 <Text style={[styles.videoName, { color: theme.textColors.primaryText }]}>{item.videoName}</Text>
-                <Text style={[styles.videoDetails, { color: theme.textColors.secondaryText }]}>Class: {item.class}</Text>
                 <Text style={[styles.videoDetails, { color: theme.textColors.secondaryText }]}>Duration: {item.duration}</Text>
             </View>
         </TouchableOpacity>
@@ -105,7 +104,6 @@ const Videos = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         paddingTop: 10,
     },
     loadingContainer: {
@@ -127,15 +125,17 @@ const styles = StyleSheet.create({
         shadowRadius: 2.62,
         elevation: 4,
         marginBottom: 20,
+        alignSelf: 'center'
     },
     videoListItem: {
         flexDirection: 'row',
         alignItems: 'center',
+        alignSelf: 'center',
         padding: 10,
         borderRadius: 8,
         width: '95%',
         marginVertical: 5,
-        elevation: 3,
+        elevation: 2,
     },
     thumbnail: {
         width: 100,

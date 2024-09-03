@@ -64,13 +64,13 @@ const Home = () => {
                 <TouchableOpacity
                     style={{ alignItems: 'center' }}
                     onPress={() => {
-                        router.push("/AddCourse/");
+                        router.push("/AddCourse");
                     }}
                 >
                     <Ionicons name="add-circle" size={50} color="black" />
                 </TouchableOpacity>
                 <Text style={{ textAlign: 'center', fontSize: 15, color: theme.textColors.errorText }}>
-                    Add course {/* Display the actual error message */}
+                    Add course
                 </Text>
                 <TouchableOpacity
                     style={{ alignItems: 'center' }}
@@ -78,7 +78,7 @@ const Home = () => {
                         fetchCourses();
                     }}
                 >
-                    <Ionicons name="refresh" size={20} color="black" />
+                    <Ionicons name="refresh" size={50} color="black" />
                 </TouchableOpacity>
             </View>
         );

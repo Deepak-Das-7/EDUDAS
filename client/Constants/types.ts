@@ -102,3 +102,14 @@ export interface Paper {
     updatedAt: Date;
     language: string;
 }
+
+export interface Playlist {
+    _id: string,
+    is_deleted: boolean;
+    name: string;
+    class: string;
+    course_id: string;
+    videos_id: [];
+    updatedAt: Date;
+    createdAt: Date;
+}

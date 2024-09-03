@@ -27,7 +27,7 @@ const VideoTestCard = ({ course }) => {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.card, { backgroundColor: theme.colors.background }]}
-                    onPress={goTo("Videos", course.videos)}
+                    onPress={goTo("Videos", course.playlist)}
                 >
                     <Image source={require('@/assets/photo/youtube.png')} style={styles.image} />
                     <View style={styles.overlay}>

@@ -65,7 +65,7 @@ const TestDetail = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Updating Test</Text>
+            <Text style={styles.title}>Appending Question</Text>
             <CommonFormCRUD
                 fields={fields}
                 onSave={handleUpdate}
